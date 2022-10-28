@@ -23,20 +23,20 @@ Identify and discuss benefits of an ORM
 Flask - Python web framework  
 Blueprint - Flask extension for modular applications  
 jsonify - Flask extension for returning JSON responses  
-request - Flask extension for handling HTTP requests
-abort - Flask extension for handling HTTP errors
+request - Flask extension for handling HTTP requests  
+abort - Flask extension for handling HTTP errors  
 SQLAlchemy - ORM  
-Marshmallow - Serialisation
+Marshmallow - Serialisation  
 fields - Marshmallow extension for handling data types  
 psychopg2 - PostgreSQL adapter for Python  
-Bcrypt - Password Hashing
-flask_jwt_extended - JWT authentication
-jwt_required -
+Bcrypt - Password Hashing  
+flask_jwt_extended - JWT authentication  
+jwt_required -  
 get_jwt_identity -   
 JWTManger - JSON Web Token Manager  
 Datetime - Date and Time  
 marshmallow-validate - Validation  
-datetime - Date and Time
+datetime - Date and Time  
 
 ## Project Models
 
