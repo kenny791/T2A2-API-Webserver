@@ -65,8 +65,10 @@ datetime - Date and Time
 
 ## Database Relations  
 
-##  Project Management  
 
+
+##  Project Management  
+explanation of project management tools used
 [Project Trello Board](https://trello.com/b/3Zt5Nzh5/t2a2)
 
 
