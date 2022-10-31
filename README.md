@@ -1,5 +1,29 @@
 # T2A2 API Webserver  
 
+installation
+
+create virtual machine  
+```
+python3 -m venv .venv
+```
+install requirements  
+```
+pip install -r requirements.txt
+```
+create database in psql called food_finder
+```
+create database food_finder;
+```
+connect to database  
+``` 
+\c food_finder
+```
+
+
+replace USERNAME and PASSWORD with your own    
+```
+
+
 ## Overview  
   
 ## Table Of Contents  
