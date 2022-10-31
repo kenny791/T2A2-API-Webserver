@@ -1,6 +1,6 @@
 # T2A2 API Webserver  
 
-installation
+## Installation
 
 create virtual machine  
 ```
@@ -21,7 +21,6 @@ connect to database
 
 
 replace USERNAME and PASSWORD with your own    
-```
 
 
 ## Overview  
