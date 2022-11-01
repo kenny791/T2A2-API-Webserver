@@ -41,13 +41,13 @@ def seed_db():
             name = 'Burger King',
             address = '456 high st',
             is_vegan = False,
-            price_range = '$'
+            price_range = '$$'
         ),
         Restaurant(
             name = 'Veggie Hut',
             address = '789 low st',
             is_vegan = True,
-            price_range = '$$'
+            price_range = '$'
         ),
         Restaurant(
             name = 'Laksa Palace',
@@ -88,6 +88,14 @@ def all_restaurants_address():
 @app.cli.command('all_restaurants_vegan')
 def all_restaurants_vegan():
     stmt = db.select(Restaurant.name).where(Restaurant.is_vegan == True)
+    restaurants = db.session.scalars(stmt)
+    print ('\n')
+    for restaurant in restaurants:
+        print(restaurant)
+
+@app.cli.command('all_restaurants_vegan_cheap')
+def all_restaurants_vegan():
+    stmt = db.select(Restaurant.name).where(db.or_(Restaurant.is_vegan == True, Restaurant.price_range == '$'))
     restaurants = db.session.scalars(stmt)
     print ('\n')
     for restaurant in restaurants:
