@@ -75,20 +75,22 @@ def all_restaurants():
     restaurants = db.session.scalars(stmt).all()
     print ('\n')
     for restaurant in restaurants:
-        print(restaurant.__dict__)
+        print(restaurant)
 
+@app.cli.command('all_restaurants_address')
+def all_restaurants_address():
+    stmt = db.select(Restaurant.name, Restaurant.address)
+    restaurants = db.session.execute(stmt)
+    print ('\n')
+    for restaurant in restaurants:
+        print(restaurant)
 
 @app.cli.command('first_restaurant')
 def first_restaurant():
-    #select * from cards limit 1;
-    restaurant =Restaurant.query.first()
+    stmt =db.select(Restaurant).limit(1)
+    restaurant = db.session.scalar(stmt)
     print('\n')
     print(restaurant.__dict__)
-
-
-
-
-
 
 
 @app.route('/')
