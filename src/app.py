@@ -1,5 +1,4 @@
-from unicodedata import name, jsonify
-from flask import Flask
+from flask import Flask, jsonify
 from flask_sqlalchemy import SQLAlchemy
 
 
@@ -23,28 +22,71 @@ class Restaurant(db.Model):
 @app.cli.command('create')
 def create_db():
     db.create_all()
-    print("tables created")
+    print("Tables created")
 
 
 
 #adds entity
 @app.cli.command('seed')
 def seed_db():
-    restaurant = Restaurant(
-        name = 'Macdonalds',
-        address = '123 main st',
-        is_vegan = False,
-        price_range = '$',
-    )
 
-    db.session.add(restaurant)
+    restaurants = [
+        Restaurant(
+            name = 'Macdonalds',
+            address = '123 main st',
+            is_vegan = False,
+            price_range = '$'
+        ),
+        Restaurant(
+            name = 'Burger King',
+            address = '456 high st',
+            is_vegan = False,
+            price_range = '$'
+        ),
+        Restaurant(
+            name = 'Veggie Hut',
+            address = '789 low st',
+            is_vegan = True,
+            price_range = '$$'
+        ),
+        Restaurant(
+            name = 'Laksa Palace',
+            address = '1011 high st',
+            is_vegan = True,
+            price_range = '$$'
+        )
+    ]
+
+    db.session.add_all(restaurants)
     db.session.commit()
     print('Table seeded')
 
 @app.cli.command('drop')
-def drop():
+def drop_db():
     db.drop_all()
     print("Tables dropped")
+
+
+
+
+@app.cli.command('all_restaurants')
+def all_restaurants():
+    stmt = db.select(Restaurant)
+    restaurants = db.session.scalars(stmt).all()
+    print ('\n')
+    for restaurant in restaurants:
+        print(restaurant.__dict__)
+
+
+@app.cli.command('first_restaurant')
+def first_restaurant():
+    #select * from cards limit 1;
+    restaurant =Restaurant.query.first()
+    print('\n')
+    print(restaurant.__dict__)
+
+
+
 
 
 
