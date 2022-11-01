@@ -85,6 +85,15 @@ def all_restaurants_address():
     for restaurant in restaurants:
         print(restaurant)
 
+@app.cli.command('all_restaurants_vegan')
+def all_restaurants_vegan():
+    stmt = db.select(Restaurant.name).where(Restaurant.is_vegan == True)
+    restaurants = db.session.scalars(stmt)
+    print ('\n')
+    for restaurant in restaurants:
+        print(restaurant)
+
+
 @app.cli.command('first_restaurant')
 def first_restaurant():
     stmt =db.select(Restaurant).limit(1)
