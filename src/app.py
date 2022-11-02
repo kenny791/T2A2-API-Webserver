@@ -1,6 +1,7 @@
 from flask import Flask, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
+from flask_bcrypt import Bcrypt
 
 
 app = Flask(__name__)
@@ -11,6 +12,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://db_dev:password12
 
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
+bcrypt = Bcrypt(app)
 
 #creates table
 class User(db.Model):
@@ -56,21 +58,20 @@ def seed_db():
         User(
             username = 'admin',
             email = 'admin@email.com',
-            password = 'password123',
+            password = bcrypt.generate_password_hash('password123').decode('utf-8'),
             admin = True
         ),
         User(
             username = 'user1',
             email = 'user1@email.com',
-            password = 'password123'
+            password = bcrypt.generate_password_hash('password123').decode('utf-8')
         ),
         User(
             username = 'user2',
             email = 'user2@email.com',
-            password = 'password123'
+            password = bcrypt.generate_password_hash('password123').decode('utf-8')
         )
     ]
-
 
     restaurants = [
         Restaurant(
