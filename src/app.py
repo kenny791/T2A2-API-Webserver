@@ -4,7 +4,7 @@ from flask_marshmallow import Marshmallow
 from flask_bcrypt import Bcrypt
 from sqlalchemy.exc import IntegrityError
 from datetime import date, timedelta
-from flask_jwt_extended import JWTManager, create_access_token
+from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 
 
 app = Flask(__name__)
@@ -26,7 +26,7 @@ class User(db.Model):
     username = db.Column(db.String(50), unique=True, nullable=False)
     email = db.Column(db.String(), unique=True, nullable=False)
     password = db.Column(db.String(), nullable=False)
-    admin = db.Column(db.Boolean(), default=False)
+    is_admin = db.Column(db.Boolean(), default=False)
 
 class Restaurant(db.Model):
     __tablename__ ='restaurants'
@@ -44,8 +44,17 @@ class RestaurantSchema(ma.Schema):
 
 class UserSchema(ma.Schema):
     class Meta:
-        fields = ('id', 'username', 'email', 'password', 'admin')
+        fields = ('id', 'username', 'email', 'password', 'is_admin')
         ordered = True
+
+
+
+def authorize():
+    user_id = get_jwt_identity()
+    stmt = db.select(User).filter_by(id=user_id)
+    user = db.session.scalar(stmt)
+    return user.is_admin
+
 
 
 #Defining a custom CLI (terminal) command
@@ -64,7 +73,7 @@ def seed_db():
             username = 'admin',
             email = 'admin@email.com',
             password = bcrypt.generate_password_hash('password123').decode('utf-8'),
-            admin = True
+            is_admin = True
         ),
         User(
             username = 'user1',
@@ -144,13 +153,16 @@ def auth_login():
     if user and bcrypt.check_password_hash(user.password, request.json['password']):
         #Return a response with the user's info
         token =create_access_token(identity=str(user.id),expires_delta=timedelta(days=1))
-        return {'username':user.username, 'email':user.email, 'token':token, 'admin':user.admin}, 200
+        return {'username':user.username, 'email':user.email, 'token':token, 'is_admin':user.is_admin}, 200
     else:
         return {'error':'Incorrect email or password'}, 401
 
  
 @app.route('/restaurants/')
+@jwt_required()
 def all_restaurants():
+    if not authorize():
+        return {'error':'You must be an admin'}, 401
     stmt = db.select(Restaurant)
     restaurants = db.session.scalars(stmt).all()
     return RestaurantSchema(many=True).dump(restaurants)
@@ -172,7 +184,7 @@ def all_restaurants_vegan():
         print(restaurant)
 
 @app.cli.command('all_restaurants_vegan_cheap')
-def all_restaurants_vegan():
+def all_restaurants_vegan_cheap():
     stmt = db.select(Restaurant.name).order_by(Restaurant.name).where(db.or_(Restaurant.is_vegan == True, Restaurant.price_range == '$'))
     restaurants = db.session.scalars(stmt)
     print ('\n')
