@@ -1,13 +1,16 @@
 from flask import Flask, jsonify
 from flask_sqlalchemy import SQLAlchemy
+from flask_marshmallow import Marshmallow
 
 
 app = Flask(__name__)
+app.config ['JSON_SORT_KEYS'] = False
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://db_dev:password123@127.0.0.1:5432/food_finder'
 
 
 db = SQLAlchemy(app)
+ma = Marshmallow(app)
 
 #creates table
 class Restaurant(db.Model):
@@ -17,6 +20,14 @@ class Restaurant(db.Model):
     address = db.Column(db.String())
     is_vegan = db.Column(db.Boolean())
     price_range = db.Column(db.String())
+
+
+class RestaurantSchema(ma.Schema):
+    class Meta:
+        fields = ('id', 'name', 'address', 'is_vegan', 'price_range')
+        ordered = True
+
+
 
 #Defining a custom CLI (terminal) command
 @app.cli.command('create')
@@ -68,14 +79,11 @@ def drop_db():
 
 
 
-
-@app.cli.command('all_restaurants')
+@app.route('/restaurants/')
 def all_restaurants():
     stmt = db.select(Restaurant)
     restaurants = db.session.scalars(stmt).all()
-    print ('\n')
-    for restaurant in restaurants:
-        print(restaurant)
+    return RestaurantSchema(many=True).dump(restaurants)
 
 @app.cli.command('all_restaurants_address')
 def all_restaurants_address():
