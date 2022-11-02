@@ -3,17 +3,21 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from flask_bcrypt import Bcrypt
 from sqlalchemy.exc import IntegrityError
+from datetime import date, timedelta
+from flask_jwt_extended import JWTManager, create_access_token
 
 
 app = Flask(__name__)
 app.config ['JSON_SORT_KEYS'] = False
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://db_dev:password123@127.0.0.1:5432/food_finder'
+app.config['JWT_SECRET_KEY'] = 'hello there'
 
 
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
 bcrypt = Bcrypt(app)
+jwt = JWTManager(app)
 
 #creates table
 class User(db.Model):
@@ -131,7 +135,20 @@ def auth_register():
     except IntegrityError:
         return {'error':'Email address already in use'}, 409
 
+@app.route('/auth/login', methods= ['POST'])
+def auth_login():
+    #Find a user model instance from the user info
+    stmt = db.select(User).filter_by(email=request.json['email'])
+    user = db.session.scalar(stmt)
+    #Check if the hashed password matches the user's password
+    if user and bcrypt.check_password_hash(user.password, request.json['password']):
+        #Return a response with the user's info
+        token =create_access_token(identity=str(user.id),expires_delta=timedelta(days=1))
+        return {'username':user.username, 'email':user.email, 'token':token, 'admin':user.admin}, 200
+    else:
+        return {'error':'Incorrect email or password'}, 401
 
+ 
 @app.route('/restaurants/')
 def all_restaurants():
     stmt = db.select(Restaurant)
