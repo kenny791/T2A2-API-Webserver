@@ -110,6 +110,13 @@ def first_restaurant():
     print(restaurant.__dict__)
 
 
+@app.cli.command('count_vegan')
+def count_vegan():
+    stmt = db.select(db.func.count()).select_from(Restaurant).filter_by(is_vegan=True)
+    restaurants = db.session.scalar(stmt)
+    print(restaurants)
+
+
 @app.route('/')
 def index():
     return 'hello world!'
