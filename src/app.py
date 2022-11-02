@@ -35,6 +35,10 @@ class RestaurantSchema(ma.Schema):
         fields = ('id', 'name', 'address', 'is_vegan', 'price_range')
         ordered = True
 
+class UserSchema(ma.Schema):
+    class Meta:
+        fields = ('id', 'username', 'email', 'password', 'admin')
+        ordered = True
 
 
 #Defining a custom CLI (terminal) command
