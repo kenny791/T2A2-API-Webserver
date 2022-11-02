@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from flask_bcrypt import Bcrypt
+from sqlalchemy.exc import IntegrityError
 
 
 app = Flask(__name__)
@@ -115,19 +116,20 @@ def drop_db():
 
 @app.route('/auth/register', methods=['POST'])
 def auth_register():
-    #Load the posted user info and parse the JSON.(load is used to deserialise the json data as python objects)
-    user_info=UserSchema().load(request.json)
-    #Create a new user model instance from the user info
-    user = User(
-        username = user_info['username'],
-        email = user_info['email'],
-        password = bcrypt.generate_password_hash(user_info['password']).decode('utf-8')
-    )
-    #Add the new user to the database
-    db.session.add(user)
-    db.session.commit()
-    #Return a response with the new user's info
-    return UserSchema(exclude=['password']).dump(user), 201
+    try:
+        #Create a new user model instance from the user info
+        user = User(
+            username = request.json['username'],
+            email = request.json['email'],
+            password = bcrypt.generate_password_hash(request.json['password']).decode('utf-8')
+        )
+        #Add the new user to the database
+        db.session.add(user)
+        db.session.commit()
+        #Return a response with the new user's info
+        return UserSchema(exclude=['password']).dump(user), 201
+    except IntegrityError:
+        return {'error':'Email address already in use'}, 409
 
 
 @app.route('/restaurants/')
