@@ -18,7 +18,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), unique=True, nullable=False)
     email = db.Column(db.String(), unique=True, nullable=False)
-    password = db.Column(db.String(), unique=True, nullable=False)
+    password = db.Column(db.String(), nullable=False)
     admin = db.Column(db.Boolean(), default=False)
 
 class Restaurant(db.Model):
@@ -52,6 +52,25 @@ def create_db():
 #adds entity
 @app.cli.command('seed')
 def seed_db():
+    users = [
+        User(
+            username = 'admin',
+            email = 'admin@email.com',
+            password = 'password123',
+            admin = True
+        ),
+        User(
+            username = 'user1',
+            email = 'user1@email.com',
+            password = 'password123'
+        ),
+        User(
+            username = 'user2',
+            email = 'user2@email.com',
+            password = 'password123'
+        )
+    ]
+
 
     restaurants = [
         Restaurant(
@@ -81,6 +100,7 @@ def seed_db():
     ]
 
     db.session.add_all(restaurants)
+    db.session.add_all(users)
     db.session.commit()
     print('Table seeded')
 
