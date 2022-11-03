@@ -11,7 +11,13 @@ def all_restaurants():
     return RestaurantSchema(many=True).dump(restaurants)
 
 @restaurants_bp.route('/<int:id>/')
-def one_restaurants(id):
+def one_restaurant(id):
     stmt = db.select(Restaurant).filter_by(id=id)
     restaurant = db.session.scalar(stmt)
-    return RestaurantSchema().dump(restaurant)
+    if restaurant:
+        return RestaurantSchema().dump(restaurant)
+    else:
+        return {'error': f'Restaurant not found with id {id}'}, 404
+
+
+
