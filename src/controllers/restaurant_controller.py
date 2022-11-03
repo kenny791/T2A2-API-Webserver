@@ -20,4 +20,3 @@ def one_restaurant(id):
         return {'error': f'Restaurant not found with id {id}'}, 404
 
 
-
