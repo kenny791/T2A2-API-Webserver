@@ -1,5 +1,5 @@
 from flask import Blueprint, request
-from db import db
+from init import db
 from models.restaurant import Restaurant, RestaurantSchema
 
 restaurants_bp = Blueprint('restaurants', __name__, url_prefix='/restaurants')

@@ -1,4 +1,4 @@
-from db import db, ma
+from init import db, ma
 
 class Restaurant(db.Model):
     __tablename__ = 'restaurants'
