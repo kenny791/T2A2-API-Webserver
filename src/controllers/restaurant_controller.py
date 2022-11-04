@@ -1,6 +1,7 @@
 from flask import Blueprint, request
 from init import db
 from models.restaurant import Restaurant, RestaurantSchema
+from flask_jwt_extended import create_access_token, jwt_required
 
 restaurants_bp = Blueprint('restaurants', __name__, url_prefix='/restaurants')
 
@@ -26,6 +27,7 @@ def get_one_restaurant(id):
         return {'error': f'Restaurant not found with id {id}'}, 404
 
 @restaurants_bp.route('/', methods=['POST'])
+@jwt_required()
 def add_restaurant():
     restaurant = Restaurant(
         name = request.json['name'],
@@ -40,6 +42,7 @@ def add_restaurant():
     return RestaurantSchema().dump(restaurant), 201
 
 @restaurants_bp.route('/<int:id>/', methods=['PUT','PATCH'])
+@jwt_required()
 def update_restaurant(id):
     stmt = db.select(Restaurant).filter_by(id=id)
     restaurant = db.session.scalar(stmt)
@@ -54,6 +57,7 @@ def update_restaurant(id):
         return {'error': f'Restaurant not found with id {id}'}, 404
 
 @restaurants_bp.route('/<int:id>/', methods=['DELETE'])
+@jwt_required()
 def delete_restaurant(id):
     stmt = db.select(Restaurant).filter_by(id=id)
     restaurant = db.session.scalar(stmt)

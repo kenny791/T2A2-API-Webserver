@@ -3,7 +3,7 @@ from init import db, bcrypt
 from models.user import User, UserSchema
 from sqlalchemy.exc import IntegrityError
 from datetime import timedelta
-from flask_jwt_extended import create_access_token
+from flask_jwt_extended import create_access_token, jwt_required
 
 auth_bp = Blueprint('auth', __name__, url_prefix="/auth")
 
@@ -14,8 +14,7 @@ def auth_register():
         user = User(
             username = request.json.get('username'),
             email = request.json['email'],
-            password = bcrypt.generate_password_hash(request.json['password']).decode('utf-8'),
-            
+            password = bcrypt.generate_password_hash(request.json['password']).decode('utf-8'),            
         )
 
         #Add and commit user to DB
@@ -33,7 +32,6 @@ def auth_login():
     user = db.session.scalar(stmt)
     # If user exists and password is correct
     if user and bcrypt.check_password_hash(user.password, request.json['password']):
-        # return UserSchema(exclude=['password']).dump(user)
         token = create_access_token(identity=str(user.id), expires_delta=timedelta(days=1))
         return {'email': user.email, 'token': token, 'is_admin': user.is_admin} 
     else:
