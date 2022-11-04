@@ -2,6 +2,7 @@ from flask import Blueprint, request
 from init import db
 from models.restaurant import Restaurant, RestaurantSchema
 from flask_jwt_extended import create_access_token, jwt_required
+from controllers.auth_controller import authorize
 
 restaurants_bp = Blueprint('restaurants', __name__, url_prefix='/restaurants')
 
@@ -62,6 +63,8 @@ def update_restaurant(id):
 @restaurants_bp.route('/<int:id>/', methods=['DELETE'])
 @jwt_required()
 def delete_restaurant(id):
+    if not authorize():
+        return {'error': 'You must be an admin'}, 401
     stmt = db.select(Restaurant).filter_by(id=id)
     restaurant = db.session.scalar(stmt)
     if restaurant:

@@ -3,9 +3,15 @@ from init import db, bcrypt
 from models.user import User, UserSchema
 from sqlalchemy.exc import IntegrityError
 from datetime import timedelta
-from flask_jwt_extended import create_access_token, jwt_required
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 
 auth_bp = Blueprint('auth', __name__, url_prefix="/auth")
+
+def authorize():
+    user_id = get_jwt_identity()
+    stmt = db.select(User).filter_by(id=user_id)
+    user = db.session.scalar(stmt)
+    return user.is_admin
 
 @auth_bp.route("/register", methods=["POST"])
 def auth_register():
