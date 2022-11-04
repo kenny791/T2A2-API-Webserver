@@ -11,7 +11,7 @@ def get_all_restaurants():
     return RestaurantSchema(many=True).dump(restaurants)
 
 @restaurants_bp.route('/vf/')
-def get_vegan_friendly_restaurants():
+def get_is_vegan_restaurants():
     stmt = db.select(Restaurant).filter_by(is_vegan=True).order_by(Restaurant.price_range.desc())
     restaurants = db.session.scalars(stmt)
     return RestaurantSchema(many=True).dump(restaurants)
@@ -38,3 +38,17 @@ def add_restaurant():
     db.session.commit()
     #Returning a response with the new restaurant's info
     return RestaurantSchema().dump(restaurant), 201
+
+@restaurants_bp.route('/<int:id>/', methods=['PUT','PATCH'])
+def update_restaurant(id):
+    stmt = db.select(Restaurant).filter_by(id=id)
+    restaurant = db.session.scalar(stmt)
+    if restaurant:
+        restaurant.name = request.json.get('name') or restaurant.name
+        restaurant.address = request.json.get('address') or restaurant.address
+        restaurant.price_range = request.json.get('price_range') or restaurant.price_range
+        restaurant.is_vegan = request.json.get('is_vegan') or restaurant.is_vegan
+        db.session.commit()
+        return RestaurantSchema().dump(restaurant)
+    else:
+        return {'error': f'Restaurant not found with id {id}'}, 404
