@@ -50,8 +50,11 @@ def update_restaurant(id):
         restaurant.name = request.json.get('name') or restaurant.name
         restaurant.address = request.json.get('address') or restaurant.address
         restaurant.price_range = request.json.get('price_range') or restaurant.price_range
-        restaurant.is_vegan = request.json.get('is_vegan') or restaurant.is_vegan
-        db.session.commit()
+        # restaurant.is_vegan = request.json.get('is_vegan') or restaurant.is_vegan
+        try:
+            restaurant.is_vegan = request.json.get('is_vegan')
+        except:
+            restaurant.is_vegan = restaurant.is_vegan
         return RestaurantSchema().dump(restaurant)
     else:
         return {'error': f'Restaurant not found with id {id}'}, 404
