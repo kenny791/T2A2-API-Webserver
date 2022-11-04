@@ -52,3 +52,14 @@ def update_restaurant(id):
         return RestaurantSchema().dump(restaurant)
     else:
         return {'error': f'Restaurant not found with id {id}'}, 404
+
+@restaurants_bp.route('/<int:id>/', methods=['DELETE'])
+def delete_restaurant(id):
+    stmt = db.select(Restaurant).filter_by(id=id)
+    restaurant = db.session.scalar(stmt)
+    if restaurant:
+        db.session.delete(restaurant)
+        db.session.commit()
+        return {'message': f'Restaurant \'{restaurant.name}\' with id \'{id}\' deleted successfully'},200
+    else:
+        return {'error': f'Restaurant not found with id {id}'}, 404
