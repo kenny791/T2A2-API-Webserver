@@ -42,3 +42,10 @@ def auth_login():
         return {'email': user.email, 'token': token, 'is_admin': user.is_admin} 
     else:
         return{'error': 'Invalid email or password'},401
+
+
+@auth_bp.route('/users/')
+def get_all_users():
+    stmt = db.select(User)
+    users = db.session.scalars(stmt)
+    return UserSchema(many=True, exclude=['password']).dump(users)

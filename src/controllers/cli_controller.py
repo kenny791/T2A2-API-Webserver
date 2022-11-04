@@ -46,34 +46,41 @@ def seed_db():
         )
     ]
 
+    db.session.add_all(users)
+    db.session.commit()
+
+
     restaurants = [
         Restaurant(
             name = 'Macdonalds',
             address = '123 main st',
             is_vegan = False,
-            price_range = '$'
+            price_range = '$',
+            added_by = users[0]
         ),
         Restaurant(
             name = 'Burger King',
             address = '456 high st',
             is_vegan = False,
-            price_range = '$$'
+            price_range = '$$',
+            added_by = users[0]
         ),
         Restaurant(
             name = 'Veggie Hut',
             address = '789 low st',
             is_vegan = True,
-            price_range = '$'
+            price_range = '$',
+            added_by = users[1]
         ),
         Restaurant(
             name = 'Laksa Palace',
             address = '1011 high st',
             is_vegan = True,
-            price_range = '$$'
+            price_range = '$$',
+            added_by = users[1]
         )
     ]
 
     db.session.add_all(restaurants)
-    db.session.add_all(users)
     db.session.commit()
     print('Tables seeded')

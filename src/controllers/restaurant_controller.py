@@ -1,7 +1,7 @@
 from flask import Blueprint, request
 from init import db
 from models.restaurant import Restaurant, RestaurantSchema
-from flask_jwt_extended import create_access_token, jwt_required
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from controllers.auth_controller import authorize
 
 restaurants_bp = Blueprint('restaurants', __name__, url_prefix='/restaurants')
@@ -34,7 +34,8 @@ def add_restaurant():
         name = request.json['name'],
         address = request.json['address'],
         price_range = request.json['price_range'],
-        is_vegan = request.json['is_vegan']
+        is_vegan = request.json['is_vegan'],
+        user_id = get_jwt_identity()
     )
     #Add the restaurant to the database
     db.session.add(restaurant)
