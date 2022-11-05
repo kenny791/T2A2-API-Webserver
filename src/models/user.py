@@ -11,12 +11,13 @@ class User(db.Model):
     is_admin = db.Column(db.Boolean(), default=False)
 
     # object is what is shown on the client side
-    restaurants = db.relationship('Restaurant', back_populates='added_by', cascade='all, delete')
-
+    restaurants_submitted = db.relationship('Restaurant', back_populates='added_by', cascade='all, delete')
+    reviews_submitted = db.relationship('Review', back_populates='user', cascade='all, delete')
 
 class UserSchema(ma.Schema):
-    restaurants = fields.List(fields.Nested('RestaurantSchema', only=('name',)))
+    restaurants_submitted = fields.List(fields.Nested('RestaurantSchema', only=['name']))
+    reviews_submitted = fields.List(fields.Nested('ReviewSchema', only=['restaurant','message']))
+
     class Meta:
-        # fields = ('id', 'username', 'email', 'password', 'is_admin')
-        fields = ('id', 'username', 'email', 'password', 'is_admin', 'restaurants')
+        fields = ('id', 'username', 'email', 'password', 'is_admin', 'restaurants_submitted', 'reviews_submitted')
         ordered = True

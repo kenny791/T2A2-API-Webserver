@@ -3,6 +3,7 @@ from init import db, bcrypt
 from datetime import date
 from models.restaurant import Restaurant
 from models.user import User
+from models.review import Review
 
 db_commands = Blueprint('db', __name__)
 
@@ -83,4 +84,27 @@ def seed_db():
 
     db.session.add_all(restaurants)
     db.session.commit()
+
+    reviews = [
+        Review(
+            message = 'This place is great!',
+            user = users[0],
+            restaurant = restaurants[0]
+        ),
+        Review(
+            message = 'This place is terrible!',
+            user = users[1],
+            restaurant = restaurants[0]
+        ),
+        Review(
+            message = 'This place is okay!',
+            user = users[2],
+            restaurant = restaurants[0]
+        ),
+    ]
+
+
+    db.session.add_all(reviews)
+    db.session.commit()
+
     print('Tables seeded')

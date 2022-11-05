@@ -13,12 +13,13 @@ class Restaurant(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
     # object is what is shown on the client side
-    added_by = db.relationship('User', back_populates='restaurants')
+    added_by = db.relationship('User', back_populates='restaurants_submitted')
+    reviews = db.relationship('Review', back_populates='restaurant', cascade='all, delete')
 
 
 class RestaurantSchema(ma.Schema):
-    added_by = fields.Nested('UserSchema', only=('username',))
+    added_by = fields.Nested('UserSchema', only=['username'])
+    reviews = fields.List(fields.Nested('ReviewSchema', only=['user', 'message']))
     class Meta:
-        # fields = ('id', 'name', 'address', 'is_vegan', 'price_range')
-        fields = ('id', 'name', 'address', 'is_vegan', 'price_range', 'added_by')
+        fields = ('id', 'name', 'address', 'is_vegan', 'price_range', 'added_by', 'reviews')
         ordered = True
