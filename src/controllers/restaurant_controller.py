@@ -1,8 +1,11 @@
 from flask import Blueprint, request
 from init import db
 from models.restaurant import Restaurant, RestaurantSchema
+from models.review import Review, ReviewSchema
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from controllers.auth_controller import authorize
+from email import message
+from datetime import date
 
 restaurants_bp = Blueprint('restaurants', __name__, url_prefix='/restaurants')
 
@@ -72,5 +75,24 @@ def delete_restaurant(id):
         db.session.delete(restaurant)
         db.session.commit()
         return {'message': f'Restaurant \'{restaurant.name}\' with id \'{id}\' deleted successfully'},200
+    else:
+        return {'error': f'Restaurant not found with id {id}'}, 404
+
+@restaurants_bp.route('/<int:restaurant_id>/review/', methods=['POST'])
+@jwt_required()
+def create_review(restaurant_id):
+    stmt = db.select(Restaurant).filter_by(id=restaurant_id)
+    restaurant = db.session.scalar(stmt)
+    if restaurant:
+        review = Review(
+            user_id = get_jwt_identity(),
+            message = request.json['message'],
+            rating = request.json['rating'],
+            restaurant = restaurant,
+            date = date.today(),
+        )
+        db.session.add(review)
+        db.session.commit()
+        return ReviewSchema().dump(review), 201
     else:
         return {'error': f'Restaurant not found with id {id}'}, 404

@@ -6,8 +6,8 @@ class Review(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     message = db.Column(db.Text)
-    # rating = db.Column(db.Integer)
-    # date = db.Column(db.Date) #Date created
+    rating = db.Column(db.Integer)
+    date = db.Column(db.Date) #Date created
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurants.id'), nullable=False)
@@ -22,5 +22,5 @@ class ReviewSchema(ma.Schema):
     restaurant = fields.Nested('RestaurantSchema', only=['name'])
 
     class Meta:
-        fields = ('id', 'message', 'user', 'restaurant')
+        fields = ('id','date','rating', 'message', 'user', 'restaurant')
         ordered = True

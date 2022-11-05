@@ -88,16 +88,22 @@ def seed_db():
     reviews = [
         Review(
             message = 'This place is great!',
+            rating = 5,
+            date = date.today(),
             user = users[0],
             restaurant = restaurants[0]
         ),
         Review(
             message = 'This place is terrible!',
+            rating = 1,
+            date = date.today(),
             user = users[1],
             restaurant = restaurants[0]
         ),
         Review(
             message = 'This place is okay!',
+            rating = 3,
+            date = date.today(),
             user = users[2],
             restaurant = restaurants[0]
         ),

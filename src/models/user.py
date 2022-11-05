@@ -16,7 +16,7 @@ class User(db.Model):
 
 class UserSchema(ma.Schema):
     restaurants_submitted = fields.List(fields.Nested('RestaurantSchema', only=['name']))
-    reviews_submitted = fields.List(fields.Nested('ReviewSchema', only=['restaurant','message']))
+    reviews_submitted = fields.List(fields.Nested('ReviewSchema', only=['restaurant','rating','date','message']))
 
     class Meta:
         fields = ('id', 'username', 'email', 'password', 'is_admin', 'restaurants_submitted', 'reviews_submitted')
