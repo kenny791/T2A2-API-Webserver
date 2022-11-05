@@ -1,6 +1,6 @@
 from init import db, ma
 from marshmallow import fields
-from marshmallow.validate import Length, OneOf
+from marshmallow.validate import Length, OneOf, And, Regexp
 
 VALID_PRICE_RANGE = ['$', '$$', '$$$', '$$$$']
 
@@ -23,8 +23,12 @@ class Restaurant(db.Model):
 class RestaurantSchema(ma.Schema):
     added_by = fields.Nested('UserSchema', only=['username'])
     reviews = fields.List(fields.Nested('ReviewSchema', only=['user','rating','date', 'message']))
-    name = fields.String(required=True, validate=Length(min=1, error='Name must be at least 1 character long'))
+    name = fields.String(required=True, validate=And(
+        Length(min=1, error='Name must be at least 1 character long'),
+        Regexp('^[a-zA-Z0-9 ]+$', error='Name must be alphanumeric')
+        ))
     price_range = fields.String(validate=OneOf(VALID_PRICE_RANGE))
+
     class Meta:
         fields = ('id', 'name', 'address', 'is_vegan', 'price_range', 'added_by', 'reviews')
         ordered = True
