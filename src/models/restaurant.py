@@ -1,5 +1,6 @@
 from init import db, ma
 from marshmallow import fields
+from marshmallow.validate import Length
 
 class Restaurant(db.Model):
     __tablename__ = 'restaurants'
@@ -20,6 +21,7 @@ class Restaurant(db.Model):
 class RestaurantSchema(ma.Schema):
     added_by = fields.Nested('UserSchema', only=['username'])
     reviews = fields.List(fields.Nested('ReviewSchema', only=['user','rating','date', 'message']))
+    name = fields.String(required=True, validate=Length(min=1))
     class Meta:
         fields = ('id', 'name', 'address', 'is_vegan', 'price_range', 'added_by', 'reviews')
         ordered = True
