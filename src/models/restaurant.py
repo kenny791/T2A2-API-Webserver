@@ -21,7 +21,7 @@ class Restaurant(db.Model):
 class RestaurantSchema(ma.Schema):
     added_by = fields.Nested('UserSchema', only=['username'])
     reviews = fields.List(fields.Nested('ReviewSchema', only=['user','rating','date', 'message']))
-    name = fields.String(required=True, validate=Length(min=1))
+    name = fields.String(required=True, validate=Length(min=1, error='Name must be at least 1 character long'))
     class Meta:
         fields = ('id', 'name', 'address', 'is_vegan', 'price_range', 'added_by', 'reviews')
         ordered = True
