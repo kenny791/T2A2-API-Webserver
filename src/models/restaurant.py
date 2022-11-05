@@ -1,6 +1,7 @@
 from init import db, ma
-from marshmallow import fields
+from marshmallow import fields, validates
 from marshmallow.validate import Length, OneOf, And, Regexp
+from marshmallow.exceptions import ValidationError
 
 VALID_PRICE_RANGE = ['$', '$$', '$$$', '$$$$']
 
@@ -29,6 +30,12 @@ class RestaurantSchema(ma.Schema):
         ))
     price_range = fields.String(validate=OneOf(VALID_PRICE_RANGE))
     is_vegan = fields.Boolean(load_default=False)
+
+    @validates('price_range',)
+    def validate_price_range(self, v2):
+        if v2 == '$$$$':
+            raise ValidationError('Vegan restaurants are not that expensive')
+
 
     class Meta:
         fields = ('id', 'name', 'address', 'is_vegan', 'price_range', 'added_by', 'reviews')
