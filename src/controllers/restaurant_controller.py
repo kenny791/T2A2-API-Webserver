@@ -33,18 +33,25 @@ def get_one_restaurant(id):
 @restaurants_bp.route('/', methods=['POST'])
 @jwt_required()
 def add_restaurant():
+    data = RestaurantSchema().load(request.json)
     restaurant = Restaurant(
-        name = request.json['name'],
-        address = request.json['address'],
-        price_range = request.json['price_range'],
-        is_vegan = request.json['is_vegan'],
+        # name = request.json['name'],
+        # address = request.json['address'],
+        # price_range = request.json['price_range'],
+        # is_vegan = request.json['is_vegan'],
+        # user_id = get_jwt_identity()
+
+        name = data['name'],
+        address = data['address'],
+        price_range = data['price_range'],
+        is_vegan = data['is_vegan'],
         user_id = get_jwt_identity()
     )
     #Add the restaurant to the database
     db.session.add(restaurant)
     db.session.commit()
     #Returning a response with the new restaurant's info
-    return RestaurantSchema().dump(restaurant), 201
+    return RestaurantSchema(exclude = ['reviews', 'added_by']).dump(restaurant), 201
 
 @restaurants_bp.route('/<int:id>/', methods=['PUT','PATCH'])
 @jwt_required()
