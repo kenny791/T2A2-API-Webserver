@@ -28,6 +28,7 @@ class RestaurantSchema(ma.Schema):
         Regexp('^[a-zA-Z0-9 ]+$', error='Name must be alphanumeric')
         ))
     price_range = fields.String(validate=OneOf(VALID_PRICE_RANGE))
+    is_vegan = fields.Boolean(load_default=False)
 
     class Meta:
         fields = ('id', 'name', 'address', 'is_vegan', 'price_range', 'added_by', 'reviews')
