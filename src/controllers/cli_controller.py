@@ -56,28 +56,28 @@ def seed_db():
             address = '123 main st',
             is_vegan = False,
             price_range = '$',
-            added_by = users[0]
+            user_id = users[0].id
         ),
         Restaurant(
             name = 'Burger King',
             address = '456 high st',
             is_vegan = False,
             price_range = '$$',
-            added_by = users[0]
+            user_id = users[0].id
         ),
         Restaurant(
             name = 'Veggie Hut',
             address = '789 low st',
             is_vegan = True,
             price_range = '$',
-            added_by = users[1]
+            user_id = users[1].id
         ),
         Restaurant(
             name = 'Laksa Palace',
             address = '1011 high st',
             is_vegan = True,
             price_range = '$$',
-            added_by = users[1]
+            user_id = users[1].id
         )
     ]
 

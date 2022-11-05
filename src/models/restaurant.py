@@ -8,12 +8,17 @@ class Restaurant(db.Model):
     address = db.Column(db.String())
     is_vegan = db.Column(db.Boolean())
     price_range = db.Column(db.String())
+    
+    # the id pulled from the users table and is shown in restaurants table as user_id in db
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+
+    # object is what is shown on the client side
     added_by = db.relationship('User', back_populates='restaurants')
 
 
 class RestaurantSchema(ma.Schema):
     added_by = fields.Nested('UserSchema', only=('username',))
     class Meta:
+        # fields = ('id', 'name', 'address', 'is_vegan', 'price_range')
         fields = ('id', 'name', 'address', 'is_vegan', 'price_range', 'added_by')
         ordered = True
