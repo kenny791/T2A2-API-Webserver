@@ -15,11 +15,6 @@ def get_all_restaurants():
     restaurants = db.session.scalars(stmt)
     return RestaurantSchema(many=True).dump(restaurants)
 
-@restaurants_bp.route('/vf/')
-def get_is_vegan_restaurants():
-    stmt = db.select(Restaurant).filter_by(is_vegan=True).order_by(Restaurant.price_range.desc())
-    restaurants = db.session.scalars(stmt)
-    return RestaurantSchema(many=True).dump(restaurants)
 
 @restaurants_bp.route('/<int:id>/')
 def get_one_restaurant(id):
@@ -39,7 +34,6 @@ def add_restaurant():
         region = data['region'],
         price_range = data['price_range'],
         cuisine = data['cuisine'],
-        is_vegan = data['is_vegan'],
         user_id = get_jwt_identity()
     )
     #Add the restaurant to the database
@@ -62,12 +56,6 @@ def update_restaurant(id):
         restaurant.price_range = data['price_range'] or restaurant.price_range
         restaurant.cuisine = data['cuisine'] or restaurant.cuisine
         
-
-        try:
-            restaurant.is_vegan = data['is_vegan']
-        except:
-            restaurant.is_vegan = restaurant.is_vegan
-            
         db.session.commit()
         return RestaurantSchema(exclude=['reviews']).dump(restaurant), 200
     else:

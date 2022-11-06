@@ -55,7 +55,6 @@ def seed_db():
         Restaurant(
             name = 'Mesa Verde',
             region = 'North',
-            is_vegan = False,
             price_range = '$',
             cuisine = 'Mexican',
             user_id = users[1].id
@@ -63,7 +62,6 @@ def seed_db():
         Restaurant(
             name = 'Minamishima',
             region = 'East',
-            is_vegan = False,
             price_range = '$$',
             cuisine = 'Japanese',
             user_id = users[1].id
@@ -71,7 +69,6 @@ def seed_db():
         Restaurant(
             name = 'Florentino',
             region = 'West',
-            is_vegan = True,
             price_range = '$$$',
             cuisine = 'Italian',
             user_id = users[1].id
@@ -79,7 +76,6 @@ def seed_db():
         Restaurant(
             name = 'Bodega Underground',
             region = 'North',
-            is_vegan = True,
             price_range = '$$',
             cuisine = 'Mexican',
             user_id = users[2].id
@@ -87,7 +83,6 @@ def seed_db():
         Restaurant(
             name = 'Nobu',
             region = 'South',
-            is_vegan = False,
             price_range = '$$$',
             cuisine = 'Japanese',
             user_id = users[2].id
@@ -95,7 +90,6 @@ def seed_db():
         Restaurant(
             name = 'Scopri',
             region = 'North',
-            is_vegan = False,
             price_range = '$',
             cuisine = 'Italian',
             user_id = users[2].id
@@ -103,7 +97,6 @@ def seed_db():
         Restaurant(
             name = 'Village Cantina',
             region = 'East',
-            is_vegan = True,
             price_range = '$$$',
             cuisine = 'Mexican',
             user_id = users[3].id
@@ -111,7 +104,6 @@ def seed_db():
         Restaurant(
             name = 'Supernormal',
             region = 'West',
-            is_vegan = True,
             price_range = '$',
             cuisine = 'Japanese',
             user_id = users[3].id  
@@ -119,7 +111,6 @@ def seed_db():
         Restaurant(
             name = 'Agostino',
             region = 'North',
-            is_vegan = False,
             price_range = '$$',
             cuisine = 'Italian',
             user_id = users[3].id

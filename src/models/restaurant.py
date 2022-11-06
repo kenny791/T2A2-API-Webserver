@@ -11,7 +11,6 @@ class Restaurant(db.Model):
     id = db.Column(db.Integer,primary_key=True)
     name = db.Column(db.String(),nullable=False)
     region = db.Column(db.String())
-    is_vegan = db.Column(db.Boolean())
     price_range = db.Column(db.String())
     cuisine = db.Column(db.String(), default='tbc')
     
@@ -32,7 +31,6 @@ class RestaurantSchema(ma.Schema):
         Regexp('^[a-zA-Z0-9 ]+$', error='Name must be alphanumeric')
         ))
     price_range = fields.String(validate=OneOf(VALID_PRICE_RANGE))
-    is_vegan = fields.Boolean(load_default=False)
 
     @validates('price_range',)
     def validate_price_range(self, v2):
@@ -41,5 +39,5 @@ class RestaurantSchema(ma.Schema):
 
 
     class Meta:
-        fields = ('id', 'name', 'region', 'is_vegan', 'price_range','cuisine', 'added_by', 'reviews')
+        fields = ('id', 'name', 'region', 'price_range','cuisine', 'added_by', 'reviews')
         ordered = True
