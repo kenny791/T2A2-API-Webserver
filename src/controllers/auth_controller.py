@@ -26,7 +26,7 @@ def auth_register():
 
         db.session.add(user)
         db.session.commit()
-        return UserSchema(exclude=['password']).dump(user),201
+        return UserSchema(exclude=['password', 'is_admin']).dump(user), 201
     except IntegrityError:
         return {'error': 'Username or email already exists'}, 409
         
@@ -38,7 +38,7 @@ def auth_login():
     # If user exists and password is correct
     if user and bcrypt.check_password_hash(user.password, request.json['password']):
         token = create_access_token(identity=str(user.id), expires_delta=timedelta(days=1))
-        return {'message': f'Login Successful, Welcome {user.username}', 'token': token}, 200
+        return {'email': user.email, 'token': token,}, 200
     else:
         return{'error': 'Invalid email or password'},401
 

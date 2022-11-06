@@ -48,7 +48,6 @@ def update_restaurant(id):
     stmt = db.select(Restaurant).filter_by(id=id)
     restaurant = db.session.scalar(stmt)
 
-
     if restaurant:
         data = RestaurantSchema().load(request.json)
         restaurant.name = data['name'] or restaurant.name
@@ -81,13 +80,18 @@ def create_review(restaurant_id):
     stmt = db.select(Restaurant).filter_by(id=restaurant_id)
     restaurant = db.session.scalar(stmt)
     if restaurant:
+        data = ReviewSchema().load(request.json)
         review = Review(
             user_id = get_jwt_identity(),
-            message = request.json['message'],
-            rating = request.json['rating'],
-            restaurant = restaurant,
-            date = date.today(),
+            restaurant_id = restaurant_id,
+            rating = data['rating'],
+            message = data['message'],
+            date = date.today()
         )
+
+
+
+
         db.session.add(review)
         db.session.commit()
         return ReviewSchema().dump(review), 201

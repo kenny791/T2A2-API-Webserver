@@ -27,23 +27,23 @@ def seed_db():
         User(
             username="admin",
             email='admin@email.com',
-            password=bcrypt.generate_password_hash('admin').decode('utf-8'),
+            password=bcrypt.generate_password_hash('passwordadmin').decode('utf-8'),
             is_admin=True
         ),
         User(
             username="user1",
             email='user1@email.com',
-            password=bcrypt.generate_password_hash('user1').decode('utf-8')
+            password=bcrypt.generate_password_hash('password1').decode('utf-8')
         ),
         User(
             username="user2",
             email='user2@email.com',
-            password=bcrypt.generate_password_hash('user2').decode('utf-8')
+            password=bcrypt.generate_password_hash('password2').decode('utf-8')
         ),
         User(
             username="user3",
             email='user3@email.com',
-            password=bcrypt.generate_password_hash('user3').decode('utf-8')
+            password=bcrypt.generate_password_hash('password3').decode('utf-8')
         )
     ]
 

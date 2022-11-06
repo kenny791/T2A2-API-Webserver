@@ -20,6 +20,7 @@ class User(db.Model):
 class UserSchema(ma.Schema):
     restaurants_submitted = fields.List(fields.Nested('RestaurantSchema', only=['name']))
     reviews_submitted = fields.List(fields.Nested('ReviewSchema', only=['restaurant','rating','date','message']))
+    # input fields area validated by marshmallow
     email =fields.String(validate=Email())
     username = fields.String(validate=And(
         Length(min=1, error='Username must be at least 1 character long'),
