@@ -16,20 +16,19 @@ def authorize():
 @auth_bp.route("/register", methods=["POST"])
 def auth_register():
     try:
-        #Create a new User model instance from the user_info
+        data = UserSchema().load(request.json)
         user = User(
-            username = request.json.get('username'),
-            email = request.json['email'],
-            password = bcrypt.generate_password_hash(request.json['password']).decode('utf-8'),            
+            username = data['username'],
+            email = data['email'],
+            password = bcrypt.generate_password_hash(data['password']).decode('utf-8')
         )
+        
 
-        #Add and commit user to DB
         db.session.add(user)
         db.session.commit()
-        #Respond to client
         return UserSchema(exclude=['password']).dump(user),201
     except IntegrityError:
-        return {'error': 'Email address already in use'}, 409
+        return {'error': 'Username or email already exists'}, 409
         
 @auth_bp.route('/login/', methods=['POST'])
 def auth_login():

@@ -120,28 +120,197 @@ def seed_db():
     db.session.add_all(restaurants)
     db.session.commit()
 
+# review seed data
     reviews = [
         Review(
+            restaurant = restaurants[0],
             message = 'This place is great!',
             rating = 5,
-            date = date.today(),
-            user = users[0],
-            restaurant = restaurants[0]
+            date = '2022-10-01',
+            user = users[1]
         ),
         Review(
-            message = 'This place is terrible!',
+            restaurant = restaurants[0],
+            message = 'Fantastic food and service!',
+            rating = 4,
+            date = date.today(),
+            user = users[2]
+        ),
+        Review(
+            restaurant = restaurants[0],
+            message = 'Good but not great.',
+            rating = 1,
+            date = '2022-11-01',
+            user = users[3]
+        ),
+        Review(
+            restaurant = restaurants[1],
+            message = 'This place is great!',
+            rating = 5,
+            date = '2022-10-01',
+            user = users[1]
+        ),
+        Review(
+            restaurant = restaurants[1],
+            message = 'Fantastic food and service!',
+            rating = 4,
+            date = date.today(),
+            user = users[2]
+        ),
+        Review(
+            restaurant = restaurants[1],
+            message = 'Good but not great.',
+            rating = 1,
+            date = '2022-10-01',
+            user = users[3]
+        ),
+        Review(
+            restaurant = restaurants[2],
+            message = 'This place is great!',
+            rating = 5,
+            date = '2022-10-01',
+            user = users[1]
+        ),
+        Review(
+            restaurant = restaurants[2],
+            message = 'Fantastic food and service!',
+            rating = 4,
+            date = date.today(),
+            user = users[2]
+        ),
+        Review(
+            restaurant = restaurants[2],
+            message = 'Good but not great.',
+            rating = 1,
+            date = '2022-10-01',
+            user = users[3]
+        ),
+        Review(
+            restaurant = restaurants[3],
+            message = 'This place is great!',
+            rating = 5,
+            date = '2022-10-01',
+            user = users[1]
+        ),
+        Review(
+            restaurant = restaurants[3],
+            message = 'Fantastic food and service!',
+            rating = 4,
+            date = date.today(),
+            user = users[2]
+        ),
+        Review(
+            restaurant = restaurants[3],
+            message = 'Good but not great.',
+            rating = 1,
+            date = '2022-10-01',
+            user = users[3]
+        ),
+        Review(
+            restaurant = restaurants[4],
+            message = 'This place is great!',
+            rating = 5,
+            date = '2022-10-01',
+            user = users[1]
+        ),
+        Review(
+            restaurant = restaurants[4],
+            message = 'Fantastic food and service!',
+            rating = 4,
+            date = '2022-10-01',
+            user = users[2]
+        ),
+        Review(
+            restaurant = restaurants[4],
+            message = 'Good but not great.',
             rating = 1,
             date = date.today(),
-            user = users[1],
-            restaurant = restaurants[0]
+            user = users[3]
         ),
         Review(
-            message = 'This place is okay!',
-            rating = 3,
-            date = date.today(),
-            user = users[2],
-            restaurant = restaurants[0]
+            restaurant = restaurants[5],
+            message = 'This place is great!',
+            rating = 5,
+            date = '2022-10-01',
+            user = users[1]
         ),
+        Review(
+            restaurant = restaurants[5],
+            message = 'Fantastic food and service!',
+            rating = 4,
+            date = date.today(),
+            user = users[2]
+        ),
+        Review(
+            restaurant = restaurants[5],
+            message = 'Good but not great.',
+            rating = 1,
+            date = '2022-10-01',
+            user = users[3]
+        ),
+        Review(
+            restaurant = restaurants[6],
+            message = 'This place is great!',
+            rating = 5,
+            date = '2022-10-01',
+            user = users[1]
+        ),
+        Review(
+            restaurant = restaurants[6],
+            message = 'Fantastic food and service!',
+            rating = 4,
+            date = date.today(),
+            user = users[2]
+        ),
+        Review(
+            restaurant = restaurants[6],
+            message = 'Good but not great.',
+            rating = 1,
+            date = '2022-10-01',
+            user = users[3]
+        ),
+        Review(
+            restaurant = restaurants[7],
+            message = 'This place is great!',
+            rating = 5,
+            date = '2022-10-01',
+            user = users[1]
+        ),
+        Review(
+            restaurant = restaurants[7],
+            message = 'Fantastic food and service!',
+            rating = 4,
+            date = date.today(),
+            user = users[2]
+        ),
+        Review(
+            restaurant = restaurants[7],
+            message = 'Good but not great.',
+            rating = 1,
+            date = '2022-10-01',
+            user = users[3]
+        ),
+        Review(
+            restaurant = restaurants[8],
+            message = 'This place is great!',
+            rating = 5,
+            date = '2022-10-01',
+            user = users[1]
+        ),
+        Review(
+            restaurant = restaurants[8],
+            message = 'Fantastic food and service!',
+            rating = 4,
+            date = date.today(),
+            user = users[2]
+        ),
+        Review(
+            restaurant = restaurants[8],
+            message = 'Good but not great.',
+            rating = 1,
+            date = '2022-10-01',
+            user = users[3]
+        )
     ]
 
 
