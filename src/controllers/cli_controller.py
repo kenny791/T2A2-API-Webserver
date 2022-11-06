@@ -53,32 +53,76 @@ def seed_db():
 
     restaurants = [
         Restaurant(
-            name = 'Macdonalds',
-            address = '123 main st',
+            name = 'Mesa Verde',
+            region = 'North',
             is_vegan = False,
             price_range = '$',
-            user_id = users[0].id
-        ),
-        Restaurant(
-            name = 'Burger King',
-            address = '456 high st',
-            is_vegan = False,
-            price_range = '$$',
-            user_id = users[0].id
-        ),
-        Restaurant(
-            name = 'Veggie Hut',
-            address = '789 low st',
-            is_vegan = True,
-            price_range = '$',
+            cuisine = 'Mexican',
             user_id = users[1].id
         ),
         Restaurant(
-            name = 'Laksa Palace',
-            address = '1011 high st',
+            name = 'Minamishima',
+            region = 'East',
+            is_vegan = False,
+            price_range = '$$',
+            cuisine = 'Japanese',
+            user_id = users[1].id
+        ),
+        Restaurant(
+            name = 'Florentino',
+            region = 'West',
+            is_vegan = True,
+            price_range = '$$$',
+            cuisine = 'Italian',
+            user_id = users[1].id
+        ),
+        Restaurant(
+            name = 'Bodega Underground',
+            region = 'North',
             is_vegan = True,
             price_range = '$$',
-            user_id = users[1].id
+            cuisine = 'Mexican',
+            user_id = users[2].id
+        ),
+        Restaurant(
+            name = 'Nobu',
+            region = 'South',
+            is_vegan = False,
+            price_range = '$$$',
+            cuisine = 'Japanese',
+            user_id = users[2].id
+        ),
+        Restaurant(
+            name = 'Scopri',
+            region = 'North',
+            is_vegan = False,
+            price_range = '$',
+            cuisine = 'Italian',
+            user_id = users[2].id
+        ),
+        Restaurant(
+            name = 'Village Cantina',
+            region = 'East',
+            is_vegan = True,
+            price_range = '$$$',
+            cuisine = 'Mexican',
+            user_id = users[3].id
+        ),
+        Restaurant(
+            name = 'Supernormal',
+            region = 'West',
+            is_vegan = True,
+            price_range = '$',
+            cuisine = 'Japanese',
+            user_id = users[3].id  
+        ),
+        Restaurant(
+            name = 'Agostino',
+            region = 'North',
+            is_vegan = False,
+            price_range = '$$',
+            cuisine = 'Italian',
+            user_id = users[3].id
         )
     ]
 

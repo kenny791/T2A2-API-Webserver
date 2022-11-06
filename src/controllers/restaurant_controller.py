@@ -35,15 +35,10 @@ def get_one_restaurant(id):
 def add_restaurant():
     data = RestaurantSchema().load(request.json)
     restaurant = Restaurant(
-        # name = request.json['name'],
-        # address = request.json['address'],
-        # price_range = request.json['price_range'],
-        # is_vegan = request.json['is_vegan'],
-        # user_id = get_jwt_identity()
-
         name = data['name'],
-        address = data['address'],
+        region = data['region'],
         price_range = data['price_range'],
+        cuisine = data['cuisine'],
         is_vegan = data['is_vegan'],
         user_id = get_jwt_identity()
     )
@@ -58,16 +53,23 @@ def add_restaurant():
 def update_restaurant(id):
     stmt = db.select(Restaurant).filter_by(id=id)
     restaurant = db.session.scalar(stmt)
+
+
     if restaurant:
-        restaurant.name = request.json.get('name') or restaurant.name
-        restaurant.address = request.json.get('address') or restaurant.address
-        restaurant.price_range = request.json.get('price_range') or restaurant.price_range
-        # restaurant.is_vegan = request.json.get('is_vegan') or restaurant.is_vegan
+        data = RestaurantSchema().load(request.json)
+        restaurant.name = data['name'] or restaurant.name
+        restaurant.region = data['region'] or restaurant.region
+        restaurant.price_range = data['price_range'] or restaurant.price_range
+        restaurant.cuisine = data['cuisine'] or restaurant.cuisine
+        
+
         try:
-            restaurant.is_vegan = request.json.get('is_vegan')
+            restaurant.is_vegan = data['is_vegan']
         except:
             restaurant.is_vegan = restaurant.is_vegan
-        return RestaurantSchema().dump(restaurant)
+            
+        db.session.commit()
+        return RestaurantSchema(exclude=['reviews']).dump(restaurant), 200
     else:
         return {'error': f'Restaurant not found with id {id}'}, 404
 

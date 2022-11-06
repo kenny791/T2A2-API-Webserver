@@ -4,14 +4,16 @@ from marshmallow.validate import Length, OneOf, And, Regexp
 from marshmallow.exceptions import ValidationError
 
 VALID_PRICE_RANGE = ['$', '$$', '$$$', '$$$$']
+VALID_REGION = ['North', 'South', 'East', 'West']
 
 class Restaurant(db.Model):
     __tablename__ = 'restaurants'
     id = db.Column(db.Integer,primary_key=True)
     name = db.Column(db.String(),nullable=False)
-    address = db.Column(db.String())
+    region = db.Column(db.String())
     is_vegan = db.Column(db.Boolean())
     price_range = db.Column(db.String())
+    cuisine = db.Column(db.String(), default='tbc')
     
     # the id pulled from the users table and is shown in restaurants table as user_id in db
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
@@ -24,6 +26,7 @@ class Restaurant(db.Model):
 class RestaurantSchema(ma.Schema):
     added_by = fields.Nested('UserSchema', only=['username'])
     reviews = fields.List(fields.Nested('ReviewSchema', only=['user','rating','date', 'message']))
+    region = fields.String(validate=OneOf(VALID_REGION))
     name = fields.String(required=True, validate=And(
         Length(min=1, error='Name must be at least 1 character long'),
         Regexp('^[a-zA-Z0-9 ]+$', error='Name must be alphanumeric')
@@ -38,5 +41,5 @@ class RestaurantSchema(ma.Schema):
 
 
     class Meta:
-        fields = ('id', 'name', 'address', 'is_vegan', 'price_range', 'added_by', 'reviews')
+        fields = ('id', 'name', 'region', 'is_vegan', 'price_range','cuisine', 'added_by', 'reviews')
         ordered = True
