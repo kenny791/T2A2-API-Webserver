@@ -60,6 +60,24 @@ def update_restaurant(id):
     else:
         return {'error': f'Restaurant not found with id {id}'}, 404
 
+#get all restaurants by cuisine
+
+@restaurants_bp.route('/cuisine/<cuisine>/')
+def get_restaurants_by_cuisine(cuisine):
+    #check cuisine is available
+    stmt = db.select(Restaurant).filter_by(cuisine=cuisine.title())
+    restaurants = db.session.scalars(stmt)
+    if restaurants:
+        return RestaurantSchema(many=True).dump(restaurants)
+    else:
+        return {'error': f'Restaurant not found with cuisine {cuisine}'}, 404
+
+
+
+
+
+
+
 @restaurants_bp.route('/<int:id>/', methods=['DELETE'])
 @jwt_required()
 def delete_restaurant(id):
