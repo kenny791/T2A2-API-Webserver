@@ -14,7 +14,6 @@ class User(db.Model):
     is_admin = db.Column(db.Boolean(), default=False)
 
     # object is what is shown on the client side
-    restaurants_submitted = db.relationship('Restaurant', back_populates='added_by', cascade='all, delete')
     reviews_submitted = db.relationship('Review', back_populates='user', cascade='all, delete')
 
 class UserSchema(ma.Schema):

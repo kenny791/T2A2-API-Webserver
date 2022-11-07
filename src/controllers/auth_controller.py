@@ -13,6 +13,13 @@ def authorize():
     user = db.session.scalar(stmt)
     return user.is_admin
 
+def authorize_user():
+    user_id = get_jwt_identity()
+    stmt = db.select(User).filter_by(id=user_id)
+    user = db.session.scalar(stmt)
+    return user.id
+
+
 @auth_bp.route("/register", methods=["POST"])
 def auth_register():
     try:
@@ -38,7 +45,7 @@ def auth_login():
     # If user exists and password is correct
     if user and bcrypt.check_password_hash(user.password, request.json['password']):
         token = create_access_token(identity=str(user.id), expires_delta=timedelta(days=1))
-        return {'email': user.email, 'token': token,}, 200
+        return {'username':user.username, 'email':user.email, 'token':token}, 200
     else:
         return{'error': 'Invalid email or password'},401
 

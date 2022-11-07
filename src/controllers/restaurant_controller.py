@@ -3,7 +3,7 @@ from init import db
 from models.restaurant import Restaurant, RestaurantSchema
 from models.review import Review, ReviewSchema
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from controllers.auth_controller import authorize
+from controllers.auth_controller import authorize, authorize_user
 from email import message
 from datetime import date
 
@@ -40,7 +40,7 @@ def add_restaurant():
     db.session.add(restaurant)
     db.session.commit()
     #Returning a response with the new restaurant's info
-    return RestaurantSchema(exclude = ['reviews', 'added_by']).dump(restaurant), 201
+    return RestaurantSchema(exclude = ['reviews']).dump(restaurant), 201
 
 @restaurants_bp.route('/<int:id>/', methods=['PUT','PATCH'])
 @jwt_required()
@@ -89,11 +89,46 @@ def create_review(restaurant_id):
             date = date.today()
         )
 
-
-
-
         db.session.add(review)
         db.session.commit()
         return ReviewSchema().dump(review), 201
     else:
         return {'error': f'Restaurant not found with id {id}'}, 404
+
+
+@restaurants_bp.route('/<int:restaurant_id>/review/<int:review_id>/', methods=['PUT','PATCH'])
+@jwt_required()
+def update_review(restaurant_id, review_id):
+    stmt = db.select(Review).filter_by(id=review_id)
+    review = db.session.scalar(stmt)
+    data = ReviewSchema().load(request.json)
+    user = get_jwt_identity()
+    if review:
+        if authorize_user() == review.user_id:
+            review.rating = data['rating'] or review.rating
+            review.message = data['message'] or review.message
+            review.date = date.today()
+            db.session.commit()
+            return ReviewSchema().dump(review), 200
+        else:
+            return {'error': 'You can only update your own reviews'}, 401
+    else:
+        return {'error': f'Review not found with id {review_id}'}, 404
+
+
+#delete a review
+@restaurants_bp.route('/<int:restaurant_id>/review/<int:review_id>/', methods=['DELETE'])
+@jwt_required()
+def delete_review(restaurant_id, review_id):
+    stmt = db.select(Review).filter_by(id=review_id)
+    review = db.session.scalar(stmt)
+    user = get_jwt_identity()
+    if review:
+        if authorize_user() == review.user_id or authorize():
+            db.session.delete(review)
+            db.session.commit()
+            return {'message': f'Review with id \'{review_id}\' deleted successfully'},200
+        else:
+            return {'error': 'You can only delete your own reviews'}, 401
+    else:
+        return {'error': f'Review not found with id {review_id}'}, 404

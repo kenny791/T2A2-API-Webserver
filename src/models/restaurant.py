@@ -18,13 +18,11 @@ class Restaurant(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
     # object is what is shown on the client side
-    added_by = db.relationship('User', back_populates='restaurants_submitted')
     reviews = db.relationship('Review', back_populates='restaurant', cascade='all, delete')
 
 
 class RestaurantSchema(ma.Schema):
-    added_by = fields.Nested('UserSchema', only=['username'])
-    reviews = fields.List(fields.Nested('ReviewSchema', only=['user','rating','date', 'message']))
+    reviews = fields.List(fields.Nested('ReviewSchema', only=['id','user','rating','message','date' ]))
     region = fields.String(validate=OneOf(VALID_REGION))
     name = fields.String(required=True, validate=And(
         Length(min=1, error='Name must be at least 1 character long'),
@@ -39,5 +37,5 @@ class RestaurantSchema(ma.Schema):
 
 
     class Meta:
-        fields = ('id', 'name', 'region', 'price_range','cuisine', 'added_by', 'reviews')
+        fields = ('id', 'name', 'region', 'price_range','cuisine', 'reviews')
         ordered = True
