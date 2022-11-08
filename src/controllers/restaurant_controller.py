@@ -196,7 +196,7 @@ def update_pin(restaurant_id):
         db.session.commit()
         return {'message': f'Tag has been removed from restaurant {restaurant.name} '},200
     elif pin.tag == data['tag']: #If the tag is the same, return a message
-        return {'message': f'Restaurant {restaurant.name} already Pinned with tag {pin.tag}'},200
+        return {'message': f'Restaurant {restaurant.name} already Pinned with tag {pin.tag}'}, 200
     elif pin:
         pin.tag = data['tag']
         db.session.commit()

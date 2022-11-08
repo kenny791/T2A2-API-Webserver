@@ -9,6 +9,7 @@ class Pin(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     tag = db.Column(db.String(50), nullable=True, default='')
+
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurants.id'), nullable=False)
 
@@ -20,6 +21,8 @@ class Pin(db.Model):
 class PinSchema(ma.Schema):
     tag =fields.String(load_default='', 
         validate=OneOf(['Fave', 'To Go',''], error='Tag must be either Fave or To Go'))
+    restaurant = fields.Nested('RestaurantSchema', only=['name'])
 
     class Meta:
-        fields = ('id', 'tag','restaurant_id', 'user_id')
+        fields = ('id', 'restaurant','tag','user_id')
+        ordered = True
