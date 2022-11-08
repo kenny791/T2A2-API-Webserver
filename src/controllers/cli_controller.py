@@ -4,6 +4,7 @@ from datetime import date
 from models.restaurant import Restaurant
 from models.user import User
 from models.review import Review
+from models.pin import Pin
 
 db_commands = Blueprint('db', __name__)
 
@@ -44,6 +45,16 @@ def seed_db():
             username="user3",
             email='user3@email.com',
             password=bcrypt.generate_password_hash('password3').decode('utf-8')
+        ),
+        User(
+            username="user4",
+            email='user4@email.com',
+            password=bcrypt.generate_password_hash('password4').decode('utf-8')
+        ),
+        User(
+            username="user5",
+            email="user5@email.com",
+            password=bcrypt.generate_password_hash('password5').decode('utf-8')
         )
     ]
 
@@ -317,4 +328,20 @@ def seed_db():
     db.session.add_all(reviews)
     db.session.commit()
 
+
+    pins = [
+        Pin(
+            tag = 'fave',
+            restaurant = restaurants[0],
+            user = users[1]
+        ),
+        Pin(
+            tag = 'visit',
+            restaurant = restaurants[0],
+            user = users[1]
+        )
+    ]
+
+    db.session.add_all(pins)
+    db.session.commit()
     print('Tables seeded')

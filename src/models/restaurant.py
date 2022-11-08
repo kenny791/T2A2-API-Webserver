@@ -19,6 +19,7 @@ class Restaurant(db.Model):
 
     # object is what is shown on the client side
     reviews = db.relationship('Review', back_populates='restaurant', cascade='all, delete')
+    pins = db.relationship('Pin', back_populates='restaurant', cascade='all, delete')
 
 
 class RestaurantSchema(ma.Schema):

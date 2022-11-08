@@ -1,6 +1,7 @@
 from flask import Blueprint, request
 from init import db
 from models.restaurant import Restaurant, RestaurantSchema
+from models.pin import Pin, PinSchema
 from models.review import Review, ReviewSchema
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from controllers.auth_controller import authorize, authorize_user
@@ -71,8 +72,6 @@ def get_restaurants_by_cuisine(cuisine):
         return RestaurantSchema(many=True).dump(restaurants)
     else:
         return {'error': f'Restaurant not found with cuisine {cuisine}'}, 404
-
-
 
 
 
@@ -150,3 +149,6 @@ def delete_review(restaurant_id, review_id):
             return {'error': 'You can only delete your own reviews'}, 401
     else:
         return {'error': f'Review not found with id {review_id}'}, 404
+
+
+
