@@ -152,3 +152,25 @@ def delete_review(restaurant_id, review_id):
 
 
 
+# add restaurant to pins
+@restaurants_bp.route('/<int:restaurant_id>/pin/', methods=['PATCH','PUT','POST'])
+@jwt_required()
+def add_restaurant_to_pins(restaurant_id):
+    stmt = db.select(Restaurant).filter_by(id=restaurant_id)
+    restaurant = db.session.scalar(stmt)
+    stmt = db.select(Pin).filter_by(user_id=get_jwt_identity(), restaurant_id=restaurant_id)
+    pin = db.session.scalar(stmt)
+    data = PinSchema().load(request.json)
+    # return {'message': f'pin with tag {pin} found' },200
+    if pin == None: 
+        pin = Pin(
+            tag = data['tag'],
+            user_id = get_jwt_identity(),
+            restaurant_id = restaurant_id
+        )
+    else:
+        pin.tag = data['tag'] or pin.tag
+    db.session.add(pin)
+    db.session.commit()
+    return {'message': f'Restaurant \'{restaurant.name}\' with id \'{restaurant_id}\' added to pins successfully'},200
+

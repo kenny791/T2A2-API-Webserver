@@ -333,12 +333,16 @@ def seed_db():
         Pin(
             tag = 'fave',
             restaurant = restaurants[0],
-            user = users[1]
+            user = users[5]
         ),
         Pin(
             tag = 'visit',
-            restaurant = restaurants[0],
-            user = users[1]
+            restaurant = restaurants[1],
+            user = users[5]
+        ),
+        Pin(
+            restaurant = restaurants[2],
+            user = users[5]
         )
     ]
 
