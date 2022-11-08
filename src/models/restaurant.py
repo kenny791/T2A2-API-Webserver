@@ -33,7 +33,7 @@ class RestaurantSchema(ma.Schema):
         ))
     price_range = fields.String(validate=OneOf(VALID_PRICE_RANGE))
 
-    
+
     @validates('price_range',)
     def validate_price_range(self, v2):
         if v2 == '$$$$':
@@ -43,5 +43,5 @@ class RestaurantSchema(ma.Schema):
 
 
     class Meta:
-        fields = ('id', 'name', 'region', 'price_range','cuisine', 'reviews','pins', 'is_pinned')
+        fields = ('id', 'name', 'region', 'price_range','cuisine', 'reviews')
         ordered = True

@@ -3,6 +3,7 @@ from init import db
 from models.restaurant import Restaurant, RestaurantSchema
 from models.pin import Pin, PinSchema
 from models.review import Review, ReviewSchema
+# from models.stars import Star, StarSchema
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from controllers.auth_controller import authorize, authorize_user
 from email import message
@@ -113,6 +114,7 @@ def create_review(restaurant_id):
         return {'error': f'Restaurant not found with id {id}'}, 404
 
 
+
 @restaurants_bp.route('/<int:restaurant_id>/review/<int:review_id>/', methods=['PUT','PATCH'])
 @jwt_required()
 def update_review(restaurant_id, review_id):
@@ -131,6 +133,8 @@ def update_review(restaurant_id, review_id):
             return {'error': 'You can only update your own reviews'}, 401
     else:
         return {'error': f'Review not found with id {review_id}'}, 404
+
+
 
 
 #delete a review

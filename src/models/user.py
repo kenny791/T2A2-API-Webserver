@@ -17,6 +17,7 @@ class User(db.Model):
     reviews_submitted = db.relationship('Review', back_populates='user', cascade='all, delete')
     pins = db.relationship('Pin', back_populates='user', cascade='all, delete')
 
+
 class UserSchema(ma.Schema):
     restaurants_submitted = fields.List(fields.Nested('RestaurantSchema', only=['name']))
     reviews_submitted = fields.List(fields.Nested('ReviewSchema', only=['restaurant','rating','date','message']))
