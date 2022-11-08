@@ -24,7 +24,8 @@ class Restaurant(db.Model):
 
 class RestaurantSchema(ma.Schema):
     reviews = fields.List(fields.Nested('ReviewSchema', only=['id','user','rating','message','date' ]))
-    region = fields.String(validate=OneOf(VALID_REGION))
+    region = fields.String(
+        validate=OneOf(VALID_REGION))
     name = fields.String(required=True, validate=And(
         Length(min=1, error='Name must be at least 1 character long'),
         Regexp('^[a-zA-Z0-9 ]+$', error='Name must be alphanumeric')

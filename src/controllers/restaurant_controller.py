@@ -153,7 +153,7 @@ def delete_review(restaurant_id, review_id):
 
 
 # add restaurant to pins
-@restaurants_bp.route('/<int:restaurant_id>/pin/', methods=['PATCH','PUT','POST'])
+@restaurants_bp.route('/<int:restaurant_id>/pin/', methods=['POST'])
 @jwt_required()
 def add_restaurant_to_pins(restaurant_id):
     stmt = db.select(Restaurant).filter_by(id=restaurant_id)
@@ -161,16 +161,83 @@ def add_restaurant_to_pins(restaurant_id):
     stmt = db.select(Pin).filter_by(user_id=get_jwt_identity(), restaurant_id=restaurant_id)
     pin = db.session.scalar(stmt)
     data = PinSchema().load(request.json)
+    
+
     # return {'message': f'pin with tag {pin} found' },200
-    if pin == None: 
+    if pin == None: #if pin doesn't exist, add a new entry to the database with any received tag data
         pin = Pin(
             tag = data['tag'],
             user_id = get_jwt_identity(),
             restaurant_id = restaurant_id
         )
+        db.session.add(pin)
+        db.session.commit()
+        return {'message': f'Restaurant \'{restaurant.name}\' added to pins successfully'},200
     else:
-        pin.tag = data['tag'] or pin.tag
-    db.session.add(pin)
-    db.session.commit()
-    return {'message': f'Restaurant \'{restaurant.name}\' with id \'{restaurant_id}\' added to pins successfully'},200
+        if pin.tag == data['tag']:
+            return {'message': f'Restaurant \'{restaurant.name}\' already in pins with tag \'{pin.tag}\''},200
+        else:
+            return {'message': f'Restaurant \'{restaurant.name}\' already in pins'},200
+
+
+
+#update tag of existing pin
+@restaurants_bp.route('/<int:restaurant_id>/pin/', methods=['PUT','PATCH'])
+@jwt_required()
+def update_pin(restaurant_id):
+    stmt = db.select(Pin).filter_by(user_id=get_jwt_identity(), restaurant_id=restaurant_id)
+    pin = db.session.scalar(stmt)
+    stmt = db.select(Restaurant).filter_by(id=restaurant_id)
+    restaurant = db.session.scalar(stmt)
+    data = PinSchema().load(request.json)
+   
+    if data['tag'] == '':
+        pin.tag = data['tag']
+        db.session.commit()
+        return {'message': f'Tag has been removed from restaurant {restaurant.name} '},200
+    elif pin.tag == data['tag']: #If the tag is the same, return a message
+        return {'message': f'Restaurant {restaurant.name} already Pinned with tag {pin.tag}'},200
+    elif pin:
+        pin.tag = data['tag']
+        db.session.commit()
+        return {'message': f'Restaurant {restaurant.name} tag has been updated to {pin.tag}'},200
+
+
+
+
+# @restaurants_bp.route('/<int:restaurant_id>/pin/', methods=['PATCH','PUT','POST'])
+# @jwt_required()
+# def add_restaurant_to_pins(restaurant_id):
+#     stmt = db.select(Restaurant).filter_by(id=restaurant_id)
+#     restaurant = db.session.scalar(stmt)
+#     stmt = db.select(Pin).filter_by(user_id=get_jwt_identity(), restaurant_id=restaurant_id)
+#     pin = db.session.scalar(stmt)
+#     data = PinSchema().load(request.json)
+    
+
+#     # return {'message': f'pin with tag {pin} found' },200
+#     if pin == None: #if pin doesn't exist, add a new entry to the database with any received tag data
+#         pin = Pin(
+#             tag = data['tag'],
+#             user_id = get_jwt_identity(),
+#             restaurant_id = restaurant_id
+#         )
+#         db.session.add(pin)
+#         db.session.commit()
+#         return {'message': f'Restaurant \'{restaurant.name}\' added to pins successfully'},200
+#     elif data['tag'] =='': # if pin exists and tag is empty, remove tag
+#         pin =Pin(
+#             tag = data['tag'],
+#             user_id = get_jwt_identity(),
+#             restaurant_id = restaurant_id
+#         )
+#         db.session.commit()
+#         return {'message': 'Tag has been removed'},200
+#     elif pin.tag != data['tag']: # if pin exists and tag is not empty, update tag
+#         pin.tag = data['tag']
+#         db.session.commit()
+#         return {'message': f' Tag has been updated to {pin.tag}' },200
+#     elif pin.tag == data['tag']: # if tag is the same as the existing tag, repsond to client, it exists
+#         return {'message': f' Tag is already {pin.tag}' },200
+
 
