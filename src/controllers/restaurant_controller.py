@@ -92,24 +92,44 @@ def delete_restaurant(id):
     else:
         return {'error': f'Restaurant not found with id {id}'}, 404
 
+
+
 @restaurants_bp.route('/<int:restaurant_id>/review/', methods=['POST'])
 @jwt_required()
 def create_review(restaurant_id):
     stmt = db.select(Restaurant).filter_by(id=restaurant_id)
     restaurant = db.session.scalar(stmt)
     if restaurant:
-        data = ReviewSchema().load(request.json)
-        review = Review(
-            user_id = get_jwt_identity(),
-            restaurant_id = restaurant_id,
-            rating = data['rating'],
-            message = data['message'],
-            date = date.today()
-        )
+        # if no existing review by user, create new review
+        stmt = db.select(Review).filter_by(user_id=get_jwt_identity(), restaurant_id=restaurant_id)
+        review = db.session.scalar(stmt)
+        if not review:
+            data = ReviewSchema().load(request.json)
+            review = Review(
+                user_id = get_jwt_identity(),
+                restaurant_id = restaurant_id,
+                rating = data['rating'],
+                message = data['message'],
+                date = date.today()
+            )
+            db.session.add(review)
+            db.session.commit()
+            return ReviewSchema().dump(review), 201
+        else:
+            return {'error': f'You have already reviewed this restaurant'}, 400
 
-        db.session.add(review)
-        db.session.commit()
-        return ReviewSchema().dump(review), 201
+        # data = ReviewSchema().load(request.json)
+        # review = Review(
+        #     user_id = get_jwt_identity(),
+        #     restaurant_id = restaurant_id,
+        #     rating = data['rating'],
+        #     message = data['message'],
+        #     date = date.today()
+        # )
+
+        # db.session.add(review)
+        # db.session.commit()
+        # return ReviewSchema().dump(review), 201
     else:
         return {'error': f'Restaurant not found with id {id}'}, 404
 
