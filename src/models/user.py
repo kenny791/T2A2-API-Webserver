@@ -20,6 +20,10 @@ class User(db.Model):
 class UserSchema(ma.Schema):
     restaurants_submitted = fields.List(fields.Nested('RestaurantSchema', only=['name']))
     reviews_submitted = fields.List(fields.Nested('ReviewSchema', only=['restaurant','rating','date','message']))
+    pins = fields.List(fields.Nested('PinSchema', only=['restaurant','tag']))
+    reviews_count = fields.Function(lambda obj: len(obj.reviews_submitted))
+    pins_count = fields.Function(lambda obj: len(obj.pins))
+
     # input fields area validated by marshmallow
     email =fields.String(validate=Email())
     username = fields.String(validate=And(
@@ -29,5 +33,5 @@ class UserSchema(ma.Schema):
         ))
     password = fields.String(validate=Length(min=6, error='Password must be at least 6 characters long'))
     class Meta:
-        fields = ('id', 'username', 'email', 'password', 'is_admin', 'restaurants_submitted', 'reviews_submitted')
+        fields = ('id', 'username', 'email', 'password', 'is_admin', 'reviews_submitted','pins', 'reviews_count', 'pins_count')
         ordered = True

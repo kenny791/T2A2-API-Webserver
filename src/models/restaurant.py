@@ -24,6 +24,7 @@ class Restaurant(db.Model):
 
 class RestaurantSchema(ma.Schema):
     reviews = fields.List(fields.Nested('ReviewSchema', only=['id','user','rating','message','date' ]))
+    # pins = fields.List(fields.Nested('PinSchema', only=['id','tag']))
     region = fields.String(
         validate=OneOf(VALID_REGION))
     name = fields.String(required=True, validate=And(
@@ -32,12 +33,15 @@ class RestaurantSchema(ma.Schema):
         ))
     price_range = fields.String(validate=OneOf(VALID_PRICE_RANGE))
 
+    
     @validates('price_range',)
     def validate_price_range(self, v2):
         if v2 == '$$$$':
             raise ValidationError('Vegan restaurants are not that expensive')
+    
+  
 
 
     class Meta:
-        fields = ('id', 'name', 'region', 'price_range','cuisine', 'reviews')
+        fields = ('id', 'name', 'region', 'price_range','cuisine', 'reviews','pins', 'is_pinned')
         ordered = True

@@ -24,5 +24,5 @@ class PinSchema(ma.Schema):
     restaurant = fields.Nested('RestaurantSchema', only=['name'])
 
     class Meta:
-        fields = ('id', 'restaurant','tag','user_id')
+        fields = ('id', 'restaurant','tag')
         ordered = True

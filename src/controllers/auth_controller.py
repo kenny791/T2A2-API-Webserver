@@ -30,10 +30,9 @@ def auth_register():
             password = bcrypt.generate_password_hash(data['password']).decode('utf-8')
         )
         
-
         db.session.add(user)
         db.session.commit()
-        return UserSchema(exclude=['password', 'is_admin']).dump(user), 201
+        return UserSchema(exclude=['password', 'is_admin','pins', 'reviews_count', 'pins_count']).dump(user), 201
     except IntegrityError:
         return {'error': 'Username or email already exists'}, 409
         
@@ -52,6 +51,9 @@ def auth_login():
 
 @auth_bp.route('/users/')
 def get_all_users():
-    stmt = db.select(User)
-    users = db.session.scalars(stmt)
-    return UserSchema(many=True, exclude=['password']).dump(users)
+    if authorize():
+        stmt = db.select(User)
+        users = db.session.scalars(stmt)
+        return UserSchema(many=True, exclude=['password']).dump(users)
+    else:
+        return {'error': 'Unauthorized'}, 401

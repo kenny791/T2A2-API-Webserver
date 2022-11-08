@@ -202,3 +202,19 @@ def update_pin(restaurant_id):
         db.session.commit()
         return {'message': f'Restaurant {restaurant.name} tag has been updated to {pin.tag}'},200
 
+# delete pin by user_id
+@restaurants_bp.route('<int:restaurant_id>/pins/<int:pin_id>/', methods=['DELETE'])
+@jwt_required()
+def delete_pin(pin_id):
+    if authorize_user():
+        stmt = db.select(Pin).filter_by(id=pin_id)
+        pin = db.session.scalar(stmt)
+        if pin:
+            db.session.delete(pin)
+            db.session.commit()
+            return {'message': f'Pin {pin_id} deleted'}, 200
+        else:
+            return {'error': f'Pin not found with id {pin_id}'}, 404
+    else:
+        return {'error': 'Unauthorized'}, 401
+
