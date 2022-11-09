@@ -19,12 +19,12 @@ class Restaurant(db.Model):
 
     # object is what is shown on the client side
     reviews = db.relationship('Review', back_populates='restaurant', cascade='all, delete')
-    pins = db.relationship('Pin', back_populates='restaurant', cascade='all, delete')
+    saved = db.relationship('Saved', back_populates='restaurant', cascade='all, delete')
 
 
 class RestaurantSchema(ma.Schema):
     reviews = fields.List(fields.Nested('ReviewSchema', only=['id','user','rating','message','date' ]))
-    # pins = fields.List(fields.Nested('PinSchema', only=['id','tag']))
+    # saved = fields.List(fields.Nested('SavedSchema', only=['id','tag']))
     region = fields.String(
         validate=OneOf(VALID_REGION))
     name = fields.String(required=True, validate=And(

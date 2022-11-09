@@ -4,7 +4,7 @@ from datetime import date
 from models.restaurant import Restaurant
 from models.user import User
 from models.review import Review
-from models.pin import Pin
+from models.saved import Saved
 # from models.stars import Star
 
 db_commands = Blueprint('db', __name__)
@@ -330,24 +330,24 @@ def seed_db():
     db.session.commit()
 
 
-    pins = [
-        Pin(
+    saved = [
+        Saved(
             tag = 'fave',
             restaurant = restaurants[0],
             user = users[5]
         ),
-        Pin(
-            tag = 'visit',
+        Saved(
+            tag = 'To Go',
             restaurant = restaurants[1],
             user = users[5]
         ),
-        Pin(
+        Saved(
             restaurant = restaurants[2],
             user = users[5]
         )
     ]
 
-    db.session.add_all(pins)
+    db.session.add_all(saved)
     db.session.commit()
 
     # stars = [

@@ -1,7 +1,7 @@
 from flask import Blueprint, request
 from init import db
 from models.restaurant import Restaurant, RestaurantSchema
-from models.pin import Pin, PinSchema
+from models.saved import Saved, SavedSchema
 from models.review import Review, ReviewSchema
 # from models.stars import Star, StarSchema
 from flask_jwt_extended import jwt_required, get_jwt_identity
@@ -176,69 +176,95 @@ def delete_review(restaurant_id, review_id):
 
 
 
-# add restaurant to pins
-@restaurants_bp.route('/<int:restaurant_id>/pin/', methods=['POST'])
+# add restaurant to saved
+@restaurants_bp.route('/<int:restaurant_id>/save/', methods=['POST'])
 @jwt_required()
-def add_restaurant_to_pins(restaurant_id):
+def add_restaurant_to_saved(restaurant_id):
     stmt = db.select(Restaurant).filter_by(id=restaurant_id)
     restaurant = db.session.scalar(stmt)
-    stmt = db.select(Pin).filter_by(user_id=get_jwt_identity(), restaurant_id=restaurant_id)
-    pin = db.session.scalar(stmt)
-    data = PinSchema().load(request.json)
+    stmt = db.select(Saved).filter_by(user_id=get_jwt_identity(), restaurant_id=restaurant_id)
+    saved = db.session.scalar(stmt)
+    data = SavedSchema().load(request.json)
     
 
-    # return {'message': f'pin with tag {pin} found' },200
-    if pin == None: #if pin doesn't exist, add a new entry to the database with any received tag data
-        pin = Pin(
+    # return {'message': f'saved with tag {saved} found' },200
+    if saved == None: #if saved doesn't exist, add a new entry to the database with any received tag data
+        saved = Saved(
             tag = data['tag'],
             user_id = get_jwt_identity(),
             restaurant_id = restaurant_id
         )
-        db.session.add(pin)
+        db.session.add(saved)
         db.session.commit()
-        return {'message': f'Restaurant \'{restaurant.name}\' added to pins successfully'},200
+        return {'message': f'Restaurant \'{restaurant.name}\' added to saved successfully'},200
     else:
-        if pin.tag == data['tag']:
-            return {'message': f'Restaurant \'{restaurant.name}\' already in pins with tag \'{pin.tag}\''},200
+        if saved.tag == data['tag']:
+            return {'message': f'Restaurant \'{restaurant.name}\' already in saved with tag \'{saved.tag}\''},200
         else:
-            return {'message': f'Restaurant \'{restaurant.name}\' already in pins'},200
+            return {'message': f'Restaurant \'{restaurant.name}\' already in saved'},200
 
 
 
-#update tag of existing pin
-@restaurants_bp.route('/<int:restaurant_id>/pin/', methods=['PUT','PATCH'])
+
+
+
+
+
+
+
+
+
+
+
+
+# #update tag of existing saved
+@restaurants_bp.route('/<int:restaurant_id>/save/', methods=['PUT','PATCH'])
 @jwt_required()
-def update_pin(restaurant_id):
-    stmt = db.select(Pin).filter_by(user_id=get_jwt_identity(), restaurant_id=restaurant_id)
-    pin = db.session.scalar(stmt)
-    stmt = db.select(Restaurant).filter_by(id=restaurant_id)
-    restaurant = db.session.scalar(stmt)
-    data = PinSchema().load(request.json)
-   
-    if data['tag'] == '':
-        pin.tag = data['tag']
+def update_saved(restaurant_id):
+    stmt = db.select(Saved).filter_by(user_id=get_jwt_identity(), restaurant_id=restaurant_id)
+    saved = db.session.scalar(stmt)
+    data = SavedSchema().load(request.json)
+    if saved:
+        saved.tag = data['tag']
         db.session.commit()
-        return {'message': f'Tag has been removed from restaurant {restaurant.name} '},200
-    elif pin.tag == data['tag']: #If the tag is the same, return a message
-        return {'message': f'Restaurant {restaurant.name} already Pinned with tag {pin.tag}'}, 200
-    elif pin:
-        pin.tag = data['tag']
-        db.session.commit()
-        return {'message': f'Restaurant {restaurant.name} tag has been updated to {pin.tag}'},200
+        return {'message': f'Tag for saved restaurant with id \'{restaurant_id}\' updated successfully'},200
+    else:
+        return {'error': f'Saved restaurant not found with id {restaurant_id}'}, 404
 
-# delete pin by user_id
-@restaurants_bp.route('<int:restaurant_id>/pins/<int:pin_id>/', methods=['DELETE'])
+
+
+# @restaurants_bp.route('/<int:restaurant_id>/save/', methods=['PUT','PATCH'])
+# @jwt_required()
+# def update_saved(restaurant_id):
+#     stmt = db.select(Saved).filter_by(user_id=get_jwt_identity(), restaurant_id=restaurant_id)
+#     saved = db.session.scalar(stmt)
+#     stmt = db.select(Restaurant).filter_by(id=restaurant_id)
+#     restaurant = db.session.scalar(stmt)
+#     data = SavedSchema().load(request.json)
+#     if data['tag']:
+#         saved.tag = data['tag']
+#         db.session.commit()
+#         return {'message': f'Tag has been removed from restaurant {restaurant.name} '},200
+#     elif saved.tag == data['tag']: #If the tag is the same, return a message
+#         return {'message': f'Restaurant {restaurant.name} already Savedned with tag {saved.tag}'}, 200
+#     elif saved:
+#         saved.tag = data['tag']
+#         db.session.commit()
+#         return {'message': f'Restaurant {restaurant.name} tag has been updated to {saved.tag}'},200
+
+# delete saved by user_id
+@restaurants_bp.route('<int:restaurant_id>/saved/<int:saved_id>/', methods=['DELETE'])
 @jwt_required()
-def delete_pin(pin_id):
+def delete_saved(saved_id):
     if authorize_user():
-        stmt = db.select(Pin).filter_by(id=pin_id)
-        pin = db.session.scalar(stmt)
-        if pin:
-            db.session.delete(pin)
+        stmt = db.select(Saved).filter_by(id=saved_id)
+        saved = db.session.scalar(stmt)
+        if saved:
+            db.session.delete(saved)
             db.session.commit()
-            return {'message': f'Pin {pin_id} deleted'}, 200
+            return {'message': f'Saved {saved_id} deleted'}, 200
         else:
-            return {'error': f'Pin not found with id {pin_id}'}, 404
+            return {'error': f'Saved not found with id {saved_id}'}, 404
     else:
         return {'error': 'Unauthorized'}, 401
 

@@ -15,15 +15,15 @@ class User(db.Model):
 
     # object is what is shown on the client side
     reviews_submitted = db.relationship('Review', back_populates='user', cascade='all, delete')
-    pins = db.relationship('Pin', back_populates='user', cascade='all, delete')
+    saved = db.relationship('Saved', back_populates='user', cascade='all, delete')
 
 
 class UserSchema(ma.Schema):
     restaurants_submitted = fields.List(fields.Nested('RestaurantSchema', only=['name']))
     reviews_submitted = fields.List(fields.Nested('ReviewSchema', only=['restaurant','rating','date','message']))
-    pins = fields.List(fields.Nested('PinSchema', only=['restaurant','tag']))
+    saved = fields.List(fields.Nested('SavedSchema', only=['restaurant','tag']))
     reviews_count = fields.Function(lambda obj: len(obj.reviews_submitted))
-    pins_count = fields.Function(lambda obj: len(obj.pins))
+    saved_count = fields.Function(lambda obj: len(obj.saved))
 
     # input fields area validated by marshmallow
     email =fields.String(validate=Email())
@@ -34,5 +34,5 @@ class UserSchema(ma.Schema):
         ))
     password = fields.String(validate=Length(min=6, error='Password must be at least 6 characters long'))
     class Meta:
-        fields = ('id', 'username', 'email', 'password', 'is_admin', 'reviews_submitted','pins', 'reviews_count', 'pins_count')
+        fields = ('id', 'username', 'email', 'password', 'is_admin', 'reviews_submitted','saved', 'reviews_count', 'saved_count')
         ordered = True

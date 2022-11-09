@@ -4,8 +4,8 @@ from marshmallow.validate import Email, OneOf, And, Regexp, Length
 from marshmallow.exceptions import ValidationError
 
 
-class Pin(db.Model):
-    __tablename__ = 'pins'
+class Saved(db.Model):
+    __tablename__ = 'saved'
 
     id = db.Column(db.Integer, primary_key=True)
     tag = db.Column(db.String(50), nullable=True, default='')
@@ -15,10 +15,10 @@ class Pin(db.Model):
 
 
 #     # stores all fields from User table into user object
-    user = db.relationship ("User", back_populates='pins')
-    restaurant = db.relationship ("Restaurant", back_populates='pins')
+    user = db.relationship ("User", back_populates='saved')
+    restaurant = db.relationship ("Restaurant", back_populates='saved')
 
-class PinSchema(ma.Schema):
+class SavedSchema(ma.Schema):
     tag =fields.String(load_default='', 
         validate=OneOf(['Fave', 'To Go',''], error='Tag must be either Fave or To Go'))
     restaurant = fields.Nested('RestaurantSchema', only=['name'])
@@ -26,3 +26,4 @@ class PinSchema(ma.Schema):
     class Meta:
         fields = ('id', 'restaurant','tag')
         ordered = True
+

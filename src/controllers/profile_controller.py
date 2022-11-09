@@ -1,7 +1,7 @@
 from flask import Blueprint, request
 from init import db
 from models.restaurant import Restaurant, RestaurantSchema
-from models.pin import Pin, PinSchema
+from models.saved import Saved, SavedSchema
 from models.review import Review, ReviewSchema
 from models.user import User, UserSchema
 from flask_jwt_extended import jwt_required, get_jwt_identity
@@ -20,36 +20,36 @@ def get_user_profile():
     user_id = get_jwt_identity()
     stmt = db.select(User).filter_by(id=user_id)
     user = db.session.scalar(stmt)
-    return UserSchema(exclude=['password', 'is_admin', 'pins', 'reviews_submitted']).dump(user)
+    return UserSchema(exclude=['password', 'is_admin', 'saved', 'reviews_submitted']).dump(user)
 
 
-#display all pinned restaurants for user
-@profiles_bp.route('/pins/')
+#display all savedned restaurants for user
+@profiles_bp.route('/saved/')
 @jwt_required()
-def get_user_pins():
+def get_user_saved():
     user_id = get_jwt_identity()
-    stmt = db.select(Pin).filter_by(user_id=user_id)
-    pins = db.session.scalars(stmt)
-    # if there are pins then display them
-    if pins:
-        return PinSchema(many=True).dump(pins)
+    stmt = db.select(Saved).filter_by(user_id=user_id)
+    saved = db.session.scalars(stmt)
+    # if there are saved then display them
+    if saved:
+        return SavedSchema(many=True).dump(saved)
     else:
-        return {'error': 'No pins found'}, 404
+        return {'error': 'No saved found'}, 404
     
 
-# delete pin by user_id
-@profiles_bp.route('pins/<int:pin_id>/', methods=['DELETE'])
+# delete saved by user_id
+@profiles_bp.route('saved/<int:saved_id>/', methods=['DELETE'])
 @jwt_required()
-def delete_pin(pin_id):
+def delete_saved(saved_id):
     if authorize_user():
-        stmt = db.select(Pin).filter_by(id=pin_id)
-        pin = db.session.scalar(stmt)
-        if pin:
-            db.session.delete(pin)
+        stmt = db.select(Saved).filter_by(id=saved_id)
+        saved = db.session.scalar(stmt)
+        if saved:
+            db.session.delete(saved)
             db.session.commit()
-            return {'message': f'Pin {pin_id} deleted'}, 200
+            return {'message': f'Saved {saved_id} deleted'}, 200
         else:
-            return {'error': f'Pin not found with id {pin_id}'}, 404
+            return {'error': f'Saved not found with id {saved_id}'}, 404
     else:
         return {'error': 'Unauthorized'}, 401
 

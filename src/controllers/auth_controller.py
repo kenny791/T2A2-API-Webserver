@@ -32,7 +32,7 @@ def auth_register():
         
         db.session.add(user)
         db.session.commit()
-        return UserSchema(exclude=['password', 'is_admin','pins', 'reviews_count', 'pins_count']).dump(user), 201
+        return UserSchema(exclude=['password', 'is_admin','saved', 'reviews_count', 'saved_count']).dump(user), 201
     except IntegrityError:
         return {'error': 'Username or email already exists'}, 409
         
