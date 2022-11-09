@@ -68,64 +68,55 @@ def seed_db():
             name = 'Mesa Verde',
             region = 'North',
             price_range = '$',
-            cuisine = 'Mexican',
-            user_id = users[1].id
+            cuisine = 'Mexican'
         ),
         Restaurant(
             name = 'Minamishima',
             region = 'East',
             price_range = '$$',
-            cuisine = 'Japanese',
-            user_id = users[1].id
+            cuisine = 'Japanese'
         ),
         Restaurant(
             name = 'Florentino',
             region = 'West',
             price_range = '$$$',
-            cuisine = 'Italian',
-            user_id = users[1].id
+            cuisine = 'Italian'
         ),
         Restaurant(
             name = 'Bodega Underground',
             region = 'North',
             price_range = '$$',
-            cuisine = 'Mexican',
-            user_id = users[2].id
+            cuisine = 'Mexican'
         ),
         Restaurant(
             name = 'Nobu',
             region = 'South',
             price_range = '$$$',
-            cuisine = 'Japanese',
-            user_id = users[2].id
+            cuisine = 'Japanese'
         ),
         Restaurant(
             name = 'Scopri',
             region = 'North',
             price_range = '$',
-            cuisine = 'Italian',
-            user_id = users[2].id
+            cuisine = 'Italian'
         ),
         Restaurant(
             name = 'Village Cantina',
             region = 'East',
             price_range = '$$$',
-            cuisine = 'Mexican',
-            user_id = users[3].id
+            cuisine = 'Mexican'
         ),
         Restaurant(
             name = 'Supernormal',
             region = 'West',
             price_range = '$',
-            cuisine = 'Japanese',
-            user_id = users[3].id  
+            cuisine = 'Japanese'
         ),
         Restaurant(
             name = 'Agostino',
             region = 'North',
             price_range = '$$',
-            cuisine = 'Italian',
-            user_id = users[3].id
+            cuisine = 'Italian'
         )
     ]
 
@@ -139,7 +130,7 @@ def seed_db():
             message = 'This place is great!',
             rating = 5,
             date = '2022-10-01',
-            user = users[1]
+            user = users[4]
         ),
         Review(
             restaurant = restaurants[0],
@@ -160,7 +151,7 @@ def seed_db():
             message = 'This place is great!',
             rating = 5,
             date = '2022-10-01',
-            user = users[1]
+            user = users[4]
         ),
         Review(
             restaurant = restaurants[1],
@@ -181,7 +172,7 @@ def seed_db():
             message = 'This place is great!',
             rating = 5,
             date = '2022-10-01',
-            user = users[1]
+            user = users[4]
         ),
         Review(
             restaurant = restaurants[2],
@@ -202,7 +193,7 @@ def seed_db():
             message = 'This place is great!',
             rating = 5,
             date = '2022-10-01',
-            user = users[1]
+            user = users[4]
         ),
         Review(
             restaurant = restaurants[3],
@@ -223,7 +214,7 @@ def seed_db():
             message = 'This place is great!',
             rating = 5,
             date = '2022-10-01',
-            user = users[1]
+            user = users[4]
         ),
         Review(
             restaurant = restaurants[4],
@@ -244,7 +235,7 @@ def seed_db():
             message = 'This place is great!',
             rating = 5,
             date = '2022-10-01',
-            user = users[1]
+            user = users[4]
         ),
         Review(
             restaurant = restaurants[5],
@@ -265,7 +256,7 @@ def seed_db():
             message = 'This place is great!',
             rating = 5,
             date = '2022-10-01',
-            user = users[1]
+            user = users[4]
         ),
         Review(
             restaurant = restaurants[6],
@@ -286,7 +277,7 @@ def seed_db():
             message = 'This place is great!',
             rating = 5,
             date = '2022-10-01',
-            user = users[1]
+            user = users[4]
         ),
         Review(
             restaurant = restaurants[7],
@@ -307,7 +298,7 @@ def seed_db():
             message = 'This place is great!',
             rating = 5,
             date = '2022-10-01',
-            user = users[1]
+            user = users[4]
         ),
         Review(
             restaurant = restaurants[8],

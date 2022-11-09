@@ -11,8 +11,7 @@ from datetime import date
 saved_bp = Blueprint('saved', __name__, url_prefix='/saved')
 
 
-
-#display all savedned restaurants for a user
+# displays all saved restaurants for a user
 @saved_bp.route('/')
 @jwt_required()
 def get_user_saved():

@@ -5,7 +5,7 @@ from marshmallow.exceptions import ValidationError
 
 
 class User(db.Model):
-    __tablename__ = 'users'
+    __tablename__ = 'users' #table name used for db
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), unique=True, nullable=False)

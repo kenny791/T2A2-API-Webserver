@@ -5,7 +5,7 @@ from marshmallow.exceptions import ValidationError
 
 
 class Saved(db.Model):
-    __tablename__ = 'saved'
+    __tablename__ = 'saved' #table name used for db
 
     id = db.Column(db.Integer, primary_key=True)
     tag = db.Column(db.String(50), nullable=True, default='')

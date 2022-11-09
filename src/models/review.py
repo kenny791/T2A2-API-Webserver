@@ -4,7 +4,7 @@ from marshmallow.validate import Email, OneOf, And, Regexp, Length
 from marshmallow.exceptions import ValidationError
 
 class Review(db.Model):
-    __tablename__ = 'reviews'
+    __tablename__ = 'reviews' #table name used for db
 
     id = db.Column(db.Integer, primary_key=True)
     message = db.Column(db.String)
