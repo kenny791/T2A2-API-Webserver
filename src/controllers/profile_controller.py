@@ -41,7 +41,7 @@ def get_user_saved():
 @profiles_bp.route('saved/<int:saved_id>/', methods=['DELETE'])
 @jwt_required()
 def delete_saved(saved_id):
-    if authorize_user():
+    if original_user():
         stmt = db.select(Saved).filter_by(id=saved_id)
         saved = db.session.scalar(stmt)
         if saved:
@@ -75,7 +75,7 @@ def delete_review(review_id):
     review = db.session.scalar(stmt)
     user = get_jwt_identity()
     if review:
-        if authorize_user() == review.user_id or authorize():
+        if original_user() == review.user_id or is_admin():
             db.session.delete(review)
             db.session.commit()
             return {'message': f'Review with id \'{review_id}\' deleted successfully'},200

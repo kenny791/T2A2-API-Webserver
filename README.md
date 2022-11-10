@@ -1,26 +1,77 @@
 # T2A2 API Webserver  
 
 
-R1 Identification of the problem you are trying to solve by building this particular app.  
+#R1 Identification of the problem you are trying to solve by building this particular app.  
+Like many foodies, I enjoy trying out new restaurants and cuisines. Howevever the amount of restaurants you have to choose from can be overwhelming, and when you have tried the restaurant it is hard to keep track of the ones you like.
 
-R2 Why is it a problem that needs solving?  
 
-R3 Why have you chosen this database system. What are the drawbacks compared to others?  
+#R2 Why is it a problem that needs solving?  
+With the cost of living being so high in Australia, it is important to find the best value for money, and making sure every new visit worthwhile. With the app you can find new restaurants submitted by like minded foodies, seeing reviews and ratings. Once you have visited a restaurant you can add your own review and rating. This app will also allow you to save restaurants you like to your account, and keep track of the ones you would like to try and the ones you thought were great.
 
-R4 Identify and discuss the key functionalities and benefits of an ORM  
 
-R5 Document all endpoints for your API  
+#R3 Why have you chosen this database system. What are the drawbacks compared to others?  
 
-R6 An ERD for your app 
+There are two main types of databases to choose from, relational and 
 
-R7 Detail any third party services that your app will use  
+How it will benefit the project. 
+A relational database was chosen for the following reasons: 
+- The data within this project will have a consistent structure with and known attributes.
+- Entities in the database will query other entities to retrieve data.
+- 
+As the data being handled comes in a consistent structure it was the ideal solution to use a relational database system
 
-R8 Describe your projects models in terms of the relationships they have with each other  
+https://www.oracle.com/au/database/what-is-a-relational-database/
 
-R9 Discuss the database relations to be implemented in your application  
 
-R10 Describe the way tasks are allocated and tracked in your project  
 
+For this project the Postgres database.
+- about post
+- benefits of postgtres
+- drawbacks of postgtres
+
+
+
+#R4 Identify and discuss the key functionalities and benefits of an ORM  
+- What is an ORM
+Object Relational Mapping (ORM) is a technique using libraries to represent tables in a relational database as objects in object-oriented programming languages. This allows for CRUD operations to be performed on the database using object-oriented programming languages, such as Python and Javascript.
+
+- Functionalities
+-Benefits  
+- Allows for creation of dynamic queries. For example a user can search for a restaurant by name, or by cuisine type, or by location. This can be done by creating a dynamic query that will search for the restaurant based on the parameters provided by the user. 
+
+- Code is more readable as it is written in an object-oriented language and it allows for the use of OOP concepts such as inheritance and polymorphism.  
+
+-Drawbacks  
+- ORM libraries can be slow as they have to translate the queries into SQL.
+- Writing code for complex queries is much more difficult than writing SQL queries.
+  
+
+
+Example of query to retrieve all entries in a table called restaurants
+```
+@restaurants_bp.route('/')
+def get_all_restaurants():
+    stmt = db.select(Restaurant)
+    restaurants = db.session.scalars(stmt)
+    return RestaurantSchema(many=True).dump(restaurants)
+```
+
+
+
+
+
+# R5 Document all endpoints for your API  
+
+# R6 An ERD for your app  
+
+# R7 Detail any third party services that your app will use  
+
+# R8 Describe your projects models in terms of the relationships they have with each other  
+
+# R9 Discuss the database relations to be implemented in your application  
+
+# R10 Describe the way tasks are allocated and tracked in your project  
+The project managed using Trello's Kanban board system, where tasks are broken down into small chunks and their progress moved along the board. The board is broken down into columns and updated when a task is completed. 
 
 
 ## Installation
@@ -56,6 +107,7 @@ pros and cons of using database
 
 ## ORM  
 Identify and discuss benefits of an ORM
+ORM Obejct Relational Mapping
 
 ## API Endpoints  
 
@@ -66,15 +118,15 @@ Identify and discuss benefits of an ORM
 ## Entity Relationship Diagram  
   
 ## Third Party Services  
-Flask - Python web framework  
+Flask - Python framework used to create wbe applications. 
 Blueprint - Flask extension for modular applications  
 jsonify - Flask extension for returning JSON responses  
 request - Flask extension for handling HTTP requests  
 abort - Flask extension for handling HTTP errors  
-SQLAlchemy - ORM  
-Marshmallow - Serialisation  
-fields - Marshmallow extension for handling data types  
-psychopg2 - PostgreSQL adapter for Python  
+SQLAlchemy - ORM , generates SQL statements
+psychopg2 - PostgreSQL adapter for python, it is used by SQLAlchemy to send SQL queries to the database.
+Marshmallow - a library used for validating data, serializing and deserializing data.
+    fields - Marshmallow extension for handling data types  
 Bcrypt - Password Hashing  
 flask_jwt_extended - JWT authentication  
 jwt_required -  
@@ -94,7 +146,7 @@ datetime - Date and Time
 explanation of project management tools used  
 [Project Trello Board](https://trello.com/b/3Zt5Nzh5/t2a2)
 
-
+User stories
 
 
 

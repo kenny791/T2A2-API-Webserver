@@ -7,13 +7,13 @@ from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identi
 
 auth_bp = Blueprint('auth', __name__, url_prefix="/auth")
 
-def authorize():
+def is_admin():
     user_id = get_jwt_identity()
     stmt = db.select(User).filter_by(id=user_id)
     user = db.session.scalar(stmt)
     return user.is_admin
 
-def authorize_user():
+def original_user():
     user_id = get_jwt_identity()
     stmt = db.select(User).filter_by(id=user_id)
     user = db.session.scalar(stmt)
@@ -51,7 +51,7 @@ def auth_login():
 
 @auth_bp.route('/users/')
 def get_all_users():
-    if authorize():
+    if is_admin():
         stmt = db.select(User)
         users = db.session.scalars(stmt)
         return UserSchema(many=True, exclude=['password']).dump(users)

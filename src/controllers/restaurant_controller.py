@@ -75,13 +75,42 @@ def get_restaurants_by_cuisine(cuisine):
         return {'error': f'Restaurant not found with cuisine {cuisine}'}, 404
 
 
+# show restaurants ordered by price_range low to high
+@restaurants_bp.route('/price/low/')
+def get_restaurants_by_price_range_low():
+    stmt = db.select(Restaurant).order_by(Restaurant.price_range)
+    restaurants = db.session.scalars(stmt)
+    return RestaurantSchema(many=True).dump(restaurants)
+
+# show restaurants ordered by price_range high to low
+@restaurants_bp.route('/price/high/')
+
+def get_restaurants_by_price_range_high():
+    stmt = db.select(Restaurant).order_by(Restaurant.price_range.desc())
+    restaurants = db.session.scalars(stmt)
+    return RestaurantSchema(many=True).dump(restaurants)
+
+#show restaurants based on region
+@restaurants_bp.route('/region/<region>/')
+def get_restaurants_by_region(region):
+    stmt = db.select(Restaurant).filter_by(region=region.title())
+    restaurants = db.session.scalars(stmt)
+    if restaurants:
+        return RestaurantSchema(many=True).dump(restaurants)
+    else:
+        return {'error': f'Restaurant not found with region {region}'}, 404
+
+
+
+
+
 
 
 
 @restaurants_bp.route('/<int:id>/', methods=['DELETE'])
 @jwt_required()
 def delete_restaurant(id):
-    if not authorize():
+    if not is_admin():
         return {'error': 'You must be an admin'}, 401
     stmt = db.select(Restaurant).filter_by(id=id)
     restaurant = db.session.scalar(stmt)
@@ -91,6 +120,11 @@ def delete_restaurant(id):
         return {'message': f'Restaurant \'{restaurant.name}\' with id \'{id}\' deleted successfully'},200
     else:
         return {'error': f'Restaurant not found with id {id}'}, 404
+
+
+
+
+
 
 
 
@@ -143,7 +177,7 @@ def update_review(restaurant_id, review_id):
     data = ReviewSchema().load(request.json)
     user = get_jwt_identity()
     if review:
-        if authorize_user() == review.user_id:
+        if original_user() == review.user_id:
             review.rating = data['rating'] or review.rating
             review.message = data['message'] or review.message
             review.date = date.today()
@@ -165,7 +199,7 @@ def delete_review(restaurant_id, review_id):
     review = db.session.scalar(stmt)
     user = get_jwt_identity()
     if review:
-        if authorize_user() == review.user_id or authorize():
+        if original_user() == review.user_id or is_admin():
             db.session.delete(review)
             db.session.commit()
             return {'message': f'Review with id \'{review_id}\' deleted successfully'},200
@@ -256,7 +290,7 @@ def update_saved(restaurant_id):
 @restaurants_bp.route('<int:restaurant_id>/saved/<int:saved_id>/', methods=['DELETE'])
 @jwt_required()
 def delete_saved(saved_id):
-    if authorize_user():
+    if original_user():
         stmt = db.select(Saved).filter_by(id=saved_id)
         saved = db.session.scalar(stmt)
         if saved:

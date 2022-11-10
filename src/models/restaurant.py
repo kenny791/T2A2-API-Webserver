@@ -44,3 +44,5 @@ class RestaurantSchema(ma.Schema):
     class Meta:
         fields = ('id', 'name', 'region', 'price_range','cuisine','avg_rating', 'reviews', 'saves', )
         ordered = True
+
+        

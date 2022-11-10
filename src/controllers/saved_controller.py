@@ -25,7 +25,7 @@ def get_user_saved():
 @saved_bp.route('/<int:saved_id>/', methods=['DELETE'])
 @jwt_required()
 def delete_saved(saved_id):
-    if authorize_user():
+    if original_user():
         stmt = db.select(Saved).filter_by(id=saved_id)
         saved = db.session.scalar(stmt)
         if saved:
