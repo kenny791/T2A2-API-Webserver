@@ -4,7 +4,7 @@ from models.restaurant import Restaurant, RestaurantSchema
 from models.saved import Saved, SavedSchema
 from models.review import Review, ReviewSchema
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from controllers.auth_controller import authorize, authorize_user
+from controllers.auth_controller import is_admin, original_user
 from email import message
 from datetime import date
 
