@@ -75,21 +75,27 @@ def get_restaurants_by_price_range_high():
 
 
 # route adds a new restaurant to db
-@restaurants_bp.route('/', methods=['POST'])
+@restaurants_bp.route('/submit/', methods=['POST'])
 @jwt_required()
 def add_restaurant():
     data = RestaurantSchema().load(request.json)
-    restaurant = Restaurant(
-        name = data['name'],
-        location = data['location'],
-        price_range = data['price_range'],
-        cuisine = data['cuisine'],
-    )
+    #check if existing
+    stmt = db.select(Restaurant).filter_by(name=data['name'])
+    restaurant = db.session.scalar(stmt)
+    if restaurant:
+        return {'error': f'Restaurant \'{data["name"]}\' already exists'}, 400
+    else:
+        restaurant = Restaurant(
+            name = data['name'],
+            location = data['location'],
+            price_range = data['price_range'],
+            cuisine = data['cuisine'],
+        )
     #Add the restaurant to the database
     db.session.add(restaurant)
     db.session.commit()
     #Returning a response with the new restaurant's info
-    return RestaurantSchema(exclude = ['reviews']).dump(restaurant), 201
+    return RestaurantSchema(exclude = ['reviews','tagged_to_go','tagged_fave','avg_rating', 'saved_for_later']).dump(restaurant), 201
 
 
 # route updates the details of a restaurant by id
@@ -98,7 +104,6 @@ def add_restaurant():
 def update_restaurant(id):
     stmt = db.select(Restaurant).filter_by(id=id)
     restaurant = db.session.scalar(stmt)
-
     if restaurant:
         data = RestaurantSchema().load(request.json)
         restaurant.name = data['name'] or restaurant.name
@@ -107,9 +112,9 @@ def update_restaurant(id):
         restaurant.cuisine = data['cuisine'] or restaurant.cuisine
         
         db.session.commit()
-        return RestaurantSchema(exclude=['reviews']).dump(restaurant), 200
+        return RestaurantSchema(exclude = ['reviews','tagged_to_go','tagged_fave','avg_rating', 'saved_for_later']).dump(restaurant), 200
     else:
-        return {'error': f'Restaurant not found with id {id}'}, 404
+        return {'error': f'Restaurant not found with id \'{id}\''}, 404
 
 
 # route deletes a restaurant by id
@@ -152,19 +157,6 @@ def create_review(restaurant_id):
             return ReviewSchema().dump(review), 201
         else:
             return {'error': f'You have already reviewed this restaurant'}, 400
-
-        # data = ReviewSchema().load(request.json)
-        # review = Review(
-        #     user_id = get_jwt_identity(),
-        #     restaurant_id = restaurant_id,
-        #     rating = data['rating'],
-        #     message = data['message'],
-        #     date = date.today()
-        # )
-
-        # db.session.add(review)
-        # db.session.commit()
-        # return ReviewSchema().dump(review), 201
     else:
         return {'error': f'Restaurant not found with id {id}'}, 404
 
@@ -187,7 +179,7 @@ def update_review(restaurant_id, review_id):
         else:
             return {'error': 'You can only update your own reviews'}, 401
     else:
-        return {'error': f'Review not found with id {review_id}'}, 404
+        return {'error': f'Review not found with id \'{review_id}\' for restaurant \'{restaurant_id}\''}, 404
 
 
 # route deletes a review of a restaurant by id
