@@ -1,4 +1,5 @@
 from flask import Flask
+from marshmallow.exceptions import ValidationError
 from init import db, ma, bcrypt, jwt
 from controllers.restaurant_controller import restaurants_bp
 from controllers.auth_controller import auth_bp
@@ -6,13 +7,11 @@ from controllers.saved_controller import saved_bp
 from controllers.profile_controller import profiles_bp
 from controllers.cli_controller import db_commands
 import os
-from marshmallow.exceptions import ValidationError
-# from flask_selfdoc import Autodoc
+
 
 
 def create_app():
     app = Flask(__name__)
-    # auto = Autodoc(app)
 
     #catches all 404 raised within app
     @app.errorhandler(404)
@@ -23,9 +22,18 @@ def create_app():
     def unauthorized(err):
         return {'error': str(err)}, 401
 
+    @app.errorhandler(400)
+    def bad_request(err):
+        return {'error': f'Body cannot be empty'}, 400
+
     @app.errorhandler(ValidationError)
     def bad_request(err):
         return {'error': err.messages}, 400
+
+    @app.errorhandler(KeyError)
+    def key_error(err):
+        return {'error': f'The field {err} is required.'}, 400
+
 
     app.config['JSON_SORT_KEYS'] = False
     app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')

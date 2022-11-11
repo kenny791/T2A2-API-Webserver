@@ -3,7 +3,6 @@ from init import db
 from models.restaurant import Restaurant, RestaurantSchema
 from models.saved import Saved, SavedSchema
 from models.review import Review, ReviewSchema
-# from models.stars import Star, StarSchema
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from controllers.auth_controller import is_admin, original_user
 from email import message
@@ -43,42 +42,46 @@ def get_restaurants_by_cuisine(cuisine):
         return {'error': f'Restaurant not found with cuisine {cuisine}'}, 404
 
 
-# route displays restaurants of a specific region
-@restaurants_bp.route('/region/<region>/')
-def get_restaurants_by_region(region):
-    stmt = db.select(Restaurant).filter_by(region=region.title()).order_by(Restaurant.name)
+# route displays restaurants of a specific location
+@restaurants_bp.route('/location/<location>/')
+def get_restaurants_by_location(location):
+    stmt = db.select(Restaurant).filter_by(location=location.title()).order_by(Restaurant.name)
     restaurants = db.session.scalars(stmt)
     if restaurants:
         return RestaurantSchema(many=True, exclude = ['reviews','tagged_to_go','tagged_fave']).dump(restaurants)
     else:
-        return {'error': f'Restaurant not found with region {region}'}, 404
+        return {'error': f'Restaurant not found with location {location}'}, 404
 
 
-# route displays all restaurants sorted by price range, low to high
-@restaurants_bp.route('/price/low/')
+# route displays all restaurants sorted by price range (low to high)
+@restaurants_bp.route('/price/<price>/')
+def get_restaurants_by_price(price):
+    if price.lower() == 'low':
+        return get_restaurants_by_price_range_low()
+    elif price.lower() == 'high':
+        return get_restaurants_by_price_range_high()
+    else:
+        return {'error': f'{price} Price range not found'}, 404
+
 def get_restaurants_by_price_range_low():
-    stmt = db.select(Restaurant).order_by(Restaurant.price_range)
+    stmt = db.select(Restaurant).order_by(Restaurant.price_range).order_by(Restaurant.name)
     restaurants = db.session.scalars(stmt)
-    return RestaurantSchema(many=True).dump(restaurants)
+    return RestaurantSchema(many=True, exclude = ['reviews','tagged_to_go','tagged_fave']).dump(restaurants)
 
-
-# route displays all restaurants sorted by price range, high to low
-@restaurants_bp.route('/price/high/')
 def get_restaurants_by_price_range_high():
     stmt = db.select(Restaurant).order_by(Restaurant.price_range.desc())
     restaurants = db.session.scalars(stmt)
-    return RestaurantSchema(many=True).dump(restaurants)
+    return RestaurantSchema(many=True, exclude = ['reviews','tagged_to_go','tagged_fave']).dump(restaurants)
 
 
 # route adds a new restaurant to db
 @restaurants_bp.route('/', methods=['POST'])
 @jwt_required()
-# check if it is  the original user
 def add_restaurant():
     data = RestaurantSchema().load(request.json)
     restaurant = Restaurant(
         name = data['name'],
-        region = data['region'],
+        location = data['location'],
         price_range = data['price_range'],
         cuisine = data['cuisine'],
         user_id = get_jwt_identity()
@@ -100,7 +103,7 @@ def update_restaurant(id):
     if restaurant:
         data = RestaurantSchema().load(request.json)
         restaurant.name = data['name'] or restaurant.name
-        restaurant.region = data['region'] or restaurant.region
+        restaurant.location = data['location'] or restaurant.location
         restaurant.price_range = data['price_range'] or restaurant.price_range
         restaurant.cuisine = data['cuisine'] or restaurant.cuisine
         
@@ -108,11 +111,6 @@ def update_restaurant(id):
         return RestaurantSchema(exclude=['reviews']).dump(restaurant), 200
     else:
         return {'error': f'Restaurant not found with id {id}'}, 404
-
-
-
-
-
 
 
 # route deletes a restaurant by id

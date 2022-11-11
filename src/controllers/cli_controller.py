@@ -66,55 +66,55 @@ def seed_db():
     restaurants = [
         Restaurant(
             name = 'Mesa Verde',
-            region = 'North',
+            location = 'North',
             price_range = '$',
             cuisine = 'Mexican'
         ),
         Restaurant(
             name = 'Minamishima',
-            region = 'East',
+            location = 'East',
             price_range = '$$',
             cuisine = 'Japanese'
         ),
         Restaurant(
             name = 'Florentino',
-            region = 'West',
+            location = 'West',
             price_range = '$$$',
             cuisine = 'Italian'
         ),
         Restaurant(
             name = 'Bodega Underground',
-            region = 'North',
+            location = 'North',
             price_range = '$$',
             cuisine = 'Mexican'
         ),
         Restaurant(
             name = 'Nobu',
-            region = 'South',
+            location = 'South',
             price_range = '$$$',
             cuisine = 'Japanese'
         ),
         Restaurant(
             name = 'Scopri',
-            region = 'North',
+            location = 'North',
             price_range = '$',
             cuisine = 'Italian'
         ),
         Restaurant(
             name = 'Village Cantina',
-            region = 'East',
+            location = 'East',
             price_range = '$$$',
             cuisine = 'Mexican'
         ),
         Restaurant(
             name = 'Supernormal',
-            region = 'West',
+            location = 'West',
             price_range = '$',
             cuisine = 'Japanese'
         ),
         Restaurant(
             name = 'Agostino',
-            region = 'North',
+            location = 'North',
             price_range = '$$',
             cuisine = 'Italian'
         )

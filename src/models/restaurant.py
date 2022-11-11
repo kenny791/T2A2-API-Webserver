@@ -5,13 +5,13 @@ from marshmallow.exceptions import ValidationError
 
 
 VALID_PRICE_RANGE = ['$', '$$', '$$$', '$$$$']
-VALID_REGION = ['North', 'South', 'East', 'West']
+VALID_LOCATION = ['North', 'South', 'East', 'West']
 
 class Restaurant(db.Model):
     __tablename__ = 'restaurants' #table name used for db
     id = db.Column(db.Integer,primary_key=True)
     name = db.Column(db.String(),nullable=False)
-    region = db.Column(db.String())
+    location = db.Column(db.String())
     price_range = db.Column(db.String())
     cuisine = db.Column(db.String(), default='tbc')
     
@@ -27,8 +27,8 @@ class Restaurant(db.Model):
 
 class RestaurantSchema(ma.Schema):
         # saved = fields.List(fields.Nested('SavedSchema', only=['id','tag']))
-    region = fields.String(
-        validate=OneOf(VALID_REGION))
+    location = fields.String(
+        validate=OneOf(VALID_LOCATION))
     name = fields.String(required=True, validate=And(
         Length(min=1, error='Name must be at least 1 character long'),
         Regexp('^[a-zA-Z0-9 ]+$', error='Name must be alphanumeric')
@@ -44,7 +44,7 @@ class RestaurantSchema(ma.Schema):
 
  
     class Meta:
-        fields = ('id', 'name', 'region', 'price_range','cuisine','avg_rating', 'reviews', 'saved_for_later','tagged_to_go', 'tagged_fave' )
+        fields = ('id', 'name', 'location', 'price_range','cuisine','avg_rating', 'reviews', 'saved_for_later','tagged_to_go', 'tagged_fave' )
         ordered = True
 
         
