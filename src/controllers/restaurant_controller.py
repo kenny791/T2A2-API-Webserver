@@ -11,15 +11,17 @@ from datetime import date
 
 restaurants_bp = Blueprint('restaurants', __name__, url_prefix='/restaurants')
 
-# route displays all restaurants
+# route returns all restaurants in the database sorted by name
 @restaurants_bp.route('/')
 def get_all_restaurants():
-    stmt = db.select(Restaurant)
+    stmt = db.select(Restaurant).order_by(Restaurant.name)
     restaurants = db.session.scalars(stmt)
-    return RestaurantSchema(many=True).dump(restaurants)
+    return RestaurantSchema(many=True, exclude = ['reviews','tagged_to_go','tagged_fave']).dump(restaurants)
 
-# route displays single restaurant by id
+
+# route displays a single restaurant by id, with more details such as reviews and tags
 @restaurants_bp.route('/<int:id>/')
+@jwt_required()
 def get_one_restaurant(id):
     stmt = db.select(Restaurant).filter_by(id=id)
     restaurant = db.session.scalar(stmt)
@@ -27,6 +29,46 @@ def get_one_restaurant(id):
         return RestaurantSchema().dump(restaurant)
     else:
         return {'error': f'Restaurant not found with id {id}'}, 404
+
+
+# route displays restaurants of a specific cuisine
+@restaurants_bp.route('/cuisine/<cuisine>/')
+def get_restaurants_by_cuisine(cuisine):
+    #check cuisine is available
+    stmt = db.select(Restaurant).filter_by(cuisine=cuisine.title()).order_by(Restaurant.name)
+    restaurants = db.session.scalars(stmt)
+    if restaurants:
+        return RestaurantSchema(many=True, exclude = ['reviews','tagged_to_go','tagged_fave']).dump(restaurants)
+    else:
+        return {'error': f'Restaurant not found with cuisine {cuisine}'}, 404
+
+
+# route displays restaurants of a specific region
+@restaurants_bp.route('/region/<region>/')
+def get_restaurants_by_region(region):
+    stmt = db.select(Restaurant).filter_by(region=region.title()).order_by(Restaurant.name)
+    restaurants = db.session.scalars(stmt)
+    if restaurants:
+        return RestaurantSchema(many=True, exclude = ['reviews','tagged_to_go','tagged_fave']).dump(restaurants)
+    else:
+        return {'error': f'Restaurant not found with region {region}'}, 404
+
+
+# route displays all restaurants sorted by price range, low to high
+@restaurants_bp.route('/price/low/')
+def get_restaurants_by_price_range_low():
+    stmt = db.select(Restaurant).order_by(Restaurant.price_range)
+    restaurants = db.session.scalars(stmt)
+    return RestaurantSchema(many=True).dump(restaurants)
+
+
+# route displays all restaurants sorted by price range, high to low
+@restaurants_bp.route('/price/high/')
+def get_restaurants_by_price_range_high():
+    stmt = db.select(Restaurant).order_by(Restaurant.price_range.desc())
+    restaurants = db.session.scalars(stmt)
+    return RestaurantSchema(many=True).dump(restaurants)
+
 
 # route adds a new restaurant to db
 @restaurants_bp.route('/', methods=['POST'])
@@ -46,6 +88,7 @@ def add_restaurant():
     db.session.commit()
     #Returning a response with the new restaurant's info
     return RestaurantSchema(exclude = ['reviews']).dump(restaurant), 201
+
 
 # route updates the details of a restaurant by id
 @restaurants_bp.route('/<int:id>/', methods=['PUT','PATCH'])
@@ -67,42 +110,10 @@ def update_restaurant(id):
         return {'error': f'Restaurant not found with id {id}'}, 404
 
 
-# route displays restaurants of a specific cuisine
-@restaurants_bp.route('/cuisine/<cuisine>/')
-def get_restaurants_by_cuisine(cuisine):
-    #check cuisine is available
-    stmt = db.select(Restaurant).filter_by(cuisine=cuisine.title())
-    restaurants = db.session.scalars(stmt)
-    if restaurants:
-        return RestaurantSchema(many=True).dump(restaurants)
-    else:
-        return {'error': f'Restaurant not found with cuisine {cuisine}'}, 404
 
 
 
-# route displays all restaurants sorted by price range, low to high
-@restaurants_bp.route('/price/low/')
-def get_restaurants_by_price_range_low():
-    stmt = db.select(Restaurant).order_by(Restaurant.price_range)
-    restaurants = db.session.scalars(stmt)
-    return RestaurantSchema(many=True).dump(restaurants)
 
-# route displays all restaurants sorted by price range, high to low
-@restaurants_bp.route('/price/high/')
-def get_restaurants_by_price_range_high():
-    stmt = db.select(Restaurant).order_by(Restaurant.price_range.desc())
-    restaurants = db.session.scalars(stmt)
-    return RestaurantSchema(many=True).dump(restaurants)
-
-# route displays restaurants of a specific region
-@restaurants_bp.route('/region/<region>/')
-def get_restaurants_by_region(region):
-    stmt = db.select(Restaurant).filter_by(region=region.title())
-    restaurants = db.session.scalars(stmt)
-    if restaurants:
-        return RestaurantSchema(many=True).dump(restaurants)
-    else:
-        return {'error': f'Restaurant not found with region {region}'}, 404
 
 # route deletes a restaurant by id
 @restaurants_bp.route('/<int:id>/', methods=['DELETE'])

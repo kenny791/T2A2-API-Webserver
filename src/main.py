@@ -47,9 +47,6 @@ def create_app():
    
 
 
-    # @app.route('/documentation')
-    # def documentation():
-    #     return auto.html()
 
 
     return app
