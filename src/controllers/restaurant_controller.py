@@ -29,6 +29,7 @@ def get_one_restaurant(id):
 
 @restaurants_bp.route('/', methods=['POST'])
 @jwt_required()
+# check if it is  the original user
 def add_restaurant():
     data = RestaurantSchema().load(request.json)
     restaurant = Restaurant(

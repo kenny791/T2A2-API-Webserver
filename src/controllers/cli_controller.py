@@ -135,28 +135,28 @@ def seed_db():
         Review(
             restaurant = restaurants[0],
             message = 'Fantastic food and service!',
-            rating = 4,
+            rating = 5,
             date = date.today(),
             user = users[2]
         ),
         Review(
             restaurant = restaurants[0],
             message = 'Good but not great.',
-            rating = 1,
+            rating = 5,
             date = '2022-11-01',
             user = users[3]
         ),
         Review(
             restaurant = restaurants[1],
             message = 'This place is great!',
-            rating = 5,
+            rating = 1,
             date = '2022-10-01',
             user = users[4]
         ),
         Review(
             restaurant = restaurants[1],
             message = 'Fantastic food and service!',
-            rating = 4,
+            rating = 1,
             date = date.today(),
             user = users[2]
         ),

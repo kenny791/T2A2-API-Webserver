@@ -19,7 +19,6 @@ def original_user():
     user = db.session.scalar(stmt)
     return user.id
 
-
 @auth_bp.route("/register", methods=["POST"])
 def auth_register():
     try:

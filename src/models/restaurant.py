@@ -26,7 +26,6 @@ class Restaurant(db.Model):
 
 
 class RestaurantSchema(ma.Schema):
-    reviews = fields.List(fields.Nested('ReviewSchema', only=['id','user','rating','message','date' ]))
     # saved = fields.List(fields.Nested('SavedSchema', only=['id','tag']))
     region = fields.String(
         validate=OneOf(VALID_REGION))
@@ -36,13 +35,17 @@ class RestaurantSchema(ma.Schema):
         ))
     price_range = fields.String(validate=OneOf(VALID_PRICE_RANGE))
     saves = fields.Function(lambda obj: len(obj.saved))
+    #total tagged To Go
+    tagged_to_go = fields.Function(lambda obj: len([save for save in obj.saved if save.tag == 'To Go']))
+
 
     #average rating from reviews, rounded to 2 decimal places
     avg_rating = fields.Function(lambda obj: round(sum([review.rating for review in obj.reviews])/len(obj.reviews),2) if len(obj.reviews) > 0 else 0)
+    reviews = fields.List(fields.Nested('ReviewSchema', only=['id','user','rating','message','date' ]))
 
  
     class Meta:
-        fields = ('id', 'name', 'region', 'price_range','cuisine','avg_rating', 'reviews', 'saves', )
+        fields = ('id', 'name', 'region', 'price_range','cuisine','avg_rating', 'reviews', 'saves','tagged_to_go' )
         ordered = True
 
         
