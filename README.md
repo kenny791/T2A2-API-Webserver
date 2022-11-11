@@ -69,30 +69,32 @@ def get_all_restaurants():
 ## Restaurant routes
 
 
-### restaurants/ 
-Methods: GET
-Arguments:
-Description:  Return all restaurants
+### /restaurants/   
+Methods: GET  
+Arguments:  
+Description:  Return all restaurants  
 
-### restaurants/<id>
-Methods: GET
-Arguments:
-Description:  Return a restaurant by id
-
-### restaurants/<id>
-Methods: PUT
-Arguments:
-Description:  Update a restaurant by id
-
-### restaurants/<id>
-Methods: DELETE
-Arguments:
-Description:  Delete a restaurant by id
-
-### restaurants/
+### /restaurants/
 Methods: POST
 Arguments:
 Description:  Create a new restaurant
+
+### /restaurants/\<int:id\>  
+Methods: GET  
+Arguments:  
+Description:  Return a restaurant by id  
+
+### /restaurants/\<int:id\>    
+Methods: PUT  
+Arguments: 
+Description:  Update a restaurant by id  
+
+### /restaurants/\<int:id\>  
+Methods: DELETE  
+Arguments:  
+Description:  Delete a restaurant by id  
+
+
 
 
 ## Auth
