@@ -84,7 +84,6 @@ def add_restaurant():
         location = data['location'],
         price_range = data['price_range'],
         cuisine = data['cuisine'],
-        user_id = get_jwt_identity()
     )
     #Add the restaurant to the database
     db.session.add(restaurant)
