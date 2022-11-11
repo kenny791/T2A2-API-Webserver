@@ -11,13 +11,14 @@ from datetime import date
 
 restaurants_bp = Blueprint('restaurants', __name__, url_prefix='/restaurants')
 
+# route displays all restaurants
 @restaurants_bp.route('/')
 def get_all_restaurants():
     stmt = db.select(Restaurant)
     restaurants = db.session.scalars(stmt)
     return RestaurantSchema(many=True).dump(restaurants)
 
-
+# route displays single restaurant by id
 @restaurants_bp.route('/<int:id>/')
 def get_one_restaurant(id):
     stmt = db.select(Restaurant).filter_by(id=id)
@@ -27,6 +28,7 @@ def get_one_restaurant(id):
     else:
         return {'error': f'Restaurant not found with id {id}'}, 404
 
+# route adds a new restaurant to db
 @restaurants_bp.route('/', methods=['POST'])
 @jwt_required()
 # check if it is  the original user
@@ -45,6 +47,7 @@ def add_restaurant():
     #Returning a response with the new restaurant's info
     return RestaurantSchema(exclude = ['reviews']).dump(restaurant), 201
 
+# route updates the details of a restaurant by id
 @restaurants_bp.route('/<int:id>/', methods=['PUT','PATCH'])
 @jwt_required()
 def update_restaurant(id):
@@ -63,8 +66,8 @@ def update_restaurant(id):
     else:
         return {'error': f'Restaurant not found with id {id}'}, 404
 
-#get all restaurants by cuisine
 
+# route displays restaurants of a specific cuisine
 @restaurants_bp.route('/cuisine/<cuisine>/')
 def get_restaurants_by_cuisine(cuisine):
     #check cuisine is available
@@ -76,22 +79,22 @@ def get_restaurants_by_cuisine(cuisine):
         return {'error': f'Restaurant not found with cuisine {cuisine}'}, 404
 
 
-# show restaurants ordered by price_range low to high
+
+# route displays all restaurants sorted by price range, low to high
 @restaurants_bp.route('/price/low/')
 def get_restaurants_by_price_range_low():
     stmt = db.select(Restaurant).order_by(Restaurant.price_range)
     restaurants = db.session.scalars(stmt)
     return RestaurantSchema(many=True).dump(restaurants)
 
-# show restaurants ordered by price_range high to low
+# route displays all restaurants sorted by price range, high to low
 @restaurants_bp.route('/price/high/')
-
 def get_restaurants_by_price_range_high():
     stmt = db.select(Restaurant).order_by(Restaurant.price_range.desc())
     restaurants = db.session.scalars(stmt)
     return RestaurantSchema(many=True).dump(restaurants)
 
-#show restaurants based on region
+# route displays restaurants of a specific region
 @restaurants_bp.route('/region/<region>/')
 def get_restaurants_by_region(region):
     stmt = db.select(Restaurant).filter_by(region=region.title())
@@ -101,13 +104,7 @@ def get_restaurants_by_region(region):
     else:
         return {'error': f'Restaurant not found with region {region}'}, 404
 
-
-
-
-
-
-
-
+# route deletes a restaurant by id
 @restaurants_bp.route('/<int:id>/', methods=['DELETE'])
 @jwt_required()
 def delete_restaurant(id):
@@ -123,12 +120,7 @@ def delete_restaurant(id):
         return {'error': f'Restaurant not found with id {id}'}, 404
 
 
-
-
-
-
-
-
+# route posts a review for a specific restaurant
 @restaurants_bp.route('/<int:restaurant_id>/review/', methods=['POST'])
 @jwt_required()
 def create_review(restaurant_id):
@@ -169,7 +161,7 @@ def create_review(restaurant_id):
         return {'error': f'Restaurant not found with id {id}'}, 404
 
 
-
+# route updates a review for a specific restaurant
 @restaurants_bp.route('/<int:restaurant_id>/review/<int:review_id>/', methods=['PUT','PATCH'])
 @jwt_required()
 def update_review(restaurant_id, review_id):
@@ -190,9 +182,7 @@ def update_review(restaurant_id, review_id):
         return {'error': f'Review not found with id {review_id}'}, 404
 
 
-
-
-#delete a review
+# route deletes a review of a restaurant by id
 @restaurants_bp.route('/<int:restaurant_id>/review/<int:review_id>/', methods=['DELETE'])
 @jwt_required()
 def delete_review(restaurant_id, review_id):
@@ -211,7 +201,7 @@ def delete_review(restaurant_id, review_id):
 
 
 
-# add restaurant to saved
+# route adds a restaurant to a users saved list
 @restaurants_bp.route('/<int:restaurant_id>/save/', methods=['POST'])
 @jwt_required()
 def add_restaurant_to_saved(restaurant_id):
@@ -221,7 +211,6 @@ def add_restaurant_to_saved(restaurant_id):
     saved = db.session.scalar(stmt)
     data = SavedSchema().load(request.json)
     
-
     # return {'message': f'saved with tag {saved} found' },200
     if saved == None: #if saved doesn't exist, add a new entry to the database with any received tag data
         saved = Saved(
@@ -239,23 +228,10 @@ def add_restaurant_to_saved(restaurant_id):
             return {'message': f'Restaurant \'{restaurant.name}\' already in saved'},200
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-# #update tag of existing saved
+# route updates the tag to a saved restaurant
 @restaurants_bp.route('/<int:restaurant_id>/save/', methods=['PUT','PATCH'])
 @jwt_required()
-def update_saved(restaurant_id):
+def update_saved_tag(restaurant_id):
     stmt = db.select(Saved).filter_by(user_id=get_jwt_identity(), restaurant_id=restaurant_id)
     saved = db.session.scalar(stmt)
     data = SavedSchema().load(request.json)
@@ -265,7 +241,6 @@ def update_saved(restaurant_id):
         return {'message': f'Tag for saved restaurant with id \'{restaurant_id}\' updated successfully'},200
     else:
         return {'error': f'Saved restaurant not found with id {restaurant_id}'}, 404
-
 
 
 # @restaurants_bp.route('/<int:restaurant_id>/save/', methods=['PUT','PATCH'])
@@ -287,7 +262,8 @@ def update_saved(restaurant_id):
 #         db.session.commit()
 #         return {'message': f'Restaurant {restaurant.name} tag has been updated to {saved.tag}'},200
 
-# delete saved by user_id
+
+# route deletes a restaurant from a users saved list
 @restaurants_bp.route('<int:restaurant_id>/saved/<int:saved_id>/', methods=['DELETE'])
 @jwt_required()
 def delete_saved(saved_id):

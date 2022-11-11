@@ -7,10 +7,12 @@ from controllers.profile_controller import profiles_bp
 from controllers.cli_controller import db_commands
 import os
 from marshmallow.exceptions import ValidationError
+# from flask_selfdoc import Autodoc
 
 
 def create_app():
     app = Flask(__name__)
+    # auto = Autodoc(app)
 
     #catches all 404 raised within app
     @app.errorhandler(404)
@@ -43,4 +45,11 @@ def create_app():
     app.register_blueprint(saved_bp)
     app.register_blueprint(profiles_bp)
    
+
+
+    # @app.route('/documentation')
+    # def documentation():
+    #     return auto.html()
+
+
     return app
