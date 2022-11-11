@@ -72,12 +72,27 @@ def get_all_restaurants():
 ### /restaurants/   
 Methods: GET  
 Arguments:  
-Description:  Return all restaurants  
+Description:  Return all restaurants
+Request JSON:  
+Return JSON:  
 
 ### /restaurants/
-Methods: POST
-Arguments:
-Description:  Create a new restaurant
+Methods: POST  
+Arguments:  
+Description:  Create a new restaurant  
+Request JSON Example:  
+```
+{
+    "name": "Restaurant Name",
+    "region": "North",
+    "cuisine": "Italian",
+    "price_range": "$$"
+}
+```
+Return JSON:
+```
+
+```
 
 ### /restaurants/\<int:id\>  
 Methods: GET  
