@@ -63,6 +63,88 @@ def get_all_restaurants():
 # R5 Document all endpoints for your API  
 
 
+### /restaurants/
+Methods: GET
+
+### /restaurants/\<id\>
+Methods: GET
+
+### /restaurants/cuisine/\<cuisine\>
+Methods: GET
+
+
+### /restaurants/location/\<location\>
+Methods: GET
+
+### /restaurants/price/\<price\>
+Methods: GET
+
+### /restaurants/submit/
+Methods: POST
+
+### /restaurants/\<int:id\>
+Methods: PUT, PATCH
+
+### /restaurants/\<id\>
+Methods: DELETE
+
+### /restaurants/\<id\>/review
+Methods: POST
+
+### /restaurants/\<id\>/review
+Methods: PUT, PATCH
+
+### /restaurants/\<id\>/review
+Methods: DELETE
+
+### /restaurants/\<id\>/save
+Methods: POST
+
+### /restaurants/\<id\>/save
+Methods: PUT,PATCH
+
+### /restaurants/\<id\>/save
+Methods: DELETE
+
+
+### /auth/register/
+Methods: POST
+
+### /auth/login/
+Methods: POST
+
+### /auth/users/
+Methods: GET
+
+
+### /auth/users/\<id\>
+Methods: GET
+
+### /auth/users/\<id\>
+Methods: DELETE
+
+
+
+
+
+### /profile/
+Methods: GET
+
+### /profile/saved/
+Methods: GET
+
+### /profile/saved/\<id\>
+Methods: DELETE
+
+### /profile/reviews/
+Methods: GET
+
+### /profile/reviews/\<id\>
+Methods: DELETE
+
+
+
+
 
 
 
@@ -84,7 +166,7 @@ Request JSON Example:
 ```
 {
     "name": "Restaurant Name",
-    "region": "North",
+    "location": "North",
     "cuisine": "Italian",
     "price_range": "$$"
 }
@@ -93,6 +175,19 @@ Return JSON:
 ```
 
 ```
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ### /restaurants/\<int:id\>  
 Methods: GET  
@@ -113,10 +208,30 @@ Description:  Delete a restaurant by id
 
 
 ## Auth
+### /auth/users/
+Methods: GET
+Arguments:
+Description:  Return all users
+Request JSON:
+Return JSON:
+```
+
+```
 
 
 
-#
+
+
+
+
+## profile
+### /profile/
+Methods: GET
+Arguments:
+Description:  Returns logged in user profile
+
+
+
 
 
 
@@ -153,9 +268,7 @@ Login
 
 
 # R6 An ERD for your app  
-
-
-
+![Entity Relationship Diagram](/docs/ERD.jpeg)
 
 
 # R7 Detail any third party services that your app will use  
