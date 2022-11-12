@@ -235,9 +235,9 @@ Return Body:
  
 ### /restaurants/price/\<sort\>
 Methods: GET  
-Argument: sort (string). e.g 'low'
+Argument: sort (string). e.g 'low'  
 Authentication: N/A  
-Description: returns all restaurants sorted by price range depending on the argument (high/low).
+Description: returns all restaurants sorted by price range depending on the argument (high/low)  
 Request Body:  N/A  
 Return Body:  
 ```
@@ -285,7 +285,7 @@ Return Body:
 Methods: POST  
 Argument: N/A  
 Authentication: registered users  
-Description: allows registered users to submit a new restaurant to the database.  
+Description: allows registered users to submit a new restaurant to the database  
 Request Body:  
 ```
 {
@@ -307,10 +307,10 @@ Return Body:
 ```  
 
 ### /restaurants/\<int:restaurant_id\>
-Methods: PUT, PATCH
+Methods: PUT, PATCH  
 Argument: restaurant_id (int) e.g '1'  
 Authentication: registered users  
-Description: registered users can change details of a restaurant.
+Description: registered users can change details of a restaurant  
 Request Body:  
 ```
 {
@@ -332,10 +332,10 @@ Return Body:
 ```
  
 ### /restaurants/\<int:restaurant_id\>
-Methods: DELETE
+Methods: DELETE  
 Argument: restaurant_id (int)  
 Authentication: registered users with admin access  
-Description: admin can delete a restaurant from the database.
+Description: admin can delete a restaurant from the database  
 Request Body: N/A  
 Return Body:
 ```
@@ -345,10 +345,10 @@ Return Body:
 ```  
   
 ### /restaurants/\<int:restaurant_id\>/review
-Methods: POST
+Methods: POST  
 Argument: restaurant_id (int) e.g '2'  
 Authentication: registered users  
-Description: registered users can submit a review for a restaurant.
+Description: registered users can submit a review for a restaurant  
 Request Body:  
 ```
 {
@@ -374,10 +374,10 @@ Return Body:
 ```  
  
 ### /restaurants/\<int:restaurant_id\>/review
-Methods: PUT, PATCH
+Methods: PUT, PATCH  
 Argument: restaurant_id (int) e.g '2'  
 Authentication: registered users  
-Description: registered users can edit their review for a restaurant.  
+Description: registered users can edit their review for a restaurant  
 Request Body:  
 ```
 {
@@ -403,10 +403,10 @@ Return Body:
 ```
  
 ### /restaurants/\<int:restaurant_id\>/review
-Methods: DELETE  
+Methods: DELETE   
 Argument: restaurant_id (int) e.g '2'  
 Authentication: registered users  
-Description: registered users can delete their review for a restaurant
+Description: registered users can delete their review for a restaurant  
 Request Body: N/A  
 Return Body:  
 ```
@@ -416,10 +416,10 @@ Return Body:
 ```
  
 ### /restaurants/\<int:restaurant_id\>/save
-Methods: POST  
+Methods: POST   
 Argument: restaurant_id (int) e.g '2'  
 Authentication: registered users  
-Description: registered users can save a restaurant to a list with a tag
+Description: registered users can save a restaurant to a list with a tag  
 Request Body:
 ```
 {
