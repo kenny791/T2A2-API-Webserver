@@ -21,9 +21,7 @@ def original_user():
     user = db.session.scalar(stmt)
     return user.id
 
-
-
-
+# route allows for new users to register
 @auth_bp.route("/register", methods=["POST"])
 def auth_register():
     try:
@@ -33,14 +31,13 @@ def auth_register():
             email = data['email'],
             password = bcrypt.generate_password_hash(data['password']).decode('utf-8')
         )
-        
         db.session.add(user)
         db.session.commit()
-        return UserSchema(exclude=['password', 'is_admin','saved', 'reviews_count', 'saved_count']).dump(user), 201
+        return UserSchema(exclude=['password', 'is_admin','saved', 'reviews_count', 'saved_count', 'reviews_submitted']).dump(user), 201
     except IntegrityError:
         return {'error': 'Username or email already exists'}, 409
         
-
+# route allows for users to login
 @auth_bp.route('/login/', methods=['POST'])
 def auth_login():
     # Find a user by email address
@@ -53,8 +50,9 @@ def auth_login():
     else:
         return{'error': 'Invalid email or password'},401
 
-
+# route returns all users with details
 @auth_bp.route('/users/')
+@jwt_required()
 def get_all_users():
     if is_admin():
         stmt = db.select(User)
