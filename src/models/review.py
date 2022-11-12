@@ -27,8 +27,7 @@ class ReviewSchema(ma.Schema):
     restaurant = fields.Nested('RestaurantSchema', only=['name'])
     message = fields.String(validate=And( 
         Length(min=1, error='Message must be at least 1 character long'),
-        Length(max=255, error='Message must be less than 255 characters long'),
-        Regexp('^[a-zA-Z0-9 ]+$', error='Review must be alphanumeric')
+        Length(max=255, error='Message must be less than 255 characters long')
         ))
     rating = fields.Integer(validate = OneOf(VALID_RATING), error = 'Rating must be between 1 and 5')
 

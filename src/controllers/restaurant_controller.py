@@ -54,14 +54,14 @@ def get_restaurants_by_location(location):
 
 
 # route displays all restaurants sorted by price range (low to high)
-@restaurants_bp.route('/price/<price>/')
-def get_restaurants_by_price(price):
-    if price.lower() == 'low':
+@restaurants_bp.route('/price/<sort>/')
+def get_restaurants_by_price(sort):
+    if sort.lower() == 'low':
         return get_restaurants_by_price_range_low()
-    elif price.lower() == 'high':
+    elif sort.lower() == 'high':
         return get_restaurants_by_price_range_high()
     else:
-        return {'error': f'{price} Price range not found'}, 404
+        return {'error': f'{sort} Price sort not found'}, 404
 
 def get_restaurants_by_price_range_low():
     stmt = db.select(Restaurant).order_by(Restaurant.price_range).order_by(Restaurant.name)
@@ -162,24 +162,26 @@ def create_review(restaurant_id):
 
 
 # route updates a review for a specific restaurant
-@restaurants_bp.route('/<int:restaurant_id>/review/<int:review_id>/', methods=['PUT','PATCH'])
+@restaurants_bp.route('/<int:restaurant_id>/review/', methods=['PUT','PATCH'])
 @jwt_required()
-def update_review(restaurant_id, review_id):
-    stmt = db.select(Review).filter_by(id=review_id)
-    review = db.session.scalar(stmt)
-    data = ReviewSchema().load(request.json)
-    user = get_jwt_identity()
-    if review:
-        if original_user() == review.user_id:
+def update_review(restaurant_id,):
+    stmt = db.select(Restaurant).filter_by(id=restaurant_id)
+    restaurant = db.session.scalar(stmt)
+    if restaurant:
+        # if existing review by user, update review
+        stmt = db.select(Review).filter_by(user_id=get_jwt_identity(), restaurant_id=restaurant_id)
+        review = db.session.scalar(stmt)
+        if review:
+            data = ReviewSchema().load(request.json)
             review.rating = data['rating'] or review.rating
             review.message = data['message'] or review.message
             review.date = date.today()
             db.session.commit()
             return ReviewSchema().dump(review), 200
         else:
-            return {'error': 'You can only update your own reviews'}, 401
+            return {'error': f'You have not reviewed this restaurant'}, 400
     else:
-        return {'error': f'Review not found with id \'{review_id}\' for restaurant \'{restaurant_id}\''}, 404
+        return {'error': f'Restaurant not found with id {id}'}, 404
 
 
 # route deletes a review of a restaurant by id

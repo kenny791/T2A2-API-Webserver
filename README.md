@@ -106,7 +106,7 @@ Return Body:
 Methods: GET  
 Argument: restaurant_id (int) e.g '10'  
 Authentication: registered users  
-Description: returns a restaurant of a given id, with more details such as reviews  
+Description: registered users can request a restaurant of a given id, with more details such as reviews  
 Request Body: N/A  
 Return Body:  
 ```
@@ -186,12 +186,12 @@ Return Body:
 ```  
 
 ### /restaurants/location/\<location\>
-Methods: GET
-Argument: location (string). e.g 'north' 
+Methods: GET  
+Argument: location (string). e.g 'north'  
 Authentication: N/A  
 Description: returns all restaurants of a given location  
 Request Body:  
-Return Body: 
+Return Body:  
 ```
 [
     {
@@ -233,11 +233,11 @@ Return Body:
 ]
 ```  
  
-### /restaurants/price/\<price\>
+### /restaurants/price/\<sort\>
 Methods: GET
-Argument: price (string). e.g 'low'
+Argument: sort (string). e.g 'low'
 Authentication: N/A  
-Description: returns the restaurants sorted by price range, depending on the argument (high/low).
+Description: returns all restaurants sorted by price range depending on the argument (high/low).
 Request Body:  N/A 
 Return Body:  
 ```
@@ -285,7 +285,7 @@ Return Body:
 Methods: POST
 Argument: N/A  
 Authentication: registered users  
-Description: allows users to submit a new restaurant to the database.  
+Description: allows registered users to submit a new restaurant to the database.  
 Request Body:
 ```
 {
@@ -306,37 +306,101 @@ Return Body:
 }
 ```  
 
-### /restaurants/\<int:id\>
+### /restaurants/\<int:restaurant_id\>
 Methods: PUT, PATCH
-Argument:  
-Authentication:  
-Description:  
+Argument: restaurant_id (int) e.g '1'  
+Authentication: registered users  
+Description: registered users can change details of a restaurant.
 Request Body:  
+```
+{
+    "name": "Updated Name",
+    "location": "North",
+    "cuisine": "Updated Name",
+    "price_range": "$"
+}
+```
 Return Body:  
+```
+{
+    "id": 1,
+    "name": "Updated Name",
+    "location": "North",
+    "price_range": "$",
+    "cuisine": "Updated Name"
+}
+```
  
-### /restaurants/\<id\>
+### /restaurants/\<int:restaurant_id\>
 Methods: DELETE
-Argument:  
-Authentication:  
-Description:  
-Request Body:  
-Return Body:  
- 
-### /restaurants/\<id\>/review
+Argument: restaurant_id (int)  
+Authentication: registered users with admin access  
+Description: admin can delete a restaurant from the database.
+Request Body: N/A  
+Return Body:
+```
+{
+    "message": "Restaurant 'Scopri' with id '6' deleted successfully"
+}
+```  
+  
+### /restaurants/\<int:restaurant_id\>/review
 Methods: POST
-Argument:  
-Authentication:  
-Description:  
+Argument: restaurant_id (int) e.g '2'  
+Authentication: registered users  
+Description: registered users can submit a review for a restaurant.
 Request Body:  
+```
+{
+    "rating": "5",
+    "message": "Great food and service"
+}
+``` 
 Return Body:  
+```
+{
+    "id": 38,
+    "restaurant": {
+        "name": "Bodega Underground"
+    },
+    "date": "2022-11-12",
+    "rating": 5,
+    "message": "Great food and service",
+    "user": {
+        "id": 1,
+        "username": "admin"
+    }
+}
+```  
  
-### /restaurants/\<id\>/review
+### /restaurants/\<int:restaurant_id\>/review
 Methods: PUT, PATCH
-Argument:  
-Authentication:  
-Description:  
+Argument: restaurant_id (int) e.g '2'  
+Authentication: registered users  
+Description: registered users can edit their review for a restaurant.  
 Request Body:  
+```
+{
+    "rating": "4",
+    "message": "Updated review"
+}
+```
 Return Body:  
+```
+{
+    "id": 11,
+    "restaurant": {
+        "name": "Bodega Underground"
+    },
+    "date": "2022-11-12",
+    "rating": 4,
+    "message": "Updated review",
+    "user": {
+        "id": 3,
+        "username": "user2"
+    }
+}
+```
  
 ### /restaurants/\<id\>/review
 Methods: DELETE
