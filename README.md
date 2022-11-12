@@ -100,48 +100,212 @@ Return Body:
         "saved_for_later": 1
     },
     ...
-```
+```  
 
 ### /restaurants/\<int:restaurant_id\>
-Methods: GET
-Argument: restaurant_id (int) e.g '10' 
+Methods: GET  
+Argument: restaurant_id (int) e.g '10'  
 Authentication: registered users  
-Description: Returns a restaurant of a given id, with more details such as reviews
-Request Body: N/A  
-Return Body: 
-
-### /restaurants/cuisine/\<cuisine\>
-Methods: GET
-Argument: cuisine (string). e.g 'mexican'  
-Authentication: N/A  
-Description: Returns all restaurants of a given cuisine  
+Description: returns a restaurant of a given id, with more details such as reviews  
 Request Body: N/A  
 Return Body:  
+```
+{
+    "id": 2,
+    "name": "Minamishima",
+    "location": "East",
+    "price_range": "$$",
+    "cuisine": "Japanese",
+    "avg_rating": 1.0,
+    "reviews": [
+        {
+            "id": 4,
+            "user": {
+                "id": 5,
+                "username": "user4"
+            },
+            "rating": 1,
+            "message": "This place is great!",
+            "date": "2022-10-01"
+        },
+        {
+            "id": 5,
+            "user": {
+                "id": 3,
+                "username": "user2"
+            },
+            "rating": 1,
+            "message": "Fantastic food and service!",
+            "date": "2022-11-11"
+        },
+        {
+            "id": 6,
+            "user": {
+                "id": 4,
+                "username": "user3"
+            },
+            "rating": 1,
+            "message": "Good but not great.",
+            "date": "2022-10-01"
+        }
+    ],
+    "saved_for_later": 0,
+    "tagged_to_go": 0,
+    "tagged_fave": 0
+}
+```  
+
+### /restaurants/cuisine/\<cuisine\>
+Methods: GET  
+Argument: cuisine (string). e.g 'mexican'  
+Authentication: N/A  
+Description: returns all restaurants of a given cuisine  
+Request Body: N/A  
+Return Body:  
+```
+[
+    {
+        "id": 4,
+        "name": "Bodega Underground",
+        "location": "North",
+        "price_range": "$$",
+        "cuisine": "Mexican",
+        "avg_rating": 3.33,
+        "saved_for_later": 0
+    },
+    {
+        "id": 7,
+        "name": "Village Cantina",
+        "location": "East",
+        "price_range": "$$$",
+        "cuisine": "Mexican",
+        "avg_rating": 3.33,
+        "saved_for_later": 0
+    }
+]
+```  
 
 ### /restaurants/location/\<location\>
 Methods: GET
 Argument: location (string). e.g 'north' 
-Authentication:  
-Description:  
+Authentication: N/A  
+Description: returns all restaurants of a given location  
 Request Body:  
-Return Body:  
+Return Body: 
+```
+[
+    {
+        "id": 9,
+        "name": "Agostino",
+        "location": "North",
+        "price_range": "$$",
+        "cuisine": "Italian",
+        "avg_rating": 3.33,
+        "saved_for_later": 0
+    },
+    {
+        "id": 4,
+        "name": "Bodega Underground",
+        "location": "North",
+        "price_range": "$$",
+        "cuisine": "Mexican",
+        "avg_rating": 3.33,
+        "saved_for_later": 0
+    },
+    {
+        "id": 1,
+        "name": "Mesa Verde",
+        "location": "North",
+        "price_range": "$",
+        "cuisine": "Mexican",
+        "avg_rating": 5.0,
+        "saved_for_later": 1
+    },
+    {
+        "id": 6,
+        "name": "Scopri",
+        "location": "North",
+        "price_range": "$",
+        "cuisine": "Italian",
+        "avg_rating": 3.33,
+        "saved_for_later": 0
+    }
+]
+```  
  
 ### /restaurants/price/\<price\>
 Methods: GET
-Argument:  
-Authentication:  
-Description:  
-Request Body:  
+Argument: price (string). e.g 'low'
+Authentication: N/A  
+Description: returns the restaurants sorted by price range, depending on the argument (high/low).
+Request Body:  N/A 
 Return Body:  
+```
+[
+    {
+        "id": 7,
+        "name": "Village Cantina",
+        "location": "East",
+        "price_range": "$$$",
+        "cuisine": "Mexican",
+        "avg_rating": 3.33,
+        "saved_for_later": 0
+    },
+    {
+        "id": 5,
+        "name": "Nobu",
+        "location": "South",
+        "price_range": "$$$",
+        "cuisine": "Japanese",
+        "avg_rating": 3.33,
+        "saved_for_later": 0
+    },
+    {
+        "id": 3,
+        "name": "Florentino",
+        "location": "West",
+        "price_range": "$$$",
+        "cuisine": "Italian",
+        "avg_rating": 3.33,
+        "saved_for_later": 2
+    },
+    {
+        "id": 4,
+        "name": "Bodega Underground",
+        "location": "North",
+        "price_range": "$$",
+        "cuisine": "Mexican",
+        "avg_rating": 3.33,
+        "saved_for_later": 0
+    },
+    ...cont.
+``` 
  
 ### /restaurants/submit/
 Methods: POST
-Argument:  
-Authentication:  
-Description:  
-Request Body:  
+Argument: N/A  
+Authentication: registered users  
+Description: allows users to submit a new restaurant to the database.  
+Request Body:
+```
+{
+    "name": "Shake Shack",
+    "location": "North",
+    "price_range": "$",
+    "cuisine": "Burgers",
+}
+```  
 Return Body:  
- 
+```
+{
+    "id": 18,
+    "name": "Shake Shack",
+    "location": "North",
+    "price_range": "$",
+    "cuisine": "Burgers"
+}
+```  
+
 ### /restaurants/\<int:id\>
 Methods: PUT, PATCH
 Argument:  

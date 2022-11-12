@@ -3,7 +3,7 @@ from marshmallow.exceptions import ValidationError
 from init import db, ma, bcrypt, jwt
 from controllers.restaurant_controller import restaurants_bp
 from controllers.auth_controller import auth_bp
-from controllers.saved_controller import saved_bp
+# from controllers.saved_controller import saved_bp
 from controllers.profile_controller import profiles_bp
 from controllers.cli_controller import db_commands
 import os
@@ -50,7 +50,7 @@ def create_app():
     app.register_blueprint(restaurants_bp)
     app.register_blueprint(auth_bp)
     app.register_blueprint(db_commands)
-    app.register_blueprint(saved_bp)
+    # app.register_blueprint(saved_bp)
     app.register_blueprint(profiles_bp)
    
 
