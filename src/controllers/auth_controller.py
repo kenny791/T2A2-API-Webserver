@@ -60,3 +60,35 @@ def get_all_users():
         return UserSchema(many=True, exclude=['password']).dump(users)
     else:
         return {'error': 'Unauthorized'}, 401
+
+
+# route returns one user with details
+@auth_bp.route('/users/<int:user_id>/')
+@jwt_required()
+def get_one_user(user_id):
+    if is_admin():
+        stmt = db.select(User).filter_by(id=user_id)
+        user = db.session.scalar(stmt)
+        if user:
+            return UserSchema(exclude=['password']).dump(user)
+        else:
+            return {'error': 'User not found'}, 404
+    else:
+        return {'error': 'Unauthorized'}, 401
+
+
+# route allows for admin to delete account
+@auth_bp.route('/users/<int:user_id>/', methods=['DELETE'])
+@jwt_required()
+def delete_user(user_id):
+    if is_admin():
+        stmt = db.select(User).filter_by(id=user_id)
+        user = db.session.scalar(stmt)
+        if user:
+            db.session.delete(user)
+            db.session.commit()
+            return {'message': 'User deleted'}, 200
+        else:
+            return {'error': 'User not found'}, 404
+    else:
+        return {'error': 'Unauthorized'}, 401

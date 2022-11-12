@@ -13,7 +13,7 @@ profiles_bp = Blueprint('profile', __name__, url_prefix='/profile')
 
 
 
-# display user profile
+# route display user profile
 @profiles_bp.route('/')
 @jwt_required()
 def get_user_profile():
@@ -23,7 +23,7 @@ def get_user_profile():
     return UserSchema(exclude=['password', 'is_admin', 'saved', 'reviews_submitted']).dump(user)
 
 
-#display all savedned restaurants for user
+# route display all restaurants in the users saved list
 @profiles_bp.route('/saved/')
 @jwt_required()
 def get_user_saved():
@@ -37,24 +37,26 @@ def get_user_saved():
         return {'error': 'No saved found'}, 404
     
 
-# delete saved by user_id
+# route deletes a saved restaurant from a users saved list
 @profiles_bp.route('saved/<int:saved_id>/', methods=['DELETE'])
 @jwt_required()
 def delete_saved(saved_id):
     if original_user():
         stmt = db.select(Saved).filter_by(id=saved_id)
         saved = db.session.scalar(stmt)
+
         if saved:
             db.session.delete(saved)
             db.session.commit()
-            return {'message': f'Saved {saved_id} deleted'}, 200
+            return {'message': f'Saved restaurant {saved_id} deleted'}, 200
+            
         else:
-            return {'error': f'Saved not found with id {saved_id}'}, 404
+            return {'error': f'Saved restaurant with id {saved_id} not found '}, 404
     else:
         return {'error': 'Unauthorized'}, 401
 
 
-#display all reviews for user
+# route displays all reviews submitted by a user
 @profiles_bp.route('/reviews/')
 @jwt_required()
 def get_user_reviews():
@@ -64,10 +66,7 @@ def get_user_reviews():
     return ReviewSchema(many=True, exclude=['user']).dump(reviews)
 
 
-
-
-
-#delete a review
+# route deletes a review from a user
 @profiles_bp.route('/reviews/<int:review_id>/', methods=['DELETE'])
 @jwt_required()
 def delete_review(review_id):
