@@ -106,7 +106,7 @@ def get_all_restaurants():
 }
 ```
 
-### /auth/users/
+### /auth/users/ 
 - Methods: GET  
 - Argument: N/A  
 - Authentication: registered users with admin privileges  
@@ -593,59 +593,104 @@ def get_all_restaurants():
 ```
 
 
- 
-
-
-
 
 ### /profile/
 - Methods: GET  
-- Argument:  
-- Authentication:  
-- Description:  
-- Request Body:  
+- Argument: N/A  
+- Authentication: registered users  
+- Description: registered users can view their profile with details of their saved restaurants and reviews
+- Request Body: N/A  
 - Return Body:  
+```
+{
+    "id": 2,
+    "username": "user1",
+    "email": "user1@email.com",
+    "reviews_count": 1,
+    "saved_count": 1
+}
+```
  
 ### /profile/saved/
 - Methods: GET  
-- Argument:  
-- Authentication:  
-- Description:  
-- Request Body:  
+- Argument: N/A  
+- Authentication: registered users  
+- Description: registered users can view their saved restaurants list
+- Request Body: N/A  
 - Return Body:  
+```
+[
+    {
+        "id": 5,
+        "restaurant": {
+            "name": "Florentino"
+        },
+        "tag": "To Go"
+    },
+    {
+        "id": 6,
+        "restaurant": {
+            "name": "Bodega Underground"
+        },
+        "tag": "Fave"
+    }
+]
+```
  
-### /profile/saved/\<id\>
+### /profile/saved/\<saved_id\>
 - Methods: DELETE  
-- Argument:  
-- Authentication:  
-- Description:  
-- Request Body:  
+- Argument: saved_id (int) e.g '5'  
+- Authentication: registered users  
+- Description: registered users can delete a restaurant from their saved list
+- Request Body: N/A  
 - Return Body:  
+```
+{
+    "message": "Saved restaurant 5 deleted"
+}
+```
  
 ### /profile/reviews/
 - Methods: GET  
-- Argument:  
-- Authentication:  
-- Description:  
-- Request Body:  
+- Argument: N/A  
+- Authentication: registered users  
+- Description: registered users can view a list of their submitted reviews
+- Request Body: N/A   
 - Return Body:  
+```
+[
+    {
+        "id": 28,
+        "restaurant": {
+            "name": "Scopri"
+        },
+        "date": "2022-11-12",
+        "rating": 5,
+        "message": "Great food and service"
+    }
+]
+```
  
-### /profile/reviews/\<id\>
+### /profile/reviews/\<review_id\>
 - Methods: DELETE  
-- Argument:  
-- Authentication:  
-- Description:  
-- Request Body:  
-- Return Body:  
+- Argument: review_id (int) e.g '28'  
+- Authentication: registered users  
+- Description: registered users can delete a review they have submitted  
+- Request Body: N/A   
+- Return Body:
+```
+{
+    "message": "Review with id '28' deleted successfully"
+}
+```
  
 
 
 
 
 
-
+--- 
 ## Restaurant routes
-
 
 ### /restaurants/   
 - Methods: GET  
