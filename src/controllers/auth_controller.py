@@ -57,7 +57,7 @@ def get_all_users():
     if is_admin():
         stmt = db.select(User)
         users = db.session.scalars(stmt)
-        return UserSchema(many=True, exclude=['password']).dump(users)
+        return UserSchema(many=True, exclude=['password', 'reviews_submitted', 'saved', 'reviews_count', 'saved_count']).dump(users)
     else:
         return {'error': 'Unauthorized'}, 401
 
@@ -87,7 +87,7 @@ def delete_user(user_id):
         if user:
             db.session.delete(user)
             db.session.commit()
-            return {'message': 'User deleted'}, 200
+            return {'message': f'User {user.username} with id {user.id} has been deleted'}, 200
         else:
             return {'error': 'User not found'}, 404
     else:

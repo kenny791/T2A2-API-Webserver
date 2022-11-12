@@ -63,13 +63,140 @@ def get_all_restaurants():
 # R5 Document all endpoints for your API  
 
 
+### /auth/register/
+- Methods: POST  
+- Argument: N/A  
+- Authentication: N/A  
+- Description: allows users to register a new account  
+- Request Body:  
+```
+{
+    "username": "newuser12",
+    "email": "food@email.com",
+    "password": "food123"
+}
+```
+- Return Body:
+```
+{
+    "id": 7,
+    "username": "newuser12",
+    "email": "food@email.com"
+}  
+```
+
+### /auth/login/
+- Methods: POST  
+- Argument: N/A  
+- Authentication: N/A  
+- Description: users can login to their account  
+- Request Body:  
+```
+{
+    "email": "food@email.com",
+    "password": "food123"
+}
+```
+- Return Body:  
+```
+{
+    "username": "newuser12",
+    "email": "food@email.com",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY2ODI1MjI3NCwianRpIjoiNjc5NDFjNjUtYjBlYi00YWU0LWFhZGUtNjU4ZmZhMjIxM2Y5IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjciLCJuYmYiOjE2NjgyNTIyNzQsImV4cCI6MTY2ODMzODY3NH0.Tjr-azCLWmg_ywPjSkP5e7lHURycF4y25HzrVWPNY18"
+}
+```
+
+### /auth/users/
+- Methods: GET  
+- Argument: N/A  
+- Authentication: registered users with admin privileges  
+- Description: users with admin privileges can view all users   
+- Request Body: N/A  
+- Return Body:  
+```
+[
+    {
+        "id": 1,
+        "username": "admin",
+        "email": "admin@email.com",
+        "is_admin": true
+    },
+    {
+        "id": 2,
+        "username": "user1",
+        "email": "user1@email.com",
+        "is_admin": false
+    },
+    {
+        "id": 3,
+        "username": "user2",
+        "email": "user2@email.com",
+        "is_admin": false
+    },
+    ...cont.
+```
+
+### /auth/users/\<int:user_id\>
+- Methods: GET  
+- Argument: user_id (int) e.g '2'  
+- Authentication: registered users with admin privileges     
+- Description: admin can view a specific user account details  
+- Request Body: N/A  
+- Return Body:  
+```
+{
+    "id": 2,
+    "username": "user1",
+    "email": "user1@email.com",
+    "is_admin": false,
+    "reviews_submitted": [
+        {
+            "restaurant": {
+                "name": "Scopri"
+            },
+            "rating": 5,
+            "date": "2022-11-12",
+            "message": "Great food and service"
+        }
+    ],
+    "saved": [
+        {
+            "restaurant": {
+                "name": "Florentino"
+            },
+            "tag": "To Go"
+        }
+    ],
+    "reviews_count": 1,
+    "saved_count": 1
+}
+```
+
+### /auth/users/\<int:user_id\>
+- Methods: DELETE  
+- Argument: user_id (int) e.g '2'  
+- Authentication: registered users with admin privileges  
+- Description: users with admin privileges can delete a user account
+- Request Body: N/A  
+- Return Body:  
+```
+{
+    "message": "User user3 with id 4 has been deleted"
+}
+```
+
+
+
+
+
+
 ### /restaurants/
-Methods: GET  
-Argument: N/A  
-Authentication: N/A  
-Description: Returns all restaurants in the database  
-Request Body: N/A  
-Return Body:  
+- Methods: GET  
+- Argument: N/A  
+- Authentication: N/A  
+- Description: Returns all restaurants in the database  
+- Request Body: N/A  
+- Return Body:  
 ```
 [
     {
@@ -99,16 +226,16 @@ Return Body:
         "avg_rating": 3.33,
         "saved_for_later": 1
     },
-    ...
+    ...cont.
 ```  
 
 ### /restaurants/\<int:restaurant_id\>
-Methods: GET  
-Argument: restaurant_id (int) e.g '10'  
-Authentication: registered users  
-Description: registered users can request a restaurant of a given id, with more details such as reviews  
-Request Body: N/A  
-Return Body:  
+- Methods: GET  
+- Argument: restaurant_id (int) e.g '10'  
+- Authentication: registered users  
+- Description: registered users can request a restaurant of a given id, with more details such as reviews  
+- Request Body: N/A  
+- Return Body:  
 ```
 {
     "id": 2,
@@ -156,12 +283,12 @@ Return Body:
 ```  
 
 ### /restaurants/cuisine/\<cuisine\>
-Methods: GET  
-Argument: cuisine (string). e.g 'mexican'  
-Authentication: N/A  
-Description: returns all restaurants of a given cuisine  
-Request Body: N/A  
-Return Body:  
+- Methods: GET  
+- Argument: cuisine (string). e.g 'mexican'  
+- Authentication: N/A  
+- Description: returns all restaurants of a given cuisine  
+- Request Body: N/A  
+- Return Body:  
 ```
 [
     {
@@ -186,12 +313,12 @@ Return Body:
 ```  
 
 ### /restaurants/location/\<location\>
-Methods: GET  
-Argument: location (string). e.g 'north'  
-Authentication: N/A  
-Description: returns all restaurants of a given location  
-Request Body: N/A  
-Return Body:  
+- Methods: GET  
+- Argument: location (string). e.g 'north'  
+- Authentication: N/A  
+- Description: returns all restaurants of a given location  
+- Request Body: N/A  
+- Return Body:  
 ```
 [
     {
@@ -234,12 +361,12 @@ Return Body:
 ```  
  
 ### /restaurants/price/\<sort\>
-Methods: GET  
-Argument: sort (string). e.g 'low'  
-Authentication: N/A  
-Description: returns all restaurants sorted by price range depending on the argument (high/low)  
-Request Body:  N/A  
-Return Body:  
+- Methods: GET  
+- Argument: sort (string). e.g 'low'  
+- Authentication: N/A  
+- Description: returns all restaurants sorted by price range depending on the argument (high/low)  
+- Request Body:  N/A  
+- Return Body:  
 ```
 [
     {
@@ -282,11 +409,11 @@ Return Body:
 ``` 
  
 ### /restaurants/submit/
-Methods: POST  
-Argument: N/A  
-Authentication: registered users  
-Description: allows registered users to submit a new restaurant to the database  
-Request Body:  
+- Methods: POST  
+- Argument: N/A  
+- Authentication: registered users  
+- Description: allows registered users to submit a new restaurant to the database  
+- Request Body:  
 ```
 {
     "name": "Shake Shack",
@@ -295,7 +422,7 @@ Request Body:
     "cuisine": "Burgers",
 }
 ```  
-Return Body:  
+- Return Body:  
 ```
 {
     "id": 18,
@@ -307,11 +434,11 @@ Return Body:
 ```  
 
 ### /restaurants/\<int:restaurant_id\>
-Methods: PUT, PATCH  
-Argument: restaurant_id (int) e.g '1'  
-Authentication: registered users  
-Description: registered users can change details of a restaurant  
-Request Body:  
+- Methods: PUT, PATCH  
+- Argument: restaurant_id (int) e.g '1'  
+- Authentication: registered users  
+- Description: registered users can change details of a restaurant  
+- Request Body:  
 ```
 {
     "name": "Updated Name",
@@ -320,7 +447,7 @@ Request Body:
     "price_range": "$"
 }
 ```
-Return Body:  
+- Return Body:  
 ```
 {
     "id": 1,
@@ -332,12 +459,12 @@ Return Body:
 ```
  
 ### /restaurants/\<int:restaurant_id\>
-Methods: DELETE  
-Argument: restaurant_id (int)  
-Authentication: registered users with admin access  
-Description: admin can delete a restaurant from the database  
-Request Body: N/A  
-Return Body:
+- Methods: DELETE  
+- Argument: restaurant_id (int)  
+- Authentication: registered users with admin privileges  
+- Description: admin can delete a restaurant from the database  
+- Request Body: N/A  
+- Return Body:
 ```
 {
     "message": "Restaurant 'Scopri' with id '6' deleted successfully"
@@ -345,18 +472,18 @@ Return Body:
 ```  
   
 ### /restaurants/\<int:restaurant_id\>/review
-Methods: POST  
-Argument: restaurant_id (int) e.g '2'  
-Authentication: registered users  
-Description: registered users can submit a review for a restaurant  
-Request Body:  
+- Methods: POST  
+- Argument: restaurant_id (int) e.g '2'  
+- Authentication: registered users  
+- Description: registered users can submit a review for a restaurant  
+- Request Body:  
 ```
 {
     "rating": "5",
     "message": "Great food and service"
 }
 ``` 
-Return Body:  
+- Return Body:  
 ```
 {
     "id": 38,
@@ -374,18 +501,18 @@ Return Body:
 ```  
  
 ### /restaurants/\<int:restaurant_id\>/review
-Methods: PUT, PATCH  
-Argument: restaurant_id (int) e.g '2'  
-Authentication: registered users  
-Description: registered users can edit their review for a restaurant  
-Request Body:  
+- Methods: PUT, PATCH  
+- Argument: restaurant_id (int) e.g '2'  
+- Authentication: registered users  
+- Description: registered users can edit their review for a restaurant  
+- Request Body:  
 ```
 {
     "rating": "4",
     "message": "Updated review"
 }
 ```
-Return Body:  
+- Return Body:  
 ```
 {
     "id": 11,
@@ -403,12 +530,12 @@ Return Body:
 ```
  
 ### /restaurants/\<int:restaurant_id\>/review
-Methods: DELETE   
-Argument: restaurant_id (int) e.g '2'  
-Authentication: registered users  
-Description: registered users can delete their review for a restaurant  
-Request Body: N/A  
-Return Body:  
+- Methods: DELETE   
+- Argument: restaurant_id (int) e.g '2'  
+- Authentication: registered users  
+- Description: registered users can delete their review for a restaurant  
+- Request Body: N/A  
+- Return Body:  
 ```
 {
     "message": "Review for restaurant 'Minamishima' with id '2' deleted successfully"
@@ -416,17 +543,17 @@ Return Body:
 ```
  
 ### /restaurants/\<int:restaurant_id\>/save
-Methods: POST   
-Argument: restaurant_id (int) e.g '2'  
-Authentication: registered users  
-Description: registered users can save a restaurant to a list with a tag  
-Request Body:
+- Methods: POST   
+- Argument: restaurant_id (int) e.g '2'  
+- Authentication: registered users  
+- Description: registered users can save a restaurant to a list with a tag  
+- Request Body:
 ```
 {
     "tag": "To Go"
 }
 ```  
-Return Body:  
+- Return Body:  
 ```
 {
     "message": "Restaurant 'Florentino' has been added to your saved restaurants list successfully"
@@ -435,17 +562,17 @@ Return Body:
 
  
 ### /restaurants/\<int:restaurant_id\>/save
-Methods: PUT,PATCH  
-Argument: restaurant_id (int) e.g '2'
-Authentication: registered users  
-Description: registered users can edit the tag of a restaurant in their saved list.
-Request Body:  
+- Methods: PUT,PATCH  
+- Argument: restaurant_id (int) e.g '2'
+- Authentication: registered users  
+- Description: registered users can edit the tag of a restaurant in their saved list.
+- Request Body:  
 ```
 {
     "tag": "Fave"
 }
 ```
-Return Body:  
+- Return Body:  
 ```
 {
     "message": "Tag for saved restaurant with id '3' updated successfully"
@@ -453,12 +580,12 @@ Return Body:
 ```  
  
 ### /restaurants/\<int:restaurant_id\>/save
-Methods: DELETE  
-Argument: restaurant_id (int) e.g '3'  
-Authentication: registered users  
-Description: registered users can delete a restaurant from their saved list.
-Request Body: N/A
-Return Body:
+- Methods: DELETE  
+- Argument: restaurant_id (int) e.g '3'  
+- Authentication: registered users  
+- Description: registered users can delete a restaurant from their saved list.
+- Request Body: N/A
+- Return Body:
 ```
 {
     "message": "Restaurant 'Florentino' with id '3' deleted successfully"
@@ -466,90 +593,50 @@ Return Body:
 ```
 
 
-### /auth/register/
-Methods: POST  
-Argument:  
-Authentication:  
-Description:  
-Request Body:  
-Return Body:  
- 
-### /auth/login/
-Methods: POST  
-Argument:  
-Authentication:  
-Description:  
-Request Body:  
-Return Body:  
- 
-### /auth/users/
-Methods: GET  
-Argument:  
-Authentication:  
-Description:  
-Request Body:  
-Return Body:  
- 
-
-### /auth/users/\<id\>
-Methods: GET  
-Argument:  
-Authentication:  
-Description:  
-Request Body:  
-Return Body:  
- 
-### /auth/users/\<id\>
-Methods: DELETE  
-Argument:  
-Authentication:  
-Description:  
-Request Body:  
-Return Body:  
  
 
 
 
 
 ### /profile/
-Methods: GET  
-Argument:  
-Authentication:  
-Description:  
-Request Body:  
-Return Body:  
+- Methods: GET  
+- Argument:  
+- Authentication:  
+- Description:  
+- Request Body:  
+- Return Body:  
  
 ### /profile/saved/
-Methods: GET  
-Argument:  
-Authentication:  
-Description:  
-Request Body:  
-Return Body:  
+- Methods: GET  
+- Argument:  
+- Authentication:  
+- Description:  
+- Request Body:  
+- Return Body:  
  
 ### /profile/saved/\<id\>
-Methods: DELETE  
-Argument:  
-Authentication:  
-Description:  
-Request Body:  
-Return Body:  
+- Methods: DELETE  
+- Argument:  
+- Authentication:  
+- Description:  
+- Request Body:  
+- Return Body:  
  
 ### /profile/reviews/
-Methods: GET  
-Argument:  
-Authentication:  
-Description:  
-Request Body:  
-Return Body:  
+- Methods: GET  
+- Argument:  
+- Authentication:  
+- Description:  
+- Request Body:  
+- Return Body:  
  
 ### /profile/reviews/\<id\>
-Methods: DELETE  
-Argument:  
-Authentication:  
-Description:  
-Request Body:  
-Return Body:  
+- Methods: DELETE  
+- Argument:  
+- Authentication:  
+- Description:  
+- Request Body:  
+- Return Body:  
  
 
 
@@ -561,16 +648,16 @@ Return Body:
 
 
 ### /restaurants/   
-Methods: GET  
+- Methods: GET  
 Arguments:  
-Description:  Return all restaurants
+- Description:  Return all restaurants
 Request JSON:  
 Return JSON:  
 
 ### /restaurants/
-Methods: POST  
+- Methods: POST  
 Arguments:  
-Description:  Create a new restaurant  
+- Description:  Create a new restaurant  
 Request JSON Example:  
 ```
 {
@@ -599,28 +686,28 @@ Return JSON:
 
 
 ### /restaurants/\<int:id\>  
-Methods: GET  
+- Methods: GET  
 Arguments:  
-Description:  Return a restaurant by id  
+- Description:  Return a restaurant by id  
 
 ### /restaurants/\<int:id\>    
-Methods: PUT  
+- Methods: PUT  
 Arguments: 
-Description:  Update a restaurant by id  
+- Description:  Update a restaurant by id  
 
 ### /restaurants/\<int:id\>  
-Methods: DELETE  
+- Methods: DELETE  
 Arguments:  
-Description:  Delete a restaurant by id  
+- Description:  Delete a restaurant by id  
 
 
 
 
 ## Auth
 ### /auth/users/
-Methods: GET
+- Methods: GET
 Arguments:
-Description:  Return all users
+- Description:  Return all users
 Request JSON:
 Return JSON:
 ```
@@ -635,9 +722,9 @@ Return JSON:
 
 ## profile
 ### /profile/
-Methods: GET
+- Methods: GET
 Arguments:
-Description:  Returns logged in user profile
+- Description:  Returns logged in user profile
 
 
 
