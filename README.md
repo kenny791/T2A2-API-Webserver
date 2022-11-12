@@ -1,15 +1,15 @@
 # T2A2 API Webserver  
 
 
-# R1 Identification of the problem you are trying to solve by building this particular app.  
+## R1 Identification of the problem you are trying to solve by building this particular app.  
 Like many foodies, I enjoy trying out new restaurants and cuisines. However the amount of restaurants you have to choose from can be overwhelming, and when you have tried the restaurant it is hard to keep track of the ones you like.
 
 
-# R2 Why is it a problem that needs solving?  
+## R2 Why is it a problem that needs solving?  
 With the cost of living being so high in Australia, it is important to find the best value for money, and making sure every new visit worthwhile. With the app you can find new restaurants submitted by like minded foodies, seeing reviews and ratings. Once you have visited a restaurant you can add your own review and rating. This app will also allow you to save restaurants you like to your account, and keep track of the ones you would like to try and the ones you thought were great.
 
 
-# R3 Why have you chosen this database system. What are the drawbacks compared to others?  
+## R3 Why have you chosen this database system. What are the drawbacks compared to others?  
 
 There are two main types of databases to choose from, relational and 
 
@@ -31,7 +31,7 @@ For this project the Postgres database.
 
 
 
-# R4 Identify and discuss the key functionalities and benefits of an ORM  
+## R4 Identify and discuss the key functionalities and benefits of an ORM  
 - What is an ORM
 Object Relational Mapping (ORM) is a technique using libraries to represent tables in a relational database as objects in object-oriented programming languages. This allows for CRUD operations to be performed on the database using object-oriented programming languages, such as Python and Javascript.
 
@@ -60,7 +60,7 @@ def get_all_restaurants():
 
 
 
-# R5 Document all endpoints for your API  
+## R5 Document all endpoints for your API  
 
 
 ### /auth/register/
@@ -592,8 +592,6 @@ def get_all_restaurants():
 }
 ```
 
-
-
 ### /profile/
 - Methods: GET  
 - Argument: N/A  
@@ -683,136 +681,16 @@ def get_all_restaurants():
     "message": "Review with id '28' deleted successfully"
 }
 ```
- 
+ ---
 
 
 
 
-
---- 
-## Restaurant routes
-
-### /restaurants/   
-- Methods: GET  
-Arguments:  
-- Description:  Return all restaurants
-Request JSON:  
-Return JSON:  
-
-### /restaurants/
-- Methods: POST  
-Arguments:  
-- Description:  Create a new restaurant  
-Request JSON Example:  
-```
-{
-    "name": "Restaurant Name",
-    "location": "North",
-    "cuisine": "Italian",
-    "price_range": "$$"
-}
-```
-Return JSON:
-```
-
-```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-### /restaurants/\<int:id\>  
-- Methods: GET  
-Arguments:  
-- Description:  Return a restaurant by id  
-
-### /restaurants/\<int:id\>    
-- Methods: PUT  
-Arguments: 
-- Description:  Update a restaurant by id  
-
-### /restaurants/\<int:id\>  
-- Methods: DELETE  
-Arguments:  
-- Description:  Delete a restaurant by id  
-
-
-
-
-## Auth
-### /auth/users/
-- Methods: GET
-Arguments:
-- Description:  Return all users
-Request JSON:
-Return JSON:
-```
-
-```
-
-
-
-
-
-
-
-## profile
-### /profile/
-- Methods: GET
-Arguments:
-- Description:  Returns logged in user profile
-
-
-
-
-
-
-
-
-
-
-Get all restaurants
-
-Post review for a restaurant
-
-
-
-## User
-
-
-
-
-
-## Auth
-Sign up
-
-
-Login
-
-
-
-
-
-
-
-
-
-
-
-# R6 An ERD for your app  
+## R6 An ERD for your app  
 ![Entity Relationship Diagram](/docs/ERD.jpeg)
 
 
-# R7 Detail any third party services that your app will use  
+## R7 Detail any third party services that your app will use  
 
 <b>Flask</b> - Python framework used to create wbe applications. 
 <b>Blueprint</b> - Flask extension for modular applications  
@@ -835,39 +713,59 @@ datetime - Date and Time
 
 
 
-# R8 Describe your projects models in terms of the relationships they have with each other  
+## R8 Describe your projects models in terms of the relationships they have with each other  
 
-# R9 Discuss the database relations to be implemented in your application  
+## R9 Discuss the database relations to be implemented in your application  
 
-# R10 Describe the way tasks are allocated and tracked in your project  
+## R10 Describe the way tasks are allocated and tracked in your project  
 The project managed using Trello's Kanban board system, where tasks are broken down into small chunks and their progress moved along the board. The board is broken down into columns and updated when a task is completed. 
 
 
-## Installation
 
-create virtual machine  
-```
-python3 -m venv .venv
-```
-install requirements  
-```
-pip install -r requirements.txt
-```
-create database in psql called food_finder
-```
-create database food_finder;
-```
-connect to database  
-``` 
-\c food_finder
-```
-
-
-replace USERNAME and PASSWORD with your own    
 
 
 ## Overview  
-  
+
+---
+## Getting Started 
+### Database
+Start PSQL
+```
+psql
+```
+Create the database
+```
+create database food_finder;
+```
+Create new user
+```
+create user db_dev with password 'password123';
+```
+Grant all privileges
+```
+grant all privileges on database food_finder to db_dev;
+```
+### Virtual Environment
+Create new virtual environment  
+```
+python3 -m venv .venv
+```
+Activate the virtual environment  
+```
+source .venv/bin/activate
+```
+Install requirements
+```
+pip install -r requirements.txt
+```
+Start Flask
+```
+flask run
+```
+
+
+
+---
 ## Table Of Contents  
 
 ## Database  
