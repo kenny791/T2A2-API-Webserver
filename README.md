@@ -713,12 +713,103 @@ datetime - Date and Time
 
 
 
-## R8 Describe your projects models in terms of the relationships they have with each other  
+## R8 Describe your projects models in terms of the relationships they have with each other
+This project consisted of 4 tables: <b>User, Restaurants, Reviews, Saved </b> . 
+
+<b>User</b> has a one to many relationship with <b>Reviews</b> and <b>Saved</b>. A user can have many reviews and saved restaurants.  
+<b>Restaurants</b> has a one to many relationship with <b>Reviews</b>. A restaurant can have many reviews.  
+<b>Reviews</b> has a one to many relationship with <b>Saved</b>. A review can be saved by many users.  
+<b>Saved</b> has a one to many relationship with <b>Restaurants</b>. A saved restaurant can be saved by many users.  
+
+
+
+
+
+
+
+### Users
+```
+class User(db.Model):
+    __tablename__ = 'users' #table name used for db
+
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(50), unique=True, nullable=False)
+    email = db.Column(db.String, unique=True, nullable=False)
+    password = db.Column(db.String, nullable=False)
+    is_admin = db.Column(db.Boolean, default=False)
+
+    reviews_submitted = db.relationship('Review', back_populates='user', cascade='all, delete')
+    saved = db.relationship('Saved', back_populates='user', cascade='all, delete')
+
+
+```
+
+### Restaurants
+```
+class Restaurant(db.Model):
+    __tablename__ = 'restaurants' #table name used for db
+    id = db.Column(db.Integer,primary_key=True)
+    name = db.Column(db.String(50),nullable=False)
+    location = db.Column(db.String)
+    price_range = db.Column(db.String)
+    cuisine = db.Column(db.String(20), default='tbc')
+    
+    # the id pulled from the users table and is shown in restaurants table as user_id in db
+    # user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+
+    # these releationships are used to pull data from other tables
+    # reviews will be shown in a list when restaurant is called
+    # the number of users who haved saved the restaurant will be shown in a list when restaurant is called
+    reviews = db.relationship('Review', back_populates='restaurant', cascade='all, delete')
+    saved = db.relationship('Saved', back_populates='restaurant', cascade='all, delete')
+
+```
+
+
+### Reviews
+```
+class Review(db.Model):
+    __tablename__ = 'reviews' #table name used for db
+
+    id = db.Column(db.Integer, primary_key=True)
+    message = db.Column(db.String(255))
+    rating = db.Column(db.Integer,)
+    date = db.Column(db.Date)
+
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurants.id'), nullable=False)
+
+    # stores all fields from User table into user object
+    user = db.relationship ("User", back_populates='reviews_submitted')
+    restaurant = db.relationship ("Restaurant", back_populates='reviews')
+    
+```
+
+### Saved
+```
+class Saved(db.Model):
+    __tablename__ = 'saved' #table name used for db
+
+    id = db.Column(db.Integer, primary_key=True)
+    tag = db.Column(db.String(10), nullable=True, default='')
+
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurants.id'), nullable=False)
+
+
+    # stores all fields from User table into user object
+    user = db.relationship ("User", back_populates='saved')
+    restaurant = db.relationship ("Restaurant", back_populates='saved')
+```
+
+
 
 ## R9 Discuss the database relations to be implemented in your application  
 
 ## R10 Describe the way tasks are allocated and tracked in your project  
-The project managed using Trello's Kanban board system, where tasks are broken down into small chunks and their progress moved along the board. The board is broken down into columns and updated when a task is completed. 
+The project was managed using Trello's Kanban board system, where tasks are broken down into small chunks and their progress moved along the board. The board is broken down into columns and updated when a task is completed. 
+
+[Trello Board](https://trello.com/b/3Zt5Nzh5/t2a2)
 
 
 
@@ -788,14 +879,6 @@ ORM Obejct Relational Mapping
 ## Project Models
 
 ## Database Relations  
-
-
-
-##  Project Management  
-explanation of project management tools used  
-[Project Trello Board](https://trello.com/b/3Zt5Nzh5/t2a2)
-
-User stories
 
 
 
