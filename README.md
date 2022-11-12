@@ -190,7 +190,7 @@ Methods: GET
 Argument: location (string). e.g 'north'  
 Authentication: N/A  
 Description: returns all restaurants of a given location  
-Request Body:  
+Request Body: N/A  
 Return Body:  
 ```
 [
@@ -234,11 +234,11 @@ Return Body:
 ```  
  
 ### /restaurants/price/\<sort\>
-Methods: GET
+Methods: GET  
 Argument: sort (string). e.g 'low'
 Authentication: N/A  
 Description: returns all restaurants sorted by price range depending on the argument (high/low).
-Request Body:  N/A 
+Request Body:  N/A  
 Return Body:  
 ```
 [
@@ -282,11 +282,11 @@ Return Body:
 ``` 
  
 ### /restaurants/submit/
-Methods: POST
+Methods: POST  
 Argument: N/A  
 Authentication: registered users  
 Description: allows registered users to submit a new restaurant to the database.  
-Request Body:
+Request Body:  
 ```
 {
     "name": "Shake Shack",
@@ -402,41 +402,72 @@ Return Body:
 }
 ```
  
-### /restaurants/\<id\>/review
-Methods: DELETE
-Argument:  
-Authentication:  
-Description:  
-Request Body:  
+### /restaurants/\<int:restaurant_id\>/review
+Methods: DELETE  
+Argument: restaurant_id (int) e.g '2'  
+Authentication: registered users  
+Description: registered users can delete their review for a restaurant
+Request Body: N/A  
 Return Body:  
+```
+{
+    "message": "Review for restaurant 'Minamishima' with id '2' deleted successfully"
+}
+```
  
-### /restaurants/\<id\>/save
-Methods: POST
-Argument:  
-Authentication:  
-Description:  
-Request Body:  
+### /restaurants/\<int:restaurant_id\>/save
+Methods: POST  
+Argument: restaurant_id (int) e.g '2'  
+Authentication: registered users  
+Description: registered users can save a restaurant to a list with a tag
+Request Body:
+```
+{
+    "tag": "To Go"
+}
+```  
 Return Body:  
+```
+{
+    "message": "Restaurant 'Florentino' has been added to your saved restaurants list successfully"
+}
+```
+
  
-### /restaurants/\<id\>/save
-Methods: PUT,PATCH
-Argument:  
-Authentication:  
-Description:  
+### /restaurants/\<int:restaurant_id\>/save
+Methods: PUT,PATCH  
+Argument: restaurant_id (int) e.g '2'
+Authentication: registered users  
+Description: registered users can edit the tag of a restaurant in their saved list.
 Request Body:  
+```
+{
+    "tag": "Fave"
+}
+```
 Return Body:  
+```
+{
+    "message": "Tag for saved restaurant with id '3' updated successfully"
+}
+```  
  
-### /restaurants/\<id\>/save
-Methods: DELETE
-Argument:  
-Authentication:  
-Description:  
-Request Body:  
-Return Body:  
- 
+### /restaurants/\<int:restaurant_id\>/save
+Methods: DELETE  
+Argument: restaurant_id (int) e.g '3'  
+Authentication: registered users  
+Description: registered users can delete a restaurant from their saved list.
+Request Body: N/A
+Return Body:
+```
+{
+    "message": "Restaurant 'Florentino' with id '3' deleted successfully"
+}
+```
+
 
 ### /auth/register/
-Methods: POST
+Methods: POST  
 Argument:  
 Authentication:  
 Description:  
@@ -444,7 +475,7 @@ Request Body:
 Return Body:  
  
 ### /auth/login/
-Methods: POST
+Methods: POST  
 Argument:  
 Authentication:  
 Description:  
@@ -452,7 +483,7 @@ Request Body:
 Return Body:  
  
 ### /auth/users/
-Methods: GET
+Methods: GET  
 Argument:  
 Authentication:  
 Description:  
@@ -461,7 +492,7 @@ Return Body:
  
 
 ### /auth/users/\<id\>
-Methods: GET
+Methods: GET  
 Argument:  
 Authentication:  
 Description:  
@@ -469,7 +500,7 @@ Request Body:
 Return Body:  
  
 ### /auth/users/\<id\>
-Methods: DELETE
+Methods: DELETE  
 Argument:  
 Authentication:  
 Description:  
@@ -481,7 +512,7 @@ Return Body:
 
 
 ### /profile/
-Methods: GET
+Methods: GET  
 Argument:  
 Authentication:  
 Description:  
@@ -489,7 +520,7 @@ Request Body:
 Return Body:  
  
 ### /profile/saved/
-Methods: GET
+Methods: GET  
 Argument:  
 Authentication:  
 Description:  
@@ -497,7 +528,7 @@ Request Body:
 Return Body:  
  
 ### /profile/saved/\<id\>
-Methods: DELETE
+Methods: DELETE  
 Argument:  
 Authentication:  
 Description:  
@@ -505,7 +536,7 @@ Request Body:
 Return Body:  
  
 ### /profile/reviews/
-Methods: GET
+Methods: GET  
 Argument:  
 Authentication:  
 Description:  
@@ -513,7 +544,7 @@ Request Body:
 Return Body:  
  
 ### /profile/reviews/\<id\>
-Methods: DELETE
+Methods: DELETE  
 Argument:  
 Authentication:  
 Description:  

@@ -185,22 +185,22 @@ def update_review(restaurant_id,):
 
 
 # route deletes a review of a restaurant by id
-@restaurants_bp.route('/<int:restaurant_id>/review/<int:review_id>/', methods=['DELETE'])
+@restaurants_bp.route('/<int:restaurant_id>/review/', methods=['DELETE'])
 @jwt_required()
-def delete_review(restaurant_id, review_id):
-    stmt = db.select(Review).filter_by(id=review_id)
-    review = db.session.scalar(stmt)
-    user = get_jwt_identity()
-    if review:
-        if original_user() == review.user_id or is_admin():
+def delete_review(restaurant_id):   
+    stmt = db.select(Restaurant).filter_by(id=restaurant_id)
+    restaurant = db.session.scalar(stmt)
+    if restaurant:
+        stmt = db.select(Review).filter_by(user_id=get_jwt_identity(), restaurant_id=restaurant_id)
+        review = db.session.scalar(stmt)
+        if review:
             db.session.delete(review)
             db.session.commit()
-            return {'message': f'Review with id \'{review_id}\' deleted successfully'},200
+            return {'message': f'Review for restaurant \'{restaurant.name}\' with id \'{restaurant_id}\' deleted successfully'},200
         else:
-            return {'error': 'You can only delete your own reviews'}, 401
+            return {'error': f'You have not reviewed this restaurant'}, 400
     else:
-        return {'error': f'Review not found with id {review_id}'}, 404
-
+        return {'error': f'Restaurant not found with id {id}'}, 404
 
 
 # route adds a restaurant to a users saved list
@@ -222,7 +222,7 @@ def add_restaurant_to_saved(restaurant_id):
         )
         db.session.add(saved)
         db.session.commit()
-        return {'message': f'Restaurant \'{restaurant.name}\' added to your saved restaurants successfully'},200
+        return {'message': f'Restaurant \'{restaurant.name}\' has been added to your saved restaurants list successfully'},200
     else:
         if saved.tag == data['tag']:
             return {'message': f'Restaurant \'{restaurant.name}\' already in saved list with tag \'{saved.tag}\''},200
