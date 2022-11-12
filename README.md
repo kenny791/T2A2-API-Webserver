@@ -64,10 +64,10 @@ def get_all_restaurants():
 
 
 ### /restaurants/
-Methods: GET 
-Argument: N/A 
+Methods: GET  
+Argument: N/A  
 Authentication: N/A  
-Description: Returns all restaurants in the database 
+Description: Returns all restaurants in the database  
 Request Body: N/A  
 Return Body:  
 ```
@@ -102,82 +102,196 @@ Return Body:
     ...
 ```
 
-### /restaurants/\<id\>
+### /restaurants/\<int:restaurant_id\>
 Methods: GET
+Argument: restaurant_id (int) e.g '10' 
+Authentication: registered users  
+Description: Returns a restaurant of a given id, with more details such as reviews
+Request Body: N/A  
+Return Body: 
 
 ### /restaurants/cuisine/\<cuisine\>
 Methods: GET
-
+Argument: cuisine (string). e.g 'mexican'  
+Authentication: N/A  
+Description: Returns all restaurants of a given cuisine  
+Request Body: N/A  
+Return Body:  
 
 ### /restaurants/location/\<location\>
 Methods: GET
-
+Argument: location (string). e.g 'north' 
+Authentication:  
+Description:  
+Request Body:  
+Return Body:  
+ 
 ### /restaurants/price/\<price\>
 Methods: GET
-
+Argument:  
+Authentication:  
+Description:  
+Request Body:  
+Return Body:  
+ 
 ### /restaurants/submit/
 Methods: POST
-
+Argument:  
+Authentication:  
+Description:  
+Request Body:  
+Return Body:  
+ 
 ### /restaurants/\<int:id\>
 Methods: PUT, PATCH
-
+Argument:  
+Authentication:  
+Description:  
+Request Body:  
+Return Body:  
+ 
 ### /restaurants/\<id\>
 Methods: DELETE
-
+Argument:  
+Authentication:  
+Description:  
+Request Body:  
+Return Body:  
+ 
 ### /restaurants/\<id\>/review
 Methods: POST
-
+Argument:  
+Authentication:  
+Description:  
+Request Body:  
+Return Body:  
+ 
 ### /restaurants/\<id\>/review
 Methods: PUT, PATCH
-
+Argument:  
+Authentication:  
+Description:  
+Request Body:  
+Return Body:  
+ 
 ### /restaurants/\<id\>/review
 Methods: DELETE
-
+Argument:  
+Authentication:  
+Description:  
+Request Body:  
+Return Body:  
+ 
 ### /restaurants/\<id\>/save
 Methods: POST
-
+Argument:  
+Authentication:  
+Description:  
+Request Body:  
+Return Body:  
+ 
 ### /restaurants/\<id\>/save
 Methods: PUT,PATCH
-
+Argument:  
+Authentication:  
+Description:  
+Request Body:  
+Return Body:  
+ 
 ### /restaurants/\<id\>/save
 Methods: DELETE
-
+Argument:  
+Authentication:  
+Description:  
+Request Body:  
+Return Body:  
+ 
 
 ### /auth/register/
 Methods: POST
-
+Argument:  
+Authentication:  
+Description:  
+Request Body:  
+Return Body:  
+ 
 ### /auth/login/
 Methods: POST
-
+Argument:  
+Authentication:  
+Description:  
+Request Body:  
+Return Body:  
+ 
 ### /auth/users/
 Methods: GET
-
+Argument:  
+Authentication:  
+Description:  
+Request Body:  
+Return Body:  
+ 
 
 ### /auth/users/\<id\>
 Methods: GET
-
+Argument:  
+Authentication:  
+Description:  
+Request Body:  
+Return Body:  
+ 
 ### /auth/users/\<id\>
 Methods: DELETE
-
+Argument:  
+Authentication:  
+Description:  
+Request Body:  
+Return Body:  
+ 
 
 
 
 
 ### /profile/
 Methods: GET
-
+Argument:  
+Authentication:  
+Description:  
+Request Body:  
+Return Body:  
+ 
 ### /profile/saved/
 Methods: GET
-
+Argument:  
+Authentication:  
+Description:  
+Request Body:  
+Return Body:  
+ 
 ### /profile/saved/\<id\>
 Methods: DELETE
-
+Argument:  
+Authentication:  
+Description:  
+Request Body:  
+Return Body:  
+ 
 ### /profile/reviews/
 Methods: GET
-
+Argument:  
+Authentication:  
+Description:  
+Request Body:  
+Return Body:  
+ 
 ### /profile/reviews/\<id\>
 Methods: DELETE
-
+Argument:  
+Authentication:  
+Description:  
+Request Body:  
+Return Body:  
+ 
 
 
 
