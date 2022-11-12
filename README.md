@@ -64,7 +64,43 @@ def get_all_restaurants():
 
 
 ### /restaurants/
-Methods: GET
+Methods: GET 
+Argument: N/A 
+Authentication: N/A  
+Description: Returns all restaurants in the database 
+Request Body: N/A  
+Return Body:  
+```
+[
+    {
+        "id": 9,
+        "name": "Agostino",
+        "region": "North",
+        "price_range": "$$",
+        "cuisine": "Italian",
+        "avg_rating": 3.33,
+        "saved_for_later": 0
+    },
+    {
+        "id": 4,
+        "name": "Bodega Underground",
+        "region": "North",
+        "price_range": "$$",
+        "cuisine": "Mexican",
+        "avg_rating": 3.33,
+        "saved_for_later": 0
+    },
+    {
+        "id": 3,
+        "name": "Florentino",
+        "region": "West",
+        "price_range": "$$$",
+        "cuisine": "Italian",
+        "avg_rating": 3.33,
+        "saved_for_later": 1
+    },
+    ...
+```
 
 ### /restaurants/\<id\>
 Methods: GET
