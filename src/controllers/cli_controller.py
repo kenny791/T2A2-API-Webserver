@@ -5,7 +5,6 @@ from models.restaurant import Restaurant
 from models.user import User
 from models.review import Review
 from models.saved import Saved
-# from models.stars import Star
 
 db_commands = Blueprint('db', __name__)
 
@@ -340,15 +339,6 @@ def seed_db():
 
     db.session.add_all(saved)
     db.session.commit()
-
-    # stars = [
-    #     Star(
-    #         stars_given = 5,
-    #     )
-    # ]
-    # db.session.add_all(stars)
-    # db.session.commit()
-
 
 
     print('Tables seeded')

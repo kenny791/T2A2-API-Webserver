@@ -7,17 +7,22 @@ from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identi
 
 auth_bp = Blueprint('auth', __name__, url_prefix="/auth")
 
+# function to check if user is admin
 def is_admin():
     user_id = get_jwt_identity()
     stmt = db.select(User).filter_by(id=user_id)
     user = db.session.scalar(stmt)
     return user.is_admin
 
+# function to check if user is original user of review/saved restaurant
 def original_user():
     user_id = get_jwt_identity()
     stmt = db.select(User).filter_by(id=user_id)
     user = db.session.scalar(stmt)
     return user.id
+
+
+
 
 @auth_bp.route("/register", methods=["POST"])
 def auth_register():
@@ -35,6 +40,7 @@ def auth_register():
     except IntegrityError:
         return {'error': 'Username or email already exists'}, 409
         
+
 @auth_bp.route('/login/', methods=['POST'])
 def auth_login():
     # Find a user by email address

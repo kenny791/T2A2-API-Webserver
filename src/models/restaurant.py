@@ -10,10 +10,10 @@ VALID_LOCATION = ['North', 'South', 'East', 'West']
 class Restaurant(db.Model):
     __tablename__ = 'restaurants' #table name used for db
     id = db.Column(db.Integer,primary_key=True)
-    name = db.Column(db.String(),nullable=False)
-    location = db.Column(db.String())
-    price_range = db.Column(db.String())
-    cuisine = db.Column(db.String(), default='tbc')
+    name = db.Column(db.String(50),nullable=False)
+    location = db.Column(db.String)
+    price_range = db.Column(db.String)
+    cuisine = db.Column(db.String(20), default='tbc')
     
     # the id pulled from the users table and is shown in restaurants table as user_id in db
     # user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)

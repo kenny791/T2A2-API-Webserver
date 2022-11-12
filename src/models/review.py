@@ -9,9 +9,9 @@ class Review(db.Model):
     __tablename__ = 'reviews' #table name used for db
 
     id = db.Column(db.Integer, primary_key=True)
-    message = db.Column(db.String)
+    message = db.Column(db.String(255))
     rating = db.Column(db.Integer,)
-    date = db.Column(db.Date) #Date created
+    date = db.Column(db.Date)
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurants.id'), nullable=False)
@@ -23,7 +23,7 @@ class Review(db.Model):
    
 
 class ReviewSchema(ma.Schema):
-    user = fields.Nested('UserSchema', only=['username'])
+    user = fields.Nested('UserSchema', only=['id','username'])
     restaurant = fields.Nested('RestaurantSchema', only=['name'])
     message = fields.String(validate=And( 
         Length(min=1, error='Message must be at least 1 character long'),
@@ -32,9 +32,12 @@ class ReviewSchema(ma.Schema):
         ))
     rating = fields.Integer(validate = OneOf(VALID_RATING), error = 'Rating must be between 1 and 5')
 
+
+
     class Meta:
         fields = ('id', 'restaurant', 'date','rating', 'message','user')
         ordered = True
+
 
 
 

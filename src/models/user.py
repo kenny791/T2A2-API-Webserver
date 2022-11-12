@@ -9,9 +9,9 @@ class User(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), unique=True, nullable=False)
-    email = db.Column(db.String(), unique=True, nullable=False)
-    password = db.Column(db.String(), nullable=False)
-    is_admin = db.Column(db.Boolean(), default=False)
+    email = db.Column(db.String, unique=True, nullable=False)
+    password = db.Column(db.String, nullable=False)
+    is_admin = db.Column(db.Boolean, default=False)
 
     # object is what is shown on the client side
     reviews_submitted = db.relationship('Review', back_populates='user', cascade='all, delete')
