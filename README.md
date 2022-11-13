@@ -1,68 +1,70 @@
 # T2A2 API Webserver  
-
-
 ## R1 Identification of the problem you are trying to solve by building this particular app.  
 Like many foodies, I enjoy trying out new restaurants and cuisines. However the amount of restaurants you have to choose from can be overwhelming, and when you have tried the restaurant it is hard to keep track of the ones you like.
 
-
+---
 ## R2 Why is it a problem that needs solving?  
-With the cost of living being so high in Australia, it is important to find the best value for money, and making sure every new visit worthwhile. With the app you can find new restaurants submitted by like minded foodies, seeing reviews and ratings. Once you have visited a restaurant you can add your own review and rating. This app will also allow you to save restaurants you like to your account, and keep track of the ones you would like to try and the ones you thought were great.
+With the cost of living ever increasing in Australia, it is important to find the best value for money, and making sure every new visit is worthwhile. With this app you can find new restaurants submitted by like minded foodies, seeing their reviews and ratings. Once you have visited a restaurant you can add your own review and rating so others can benefit from the information. This app will also allow you to save restaurants you like to your account, and keep track of the ones you would like to try and the ones you thought were great.
 
-
+---
 ## R3 Why have you chosen this database system. What are the drawbacks compared to others?  
-
-There are two main types of databases to choose from, relational and 
-
-How it will benefit the project. 
-A relational database was chosen for the following reasons: 
-- The data within this project will have a consistent structure with and known attributes.
-- Entities in the database will query other entities to retrieve data.
-- 
-As the data being handled comes in a consistent structure it was the ideal solution to use a relational database system
-
-https://www.oracle.com/au/database/what-is-a-relational-database/
+The database system chosen for this project is a relational database system specifically PostgreSQL. The data for the app will be stored in a consistent format in each table, this is important as it allows for the data to be more easily accessed and manipulated. For example if a table has a date attribute, all the dates will be stored in the same format according to the schema, making it easier to sort and filter the data.  
+Additionally as the data will be stored in tables with unique id keys for each entry this will allow for the tables to be joined and relationships formed allowing for data to be accessed and manipulated at the same time.
 
 
 
-For this project the Postgres database.
-- about post
-- benefits of postgtres
-- drawbacks of postgtres
+### Benefits of using PostgreSQL
+- <b>Object-relational database management system</b>: It has all the features of a
+relational database, with additional features such as inheritance and function
+overloading, which allows for more complicated data structures
+- <b>Materialised views</b>: a pre-computed query result that can be recalled later
+- <b>Security features</b>: allows for file protection and users authentication
+- <b>Supports MVCC</b>: multi-version concurrency control, allowing for different users to
+interact with and manage the database simultaneously.
+- <b>Supports multiple programming platforms</b>: such as C, C++, Java, Python
+- <b>Point-In-Time Recovery</b>: which allows the restoration of the database from a point in
+time.
 
+### Drawbacks of using PostgreSQL:
+- <b>Speed</b>: the speed and performance is not as high when compared to other relational
+databases such as MySQL.
+- <b>Usability</b>: the learning curve is considered to be difficult.
+- <b> Documentation</b>: support is not as common as others.
 
-
+---
 ## R4 Identify and discuss the key functionalities and benefits of an ORM  
-- What is an ORM
 Object Relational Mapping (ORM) is a technique using libraries to represent tables in a relational database as objects in object-oriented programming languages. This allows for CRUD operations to be performed on the database using object-oriented programming languages, such as Python and Javascript.
 
-- Functionalities
--Benefits  
-- Allows for creation of dynamic queries. For example a user can search for a restaurant by name, or by cuisine type, or by location. This can be done by creating a dynamic query that will search for the restaurant based on the parameters provided by the user. 
-
-- Code is more readable as it is written in an object-oriented language and it allows for the use of OOP concepts such as inheritance and polymorphism.  
-
--Drawbacks  
-- ORM libraries can be slow as they have to translate the queries into SQL.
-- Writing code for complex queries is much more difficult than writing SQL queries.
   
+### Benefits  
+- Allows for creation of dynamic queries. For example a user can search for a restaurant by name, or by cuisine type, or by location. This can be done by creating a dynamic query that will search for the restaurant based on the parameters provided by the user. 
+- Code is more readable as it is written in an object-oriented language and it allows for the use of OOP concepts such as inheritance and polymorphism.  
+- The ORM handles the conversion of datatypes from the database to objects and vice versa, thus reducing the mental load of the developer.
+- ORMs protect the database from SQL injection attacks, as it will handle the sanitisation of the data before it is sent to the database.
 
+<br>
 
-Example of query to retrieve all entries in a table called restaurants
+Example of the object model in the application code:
 ```
-@restaurants_bp.route('/')
-def get_all_restaurants():
-    stmt = db.select(Restaurant)
-    restaurants = db.session.scalars(stmt)
-    return RestaurantSchema(many=True).dump(restaurants)
+class Restaurant(db.Model):
+    __tablename__ = 'restaurants'
+    id = db.Column(db.Integer,primary_key=True)
+    name = db.Column(db.String(50),nullable=False)
+    location = db.Column(db.String)
+    price_range = db.Column(db.String)
+    cuisine = db.Column(db.String(20), default='tbc')
+```
+How the data is stored in the database table:
+
+```
+ id |        name        | location | price_range | cuisine    
+----+--------------------+----------+-------------+----------  
+  1 | Mesa Verde         | North    | $           | Mexican
 ```
 
 
-
-
-
+---
 ## R5 Document all endpoints for your API  
-
-
 ### /auth/register/
 - Methods: POST  
 - Argument: N/A  
@@ -858,28 +860,3 @@ flask run
 
 ---
 ## Table Of Contents  
-
-## Database  
-pros and cons of using database
-
-
-## ORM  
-Identify and discuss benefits of an ORM
-ORM Obejct Relational Mapping
-
-## API Endpoints  
-
-
-## third party services 
-
-
-## Entity Relationship Diagram  
-  
-
-## Project Models
-
-## Database Relations  
-
-
-
-## References
