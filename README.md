@@ -1,4 +1,21 @@
-# T2A2 API Webserver  
+# T2A2 API Webserver
+[Github Repo](https://github.com/kenny791/T2A2-API-Webserver)
+
+## Table Of Contents  
+[R1 - Identification of the problem you are trying to solve by building this particular app.](#r1-identification-of-the-problem-you-are-trying-to-solve-by-building-this-particular-app)  
+[R2 - Why is it a problem that needs solving?](#r2-why-is-it-a-problem-that-needs-solving)  
+[R3 Why have you chosen this database system. What are the drawbacks compared to others?](#r3-why-have-you-chosen-this-database-system-what-are-the-drawbacks-compared-to-others)  
+[R4 Identify and discuss the key functionalities and benefits of an ORM](#r4-identify-and-discuss-the-key-functionalities-and-benefits-of-an-orm)  
+[R5 Document all endpoints for your API](#r5-document-all-endpoints-for-your-api)  
+[R6 An ERD for your app](#r6-an-erd-for-your-app)  
+[R7 Detail any third party services that your app will use](#r7-detail-any-third-party-services-that-your-app-will-use)  
+[R8 Describe your projects models in terms of the relationships they have with each other](#r8-describe-your-projects-models-in-terms-of-the-relationships-they-have-with-each-other)   
+[R9 Discuss the database relations to be implemented in your application](#r9-discuss-the-database-relations-to-be-implemented-in-your-application)  
+[R10 Describe the way tasks are allocated and tracked in your project](#r10-describe-the-way-tasks-are-allocated-and-tracked-in-your-project)  
+[Getting Started](#getting-started)
+
+
+---
 ## R1 Identification of the problem you are trying to solve by building this particular app.  
 Like many foodies, I enjoy trying out new restaurants and cuisines. However the amount of restaurants you have to choose from can be overwhelming, and when you have tried the restaurant it is hard to keep track of the ones you like.
 
@@ -10,7 +27,6 @@ With the cost of living ever increasing in Australia, it is important to find th
 ## R3 Why have you chosen this database system. What are the drawbacks compared to others?  
 The database system chosen for this project is a relational database system specifically PostgreSQL. The data for the app will be stored in a consistent format in each table, this is important as it allows for the data to be more easily accessed and manipulated. For example if a table has a date attribute, all the dates will be stored in the same format according to the schema, making it easier to sort and filter the data.  
 Additionally as the data will be stored in tables with unique id keys for each entry this will allow for the tables to be joined and relationships formed allowing for data to be accessed and manipulated at the same time.
-
 
 
 ### Benefits of using PostgreSQL
@@ -683,56 +699,40 @@ How the data is stored in the database table:
     "message": "Review with id '28' deleted successfully"
 }
 ```
+
+
  ---
-
-
-
-
 ## R6 An ERD for your app  
 ![Entity Relationship Diagram](/docs/ERD.jpeg)
 
-
+---
 ## R7 Detail any third party services that your app will use  
 
-<b>Flask</b> - Python framework used to create wbe applications. 
-<b>Blueprint</b> - Flask extension for modular applications  
-<b>jsonify</b> - Flask extension for returning JSON responses  
-request - Flask extension for handling HTTP requests  
-abort - Flask extension for handling HTTP errors  
-<b>SQLAlchemy</b> - ORM , generates SQL statements
-<b>psychopg2</b> - PostgreSQL adapter for python, it is used by SQLAlchemy to send SQL queries to the database.
-<b>Marshmallow</b> - a library used for validating data, serializing and deserializing data.
-    fields - Marshmallow extension for handling data types  
-<b>Bcrypt</b> - Password Hashing  
+<b>Flask</b> - Python framework used to create wbe applications.  
+<b>Blueprint</b> - Flask extension for modular applications, by creating template routes for the application.  
+<b>flask-SQLAlchemy</b> - ORM , used to create models for the database.  
+<b>psychopg2</b> - PostgreSQL adapter for python, it is used by SQLAlchemy to send SQL queries to the database.  
+<b>Marshmallow</b> - a library used for validating, serializing and deserializing data.  
+<b>Bcrypt</b> - a library used for hashing passwords, before storing them in the database.  
 <b>flask_jwt_extended</b> - JWT authentication  
-<b>jwt_required</b> -  
-<b>get_jwt_identity</b> -   
-<b>JWTManger</b> - JSON Web Token Manager  
-Datetime - Date and Time  
-<b>marshmallow</b>-validate - Validation  
-datetime - Date and Time  
+<b>JWTManger</b> - JSON Web Token Manager, used to create and verify tokens.  
+<b>Datetime</b> - Python library used for the correct formatting of dates and times.  
 
 
 
-
+---
 ## R8 Describe your projects models in terms of the relationships they have with each other
 This project consisted of 4 tables: <b>User, Restaurants, Reviews, Saved </b> . 
 
-<b>User</b> has a one to many relationship with <b>Reviews</b> and <b>Saved</b>. A user can have many reviews and saved restaurants.  
-<b>Restaurants</b> has a one to many relationship with <b>Reviews</b>. A restaurant can have many reviews.  
-<b>Reviews</b> has a one to many relationship with <b>Saved</b>. A review can be saved by many users.  
-<b>Saved</b> has a one to many relationship with <b>Restaurants</b>. A saved restaurant can be saved by many users.  
+<b>User Model</b>: this model will store all the information regarding a user who is registered to use the app. This includes the user's username, email, password and a list of reviews and saved restaurants.  
 
+The user model has a one to many relationship with the reviews and saved models. This means that a user can have many reviews and saved restaurants, but a review or saved restaurant can only belong to one user.  
 
+The one to many relationship is created by the back_populates argument seen below. This allows for data from the associated child table to be accessed from the parent Users table.
 
-
-
-
-
-### Users
 ```
 class User(db.Model):
-    __tablename__ = 'users' #table name used for db
+    __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), unique=True, nullable=False)
@@ -742,33 +742,58 @@ class User(db.Model):
 
     reviews_submitted = db.relationship('Review', back_populates='user', cascade='all, delete')
     saved = db.relationship('Saved', back_populates='user', cascade='all, delete')
-
-
 ```
+<b>Restaurant Model</b>: this model will store all the information regarding a restaurant. This includes the restaurant's name, location, cuisine type, price range and a list of reviews.  
 
-### Restaurants
+The restaurant model has a one to many relationship with the reviews and saved models. This means that a restaurant can have many reviews and be saved to many users profiles, but a review or save can only belong to one restaurant.  
+
+When the restaurant model is displayed it will query the associated child table (reviews and saved) and returns the data in a list along with the restaurant data.
 ```
 class Restaurant(db.Model):
-    __tablename__ = 'restaurants' #table name used for db
+    __tablename__ = 'restaurants'
     id = db.Column(db.Integer,primary_key=True)
     name = db.Column(db.String(50),nullable=False)
     location = db.Column(db.String)
     price_range = db.Column(db.String)
     cuisine = db.Column(db.String(20), default='tbc')
     
-    # the id pulled from the users table and is shown in restaurants table as user_id in db
-    # user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-
-    # these releationships are used to pull data from other tables
-    # reviews will be shown in a list when restaurant is called
-    # the number of users who haved saved the restaurant will be shown in a list when restaurant is called
     reviews = db.relationship('Review', back_populates='restaurant', cascade='all, delete')
     saved = db.relationship('Saved', back_populates='restaurant', cascade='all, delete')
 
 ```
 
+<b>Saved Model</b>: this model will store all the information regarding a saved restaurant for when a user would like to add the restaurant to a list for later reference. This includes the restaurant's id, user's id and a tag. The tag is used to categorise the saved restaurant. For example, a user may want to save a restaurant to their profile to go to later, or they may want to save a restaurant as a favourite. The tag is used to differentiate between the two.
 
-### Reviews
+The saved model has a many to one relationship with the user and restaurant models. This means that a saved restaurant can only belong to one user and one restaurant, but a user or restaurant can have many saved restaurants.  
+
+When a restaurant is added to the saved table, the id of the restaurant and the user is stored in the table. This allows for the restaurant to be accessed from the user's profile. This is facilitated by the foreign key argument seen below. This allows for the data from the associated parent table to be accessed from the child table.
+
+
+```
+class Saved(db.Model):
+    __tablename__ = 'saved'
+
+    id = db.Column(db.Integer, primary_key=True)
+    tag = db.Column(db.String(10), nullable=True, default='')
+
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurants.id'), nullable=False)
+
+
+    # stores all fields from User table into user object
+    user = db.relationship ("User", back_populates='saved')
+    restaurant = db.relationship ("Restaurant", back_populates='saved')
+```
+
+
+
+<b>Review Model</b>: this model stores all the information regarding a review submitted by a user. This includes the restaurant's id, user's id, date, rating and message. The date is automatically generated when the review is submitted. The rating is a number between 1 and 5, and the message is a string of text.  
+
+The review model has a many to one relationship with the user and restaurant models. This means that a review can only belong to one user and one restaurant, but a user or restaurant can have many reviews.   
+
+When a new review is stored in the table, the user id and restaurant id are used to query the associated user and restaurant tables. The data from the user and restaurant tables are then stored in the review table. This allows for the data to be displayed when the review is queried.  
+
+This is facilitated by the foreign key argument seen below. This allows for the data from the associated parent table to be accessed from the child table.
 ```
 class Review(db.Model):
     __tablename__ = 'reviews' #table name used for db
@@ -787,27 +812,19 @@ class Review(db.Model):
     
 ```
 
-### Saved
-```
-class Saved(db.Model):
-    __tablename__ = 'saved' #table name used for db
-
-    id = db.Column(db.Integer, primary_key=True)
-    tag = db.Column(db.String(10), nullable=True, default='')
-
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurants.id'), nullable=False)
-
-
-    # stores all fields from User table into user object
-    user = db.relationship ("User", back_populates='saved')
-    restaurant = db.relationship ("Restaurant", back_populates='saved')
-```
-
-
-
+---
 ## R9 Discuss the database relations to be implemented in your application  
 
+The main tables in the database are the Users and Restaurants tables. They data stored in those tables are all unique, as there can only be one user with a specific username and email. The same applies to the restaurant table, as there can only be one restaurant with a specific name and location.  
+In addition to the above tables, there are also tables for Reviews and Saved restaurants. As the data in these tables relate to the a single restaurant, they are considered children tables. The data in these tables are accessed from the parent tables.  
+
+From the ERD it can be seen that the Restaurant table has a one to many relationship with the reviews and saved tables. This means that a restaurant can have many reviews and be saved to many users profiles, but a review or save can only belong to one restaurant.  
+Similary the User table has a one to many relationship with the reviews and saved tables indicating that a user can have many reviews and saved restaurants, but a review or save can only belong to one user.  
+
+In the Reviews and Saved tables, the user and restaurant id, stored along with the reviews and saved data, and are used to retrieve the data from the associated parent tables. This allows for the data to be displayed when the review or saved restaurant is queried.
+
+
+---
 ## R10 Describe the way tasks are allocated and tracked in your project  
 The project was managed using Trello's Kanban board system, where tasks are broken down into small chunks and their progress moved along the board. The board is broken down into columns and updated when a task is completed. 
 
@@ -816,8 +833,6 @@ The project was managed using Trello's Kanban board system, where tasks are brok
 
 
 
-
-## Overview  
 
 ---
 ## Getting Started 
@@ -851,12 +866,15 @@ Install requirements
 ```
 pip install -r requirements.txt
 ```
+### Flask
 Start Flask
 ```
 flask run
 ```
+Seed the database
+```
+flask db drop && flask db create && flask db seed
+```
 
 
 
----
-## Table Of Contents  

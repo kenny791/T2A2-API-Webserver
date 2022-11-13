@@ -6,6 +6,7 @@ from models.user import User
 from models.review import Review
 from models.saved import Saved
 
+# instantiates the blueprint for the controller, and defines the prefix for the routes
 db_commands = Blueprint('db', __name__)
 
 # Define a custom CLI (terminal) command
@@ -329,11 +330,25 @@ def seed_db():
         Saved(
             tag = 'To Go',
             restaurant = restaurants[1],
-            user = users[5]
+            user = users[4]
         ),
         Saved(
             restaurant = restaurants[2],
             user = users[5]
+        ),
+        Saved(
+            restaurant = restaurants[3],
+            user = users[4]
+        ),
+        Saved(
+            tag = 'fave',
+            restaurant = restaurants[4],
+            user = users[2]
+        ),
+        Saved(
+            tag = 'To Go',
+            restaurant = restaurants[5],
+            user = users[3]
         )
     ]
 

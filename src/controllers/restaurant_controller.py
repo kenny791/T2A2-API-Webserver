@@ -8,6 +8,7 @@ from controllers.auth_controller import is_admin, original_user
 from email import message
 from datetime import date
 
+# instantiates the blueprint for the controller, and defines the prefix for the routes
 restaurants_bp = Blueprint('restaurants', __name__, url_prefix='/restaurants')
 
 # route returns all restaurants in the database sorted by name

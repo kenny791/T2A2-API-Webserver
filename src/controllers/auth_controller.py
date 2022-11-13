@@ -5,6 +5,7 @@ from sqlalchemy.exc import IntegrityError
 from datetime import timedelta
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 
+# instantiates the blueprint for the controller, and defines the prefix for the routes
 auth_bp = Blueprint('auth', __name__, url_prefix="/auth")
 
 # function to check if user is admin

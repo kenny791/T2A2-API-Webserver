@@ -9,6 +9,7 @@ from controllers.auth_controller import is_admin, original_user
 from email import message
 from datetime import date
 
+# instantiates the blueprint for the controller, and defines the prefix for the routes
 profiles_bp = Blueprint('profile', __name__, url_prefix='/profile')
 
 
